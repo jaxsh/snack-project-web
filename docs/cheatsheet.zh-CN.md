@@ -55,18 +55,23 @@ npm install                                                # 更新依赖
 | 命令 | 说明 |
 |------|------|
 | `npm start` | 启动开发服务器（UMI_ENV=dev，带 Mock） |
-| `npm run dev` | 启动开发服务器（无 Mock） |
-| `npm run start:dev` | 同 dev，UMI_ENV=dev，无 Mock |
+| `npm run dev` | 启动开发服务器（UMI_ENV=dev，无 Mock） |
 | `npm run start:no-mock` | 无 Mock 启动 |
 | `npm run start:pre` | 预发布环境启动 |
 | `npm run start:test` | 测试环境启动 |
 | `npm run build` | 构建生产产物 |
-| `npm run preview` | 构建并本地预览（端口 8000） |
+| `npm run preview` | 预览已构建产物（需先 `npm run build`，端口 8000） |
+| `npm run preview:build` | 构建并本地预览（端口 8000） |
+| `npm run deploy` | 构建并部署到 GitHub Pages |
 | `npm run analyze` | 构建产物体积分析 |
 | `npm run lint` | 代码检查（Biome + TypeScript） |
 | `npm run biome` | Biome 自动修复 |
 | `npm test` | 运行测试 |
 | `npm run test:coverage` | 测试覆盖率 |
+| `npm run test:update` | 更新测试快照 |
+| `npm run tsc` | 类型检查（不生成文件） |
+| `npm run i18n-remove` | 移除国际化（locale=zh-CN） |
+| `npm run record` | 录制登录场景请求数据 |
 | `npm run openapi` | 根据 OpenAPI 生成 API 代码 |
 | `npm run simple` | 精简模式（删除示例页面和多余依赖） |
 
@@ -465,7 +470,7 @@ export default {
 在 `src/models/` 下创建文件，导出自定义 Hook，组件中通过 `useModel('文件名')` 使用。
 
 **Q: 如何部署？**
-`npm run build` 生成 `dist/` 目录，部署到任意静态服务器。配置 `publicPath` 处理非根目录部署。
+`npm run build` 生成 `dist/` 目录，部署到任意静态服务器。配置 `publicPath` 处理非根目录部署。`npm run deploy` 会自动构建并发布到 GitHub Pages（推送到 gh-pages 分支）。
 
 **Q: 如何使用 OpenAPI 代码生成？**
 1. 在 `config/config.ts` 配置 `openAPI` 2. 运行 `npm run openapi` 3. 自动生成 `src/services/` 下的代码

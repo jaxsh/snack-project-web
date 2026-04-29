@@ -55,18 +55,23 @@ npm install                                                # Update dependencies
 | Command | Description |
 |---------|-------------|
 | `npm start` | Start dev server (UMI_ENV=dev, with Mock) |
-| `npm run dev` | Start dev server (no Mock) |
-| `npm run start:dev` | Same as dev, UMI_ENV=dev, no Mock |
+| `npm run dev` | Start dev server (UMI_ENV=dev, no Mock) |
 | `npm run start:no-mock` | Start without Mock |
 | `npm run start:pre` | Pre-production environment |
 | `npm run start:test` | Test environment |
 | `npm run build` | Build for production |
-| `npm run preview` | Build and preview locally (port 8000) |
+| `npm run preview` | Preview built output (run `npm run build` first, port 8000) |
+| `npm run preview:build` | Build and preview (port 8000) |
+| `npm run deploy` | Build and deploy to GitHub Pages |
 | `npm run analyze` | Analyze bundle size |
 | `npm run lint` | Lint (Biome + TypeScript) |
 | `npm run biome` | Auto-fix with Biome |
 | `npm test` | Run tests |
 | `npm run test:coverage` | Test with coverage |
+| `npm run test:update` | Update test snapshots |
+| `npm run tsc` | Type check without emitting |
+| `npm run i18n-remove` | Remove i18n wrappers (locale=zh-CN) |
+| `npm run record` | Record request data for login scene |
 | `npm run openapi` | Generate API code from OpenAPI schema |
 | `npm run simple` | Strip demo pages and unused deps |
 
@@ -465,7 +470,7 @@ Edit `colorPrimary` in `config/defaultSettings.ts`. Use SettingDrawer for live p
 Create a file in `src/models/` exporting a custom Hook, then use `useModel('filename')` in components.
 
 **Q: How to deploy?**
-`npm run build` generates `dist/`. Deploy to any static file server. Set `publicPath` for non-root deployments.
+`npm run build` generates `dist/`. Deploy to any static file server. Set `publicPath` for non-root deployments. `npm run deploy` builds and publishes to GitHub Pages automatically (pushes to gh-pages branch).
 
 **Q: How to use OpenAPI code generation?**
 1. Configure `openAPI` in `config/config.ts` 2. Run `npm run openapi` 3. Code is auto-generated under `src/services/`
