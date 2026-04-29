@@ -1,53 +1,40 @@
 import {
+  BookOutlined,
+  CheckOutlined,
+  GlobalOutlined,
   LogoutOutlined,
   SettingOutlined,
-  UserOutlined,
+  SkinOutlined,
 } from '@ant-design/icons';
-import { history, useModel } from '@umijs/max';
+import {
+  getAllLocales,
+  getLocale,
+  history,
+  setLocale,
+  useModel,
+} from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Spin } from 'antd';
-import { createStyles } from 'antd-style';
 import React from 'react';
 import { flushSync } from 'react-dom';
 import { outLogin } from '@/services/ant-design-pro/api';
 import HeaderDropdown from '../HeaderDropdown';
 
 export type GlobalHeaderRightProps = {
-  menu?: boolean;
   children?: React.ReactNode;
 };
 
-export const AvatarName = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  return <span className="anticon">{currentUser?.name}</span>;
+const localeLabelMap: Record<string, { emoji: string; label: string }> = {
+  'zh-CN': { emoji: '🇨🇳', label: '简体中文' },
+  'zh-TW': { emoji: '🇭🇰', label: '繁体中文' },
+  'en-US': { emoji: '🇺🇸', label: 'English' },
 };
 
-const useStyles = createStyles(({ token }) => {
-  return {
-    action: {
-      display: 'flex',
-      height: '48px',
-      marginLeft: 'auto',
-      overflow: 'hidden',
-      alignItems: 'center',
-      padding: '0 8px',
-      cursor: 'pointer',
-      borderRadius: token.borderRadius,
-      '&:hover': {
-        backgroundColor: token.colorBgTextHover,
-      },
-    },
-  };
-});
+const supportLocaleKeys = Object.keys(localeLabelMap);
 
 export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
-  menu,
   children,
 }) => {
-  /**
-   * 退出登录，并且将当前的 url 保存
-   */
   const loginOut = async () => {
     await outLogin();
     const { search, pathname } = window.location;
@@ -55,9 +42,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
     const searchParams = new URLSearchParams({
       redirect: pathname + search,
     });
-    /** 此方法会跳转到 redirect 参数所在的位置 */
     const redirect = urlParams.get('redirect');
-    // Note: There may be security issues, please note
     if (window.location.pathname !== '/user/login' && !redirect) {
       history.replace({
         pathname: '/user/login',
@@ -65,8 +50,6 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
       });
     }
   };
-  const { styles } = useStyles();
-
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const onMenuClick: MenuProps['onClick'] = (event) => {
@@ -78,49 +61,75 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
       loginOut();
       return;
     }
+    if (key === 'theme') {
+      setInitialState((s) => ({ ...s, settingDrawerOpen: true }));
+      return;
+    }
+    if (key === 'doc') {
+      history.push('/welcome');
+      return;
+    }
+    if (key.startsWith('lang-')) {
+      setLocale(key.replace('lang-', ''), false);
+      return;
+    }
     history.push(`/account/${key}`);
   };
 
-  const loading = (
-    <span className={styles.action}>
-      <Spin
-        size="small"
-        style={{
-          marginLeft: 8,
-          marginRight: 8,
-        }}
-      />
-    </span>
-  );
-
   if (!initialState) {
-    return loading;
+    return <Spin size="small" />;
   }
 
   const { currentUser } = initialState;
 
-  if (!currentUser?.name) {
-    return loading;
+  if (!currentUser) {
+    return <Spin size="small" />;
   }
 
-  const menuItems = [
-    ...(menu
+  const allLocales = getAllLocales();
+  const currentLocale = getLocale();
+  const supportLocales = allLocales.filter((l) =>
+    supportLocaleKeys.includes(l),
+  );
+
+  const menuItems: MenuProps['items'] = [
+    {
+      key: 'settings',
+      icon: <SettingOutlined />,
+      label: '个人设置',
+    },
+    {
+      key: 'theme',
+      icon: <SkinOutlined />,
+      label: '主题设置',
+    },
+    {
+      key: 'doc',
+      icon: <BookOutlined />,
+      label: '使用文档',
+    },
+    ...(supportLocales.length > 1
       ? [
           {
-            key: 'center',
-            icon: <UserOutlined />,
-            label: '个人中心',
-          },
-          {
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: '个人设置',
-          },
-          {
-            type: 'divider' as const,
+            key: 'lang',
+            icon: <GlobalOutlined />,
+            label: localeLabelMap[currentLocale]?.label ?? currentLocale,
+            children: supportLocales.map((locale) => ({
+              key: `lang-${locale}`,
+              icon:
+                locale === currentLocale ? (
+                  <CheckOutlined style={{ color: '#52c41a' }} />
+                ) : (
+                  <span style={{ display: 'inline-block', width: 14 }} />
+                ),
+              label: `${localeLabelMap[locale]?.emoji ?? ''} ${localeLabelMap[locale]?.label ?? locale}`,
+            })),
           },
         ]
       : []),
+    {
+      type: 'divider' as const,
+    },
     {
       key: 'logout',
       icon: <LogoutOutlined />,
@@ -130,11 +139,13 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
 
   return (
     <HeaderDropdown
+      placement="bottomRight"
       menu={{
         selectedKeys: [],
         onClick: onMenuClick,
         items: menuItems,
       }}
+      arrow
     >
       {children}
     </HeaderDropdown>
