@@ -2,6 +2,7 @@ import {
   BookOutlined,
   CheckOutlined,
   GlobalOutlined,
+  HistoryOutlined,
   LogoutOutlined,
   SettingOutlined,
   SkinOutlined,
@@ -11,6 +12,7 @@ import {
   getLocale,
   history,
   setLocale,
+  useIntl,
   useModel,
 } from '@umijs/max';
 import type { MenuProps } from 'antd';
@@ -51,6 +53,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
     }
   };
   const { initialState, setInitialState } = useModel('@@initialState');
+  const intl = useIntl();
 
   const onMenuClick: MenuProps['onClick'] = (event) => {
     const { key } = event;
@@ -71,6 +74,11 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
     }
     if (key.startsWith('lang-')) {
       setLocale(key.replace('lang-', ''), false);
+      return;
+    }
+    if (key.startsWith('version-')) {
+      const url = key.replace('version-', '');
+      window.open(url, '_blank', 'noopener,noreferrer');
       return;
     }
     history.push(`/account/${key}`);
@@ -107,6 +115,31 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
       key: 'doc',
       icon: <BookOutlined />,
       label: '使用文档',
+    },
+    {
+      key: 'version',
+      icon: <HistoryOutlined />,
+      label: intl.formatMessage({
+        id: 'component.globalHeader.historyVersion',
+      }),
+      children: [
+        {
+          key: 'version-https://v5.pro.ant.design',
+          label: 'v5',
+        },
+        {
+          key: 'version-https://v4.pro.ant.design',
+          label: 'v4',
+        },
+        {
+          key: 'version-https://v2.pro.ant.design',
+          label: 'v2',
+        },
+        {
+          key: 'version-https://v1.pro.ant.design',
+          label: 'v1',
+        },
+      ],
     },
     ...(supportLocales.length > 1
       ? [
