@@ -4,6 +4,18 @@
 
 ![Ant Design Pro](https://mdn.alipayobjects.com/huamei_fkc4p0/afts/img/A*EX3ISYC2ghEAAAAAddAAAAgAeobDAQ/original)
 
+## 🎉 v6 新特性
+
+- **React 19 + antd 6 + Umi Max 4**：全面升级到最新技术栈，utoopack（Turbopack）构建
+- **样式重构**：Less → Tailwind CSS v4 + antd-style + CSS Modules，启用 CSS 变量主题
+- **AI 助手页面**：基于 Ant Design X 的聊天界面示例
+- **React Query**：从 useRequest 迁移到 @tanstack/react-query
+- **Biome**：替代 ESLint + Prettier，统一 lint 和格式化
+- **Cloudflare Worker 后端**：演示 API 独立部署，基于 Hono 框架
+- **更多**：路由预加载、骨架屏 Loading、D3 地图、Cheatsheet 速查文档、moment → dayjs、Class → 函数式组件
+
+→ [查看完整更新日志](https://github.com/ant-design/ant-design-pro/releases/tag/v6.0.0)
+
 ## 快速开始
 
 **创建项目：**

@@ -4,6 +4,18 @@
 
 ![Ant Design Pro](https://mdn.alipayobjects.com/huamei_fkc4p0/afts/img/A*EX3ISYC2ghEAAAAAddAAAAgAeobDAQ/original)
 
+## 🎉 What's New in v6
+
+- **React 19 + antd 6 + Umi Max 4**: Full upgrade to the latest stack, powered by utoopack (Turbopack)
+- **Style Overhaul**: Less → Tailwind CSS v4 + antd-style + CSS Modules, CSS variable theming enabled
+- **AI Assistant Page**: Chat interface example built with Ant Design X
+- **React Query**: Migrated from useRequest to @tanstack/react-query
+- **Biome**: Replaces ESLint + Prettier for unified linting and formatting
+- **Cloudflare Worker Backend**: Standalone demo API deployment using Hono
+- **And more**: Route prefetch, skeleton Loading, D3 map, Cheatsheet docs, moment → dayjs, class → functional components
+
+→ [View full changelog](https://github.com/ant-design/ant-design-pro/releases/tag/v6.0.0)
+
 ## Getting Started
 
 **Create a project:**
