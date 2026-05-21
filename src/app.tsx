@@ -89,8 +89,8 @@ export const layout: RunTimeLayoutConfig = ({
       return dom;
     },
     actionsRender: () => [
-      <DocLink key="doc" />,
-      <VersionDropdown key="version" />,
+      isDev ? <DocLink key="doc" /> : null,
+      isDev ? <VersionDropdown key="version" /> : null,
       <LangDropdown key="lang" />,
     ],
     avatarProps: {
@@ -103,7 +103,7 @@ export const layout: RunTimeLayoutConfig = ({
     // waterMarkProps: {
     //   content: initialState?.currentUser?.name,
     // },
-    footerRender: () => <Footer />,
+    footerRender: () => (isDev ? <Footer /> : false),
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
