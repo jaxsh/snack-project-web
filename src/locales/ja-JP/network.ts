@@ -14,4 +14,7 @@ export default {
   'app.error.home': 'ホームに戻る',
   'app.request.offline':
     'ネットワークに接続できません。接続を確認して再試行してください。',
+  'app.request.session-expired':
+    'セッションの有効期限が切れました。もう一度ログインしてください',
+  'app.request.timeout': 'リクエストがタイムアウトしました。再試行してください',
 };

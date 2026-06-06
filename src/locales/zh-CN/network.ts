@@ -11,4 +11,6 @@ export default {
   'app.error.reload': '刷新页面',
   'app.error.home': '返回首页',
   'app.request.offline': '网络不可用，请检查网络连接后重试。',
+  'app.request.session-expired': '登录状态已过期，请重新登录',
+  'app.request.timeout': '请求超时，请稍后重试',
 };
