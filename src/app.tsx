@@ -1,28 +1,30 @@
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import { SettingDrawer } from '@ant-design/pro-components';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
-import { history, Link } from '@umijs/max';
+import { history, Link, useModel } from '@umijs/max';
+import { App } from 'antd';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
+import { bindAntdApis } from '@/utils/antdStaticApi';
 
 // Initialize dayjs plugins globally
 dayjs.extend(relativeTime);
 
 import {
   AvatarDropdown,
-  DocLink,
   ErrorBoundary,
   Footer,
   LangDropdown,
   OfflineBanner,
-  VersionDropdown,
+  ThemeDropdown,
 } from '@/components';
-import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
+import { getSysUserInfo } from '@/services/auth';
+import { getSystemNavTheme } from '@/utils/theme';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 
+const THEME_PREF_KEY = 'snack-theme-preference';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
@@ -31,52 +33,119 @@ const loginPath = '/user/login';
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
+  themePreference?: 'auto' | 'light' | 'realDark';
   currentUser?: API.CurrentUser;
+  changePasswordRequired?: boolean;
+  hasNetworkError?: boolean;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
-  settingDrawerOpen?: boolean;
+  fetchUserInfo?: () => Promise<{
+    currentUser: API.CurrentUser | undefined;
+    changePasswordRequired: boolean;
+    hasNetworkError?: boolean;
+  }>;
 }> {
+  let themePref: 'auto' | 'light' | 'realDark' = 'auto';
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem(THEME_PREF_KEY);
+    if (saved === 'light' || saved === 'realDark' || saved === 'auto') {
+      themePref = saved;
+    }
+  }
+
+  const initialNavTheme =
+    themePref === 'auto' ? getSystemNavTheme() : themePref;
+
+  const initialSettings = {
+    ...defaultSettings,
+    navTheme: initialNavTheme,
+  } as Partial<LayoutSettings>;
+
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser({
+      const sysUserRes = await getSysUserInfo({
         skipErrorHandler: true,
       });
-      return msg.data;
-    } catch (_error) {
-      const { pathname, search, hash } = history.location;
-      history.replace(
-        `${loginPath}?redirect=${encodeURIComponent(pathname + search + hash)}`,
-      );
+      const profile = sysUserRes?.data;
+      if (profile) {
+        if (profile.initialPassword === 1 || profile.expired === 1) {
+          return {
+            currentUser: profile,
+            changePasswordRequired: true,
+            hasNetworkError: false,
+          };
+        }
+        return {
+          currentUser: profile,
+          changePasswordRequired: false,
+          hasNetworkError: false,
+        };
+      }
+    } catch (error: any) {
+      const loginUrl = error.response?.data?.data?.loginUrl;
+      if (loginUrl) {
+        window.location.href = loginUrl;
+        return {
+          currentUser: undefined,
+          changePasswordRequired: false,
+          hasNetworkError: false,
+        };
+      }
+
+      // 如果是底层的网络超时/服务器故障/断网等错误，只标记 hasNetworkError 为 true 且不强转重定向
+      const isNetworkError =
+        error.code === 'ECONNABORTED' ||
+        error.message?.includes('timeout') ||
+        !error.response ||
+        error.response.status >= 500 ||
+        (typeof navigator !== 'undefined' && !navigator.onLine);
+
+      if (!isNetworkError && error.response?.status === 401) {
+        const { pathname, search, hash } = history.location;
+        history.replace(
+          `${loginPath}?redirect=${encodeURIComponent(pathname + search + hash)}`,
+        );
+      }
+
+      return {
+        currentUser: undefined,
+        changePasswordRequired: false,
+        hasNetworkError: isNetworkError,
+      };
     }
-    return undefined;
+    return {
+      currentUser: undefined,
+      changePasswordRequired: false,
+      hasNetworkError: false,
+    };
   };
-  // 如果不是登录页面，执行
   const { location } = history;
   if (
-    ![loginPath, '/user/register', '/user/register-result'].includes(
-      location.pathname,
-    )
+    ![
+      loginPath,
+      '/user/register',
+      '/user/register-result',
+      '/account/change-password',
+    ].includes(location.pathname)
   ) {
-    const currentUser = await fetchUserInfo();
+    const { currentUser, changePasswordRequired, hasNetworkError } =
+      await fetchUserInfo();
     return {
       fetchUserInfo,
       currentUser,
-      settings: defaultSettings as Partial<LayoutSettings>,
-      settingDrawerOpen: false,
+      changePasswordRequired,
+      hasNetworkError,
+      settings: initialSettings,
+      themePreference: themePref,
     };
   }
   return {
     fetchUserInfo,
-    settings: defaultSettings as Partial<LayoutSettings>,
-    settingDrawerOpen: false,
+    settings: initialSettings,
+    themePreference: themePref,
   };
 }
 
-// ProLayout 支持的api https://procomponents.ant.design/components/layout
-export const layout: RunTimeLayoutConfig = ({
-  initialState,
-  setInitialState,
-}) => {
+export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
     menuItemRender: (item, dom) => {
       if (item.path) {
@@ -89,28 +158,43 @@ export const layout: RunTimeLayoutConfig = ({
       return dom;
     },
     actionsRender: () => [
-      isDev ? <DocLink key="doc" /> : null,
-      isDev ? <VersionDropdown key="version" /> : null,
+      <ThemeDropdown key="theme" />,
       <LangDropdown key="lang" />,
     ],
     avatarProps: {
       src: initialState?.currentUser?.avatar,
-      title: 'ProUser',
+      title:
+        initialState?.currentUser?.nickname ||
+        initialState?.currentUser?.username,
       render: (_, avatarChildren) => (
         <AvatarDropdown>{avatarChildren}</AvatarDropdown>
       ),
     },
-    // waterMarkProps: {
-    //   content: initialState?.currentUser?.name,
-    // },
     footerRender: () => (isDev ? <Footer /> : false),
     onPageChange: () => {
       const { location } = history;
-      // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (
+        !initialState?.currentUser &&
+        !initialState?.hasNetworkError &&
+        location.pathname !== loginPath
+      ) {
         history.replace(
           `${loginPath}?redirect=${encodeURIComponent(location.pathname + location.search + location.hash)}`,
         );
+        return;
+      }
+      if (
+        initialState?.changePasswordRequired &&
+        location.pathname !== '/account/change-password'
+      ) {
+        history.replace('/account/change-password');
+      }
+      if (
+        initialState?.currentUser &&
+        !initialState?.changePasswordRequired &&
+        location.pathname === '/account/change-password'
+      ) {
+        history.replace('/');
       }
     },
     bgLayoutImgList: [
@@ -144,33 +228,12 @@ export const layout: RunTimeLayoutConfig = ({
     // Replace ProLayout's default ErrorBoundary with our offline-aware version,
     // so chunk load errors show friendly messages instead of "Something went wrong."
     ErrorBoundary,
-    menuHeaderRender: undefined,
-    // 自定义 403 页面
-    // unAccessible: <div>unAccessible</div>,
-    // 增加一个 loading 的状态
     childrenRender: (children) => {
-      // if (initialState?.loading) return <PageLoading />;
       return (
         <>
+          <AntdApiBinder />
+          <ThemeWatcher />
           {children}
-          <SettingDrawer
-            disableUrlParams
-            enableDarkTheme
-            collapse={initialState?.settingDrawerOpen}
-            onCollapseChange={(open) => {
-              setInitialState((s) => ({
-                ...s,
-                settingDrawerOpen: open,
-              }));
-            }}
-            settings={initialState?.settings}
-            onSettingChange={(settings) => {
-              setInitialState((s) => ({
-                ...s,
-                settings,
-              }));
-            }}
-          />
         </>
       );
     },
@@ -178,15 +241,58 @@ export const layout: RunTimeLayoutConfig = ({
   };
 };
 
-/**
- * @name request 配置，可以配置错误处理
- * 它基于 axios 提供了一套统一的网络请求和错误处理方案。
- * @doc https://umijs.org/docs/max/request#配置
- */
 export const request: RequestConfig = {
-  baseURL: isDev ? '' : 'https://pro-api.ant-design-demo.workers.dev',
+  baseURL: '',
+  timeout: 10000,
   ...errorConfig,
 };
+
+function ThemeWatcher() {
+  const { initialState, setInitialState } = useModel('@@initialState');
+
+  React.useEffect(() => {
+    if (!initialState) return;
+    const pref = initialState.themePreference || 'auto';
+    if (pref !== 'auto') return;
+
+    if (typeof window === 'undefined') return;
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      const nextTheme = e.matches ? 'realDark' : 'light';
+      setInitialState((s) => {
+        if (!s) return s;
+        if (s.themePreference === 'auto') {
+          return {
+            ...s,
+            settings: {
+              ...s.settings,
+              navTheme: nextTheme,
+            },
+          };
+        }
+        return s;
+      });
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+    };
+  }, [initialState?.themePreference, setInitialState]);
+
+  return null;
+}
+
+function AntdApiBinder() {
+  const { message, notification } = App.useApp();
+  React.useEffect(() => {
+    bindAntdApis(message, notification);
+  }, [message, notification]);
+  return null;
+}
 
 export function rootContainer(container: React.ReactNode) {
   return (

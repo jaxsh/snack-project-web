@@ -9,19 +9,30 @@
  *
  * @doc https://umijs.org/docs/guides/proxy
  */
+const OAUTH_TARGET = process.env.OAUTH_TARGET || 'http://localhost:8080';
+
 export default {
   dev: {
     '/api/': {
       target: 'http://localhost:8080',
       changeOrigin: true,
     },
-    '/auth-api/': {
+    '/auth-api/login': {
+      target: OAUTH_TARGET,
+      changeOrigin: true,
+      pathRewrite: { '^/auth-api/login': '/login' },
+    },
+    '/auth-api/logout': {
       target: 'http://localhost:8080',
       changeOrigin: true,
-      pathRewrite: { '^/auth-api': '' },
+      pathRewrite: { '^/auth-api/logout': '/logout' },
+    },
+    '/oauth2/authorization/': {
+      target: 'http://localhost:8080',
+      changeOrigin: true,
     },
     '/oauth2/': {
-      target: 'http://localhost:8080',
+      target: OAUTH_TARGET,
       changeOrigin: true,
     },
   },
