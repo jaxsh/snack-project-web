@@ -60,7 +60,7 @@ const ChangePassword: React.FC = () => {
           console.error('Logout failed after password change', e);
         }
 
-        setInitialState((s) => {
+        await setInitialState((s) => {
           if (!s) return s;
           return {
             ...s,

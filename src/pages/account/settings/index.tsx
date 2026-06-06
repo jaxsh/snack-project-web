@@ -1,5 +1,5 @@
 import { GridContent } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
+import { useIntl, useModel } from '@umijs/max';
 import { Menu, Spin } from 'antd';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getSysUserInfo } from '@/services/auth';
@@ -29,11 +29,12 @@ const SettingsContent: React.FC<{ selectKey: SettingsStateKeys }> = ({
 const Settings: React.FC = () => {
   const { styles } = useStyles();
   const { setInitialState } = useModel('@@initialState');
+  const intl = useIntl();
   const [loading, setLoading] = useState(true);
 
   const menuMap: Record<string, React.ReactNode> = {
-    base: '基本设置',
-    security: '安全设置',
+    base: intl.formatMessage({ id: 'pages.settings.menu.base' }),
+    security: intl.formatMessage({ id: 'pages.settings.menu.security' }),
   };
   const [initConfig, setInitConfig] = useState<SettingsState>({
     mode: 'inline',
@@ -80,7 +81,7 @@ const Settings: React.FC = () => {
         setLoading(true);
         const res = await getSysUserInfo();
         if (res?.data && isMounted) {
-          setInitialState((s) => {
+          await setInitialState((s) => {
             if (!s) return s;
             return {
               ...s,
@@ -96,7 +97,7 @@ const Settings: React.FC = () => {
         }
       }
     };
-    fetchLatestUserInfo();
+    void fetchLatestUserInfo();
     return () => {
       isMounted = false;
     };
