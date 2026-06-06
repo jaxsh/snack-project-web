@@ -1,0 +1,314 @@
+import {
+  AlipayCircleOutlined,
+  LockOutlined,
+  MobileOutlined,
+  TaobaoCircleOutlined,
+  UserOutlined,
+  WeiboCircleOutlined,
+} from '@ant-design/icons';
+import {
+  LoginForm,
+  ProFormCaptcha,
+  ProFormCheckbox,
+  ProFormText,
+} from '@ant-design/pro-components';
+import { FormattedMessage, useIntl } from '@umijs/max';
+import { Alert, App, Tabs } from 'antd';
+import { createStyles } from 'antd-style';
+import React, { useState } from 'react';
+import { Footer } from '@/components';
+import { login } from '@/services/auth';
+import { AuthLayout } from '../components/AuthLayout';
+
+const useStyles = createStyles(({ token }) => {
+  return {
+    action: {
+      marginLeft: '8px',
+      color: 'rgba(0, 0, 0, 0.2)',
+      fontSize: '24px',
+      verticalAlign: 'middle',
+      cursor: 'pointer',
+      transition: 'color 0.3s',
+      '&:hover': {
+        color: token.colorPrimaryActive,
+      },
+    },
+  };
+});
+
+const ActionIcons = () => {
+  const { styles } = useStyles();
+
+  return (
+    <>
+      <AlipayCircleOutlined
+        key="AlipayCircleOutlined"
+        className={styles.action}
+      />
+      <TaobaoCircleOutlined
+        key="TaobaoCircleOutlined"
+        className={styles.action}
+      />
+      <WeiboCircleOutlined
+        key="WeiboCircleOutlined"
+        className={styles.action}
+      />
+    </>
+  );
+};
+
+const Login: React.FC = () => {
+  const [type, setType] = useState<string>('account');
+  const { message } = App.useApp();
+  const intl = useIntl();
+
+  const [loginErrorMsg, setLoginErrorMsg] = useState<string | null>(null);
+
+  const getSafeRedirectUrl = (redirect: string | null): string => {
+    if (!redirect?.startsWith('/')) return '/';
+
+    if (redirect.startsWith('//')) return '/';
+
+    try {
+      const parsed = new URL(redirect, window.location.origin);
+      if (parsed.origin !== window.location.origin) return '/';
+      return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    } catch {
+      return '/';
+    }
+  };
+
+  const handleSubmit = async (values: API.LoginParams) => {
+    try {
+      setLoginErrorMsg(null);
+      const msg = await login({ ...values, type }, { skipErrorHandler: true });
+      if (msg.success) {
+        const defaultLoginSuccessMessage = intl.formatMessage({
+          id: 'pages.login.success',
+        });
+        message.success(defaultLoginSuccessMessage);
+
+        const urlParams = new URL(window.location.href).searchParams;
+        const redirect = urlParams.get('redirect');
+
+        window.location.href =
+          msg.data?.redirectUrl || getSafeRedirectUrl(redirect);
+        return;
+      }
+    } catch (error: any) {
+      const serverMsg = error.response?.data?.msg;
+      if (serverMsg) {
+        setLoginErrorMsg(serverMsg);
+      } else if (error.name === 'BizError' && error.info?.errorMessage) {
+        setLoginErrorMsg(error.info.errorMessage);
+      } else {
+        setLoginErrorMsg(
+          intl.formatMessage({
+            id: 'pages.login.networkError',
+            defaultMessage: '网络错误，请检查连接后重试',
+          }),
+        );
+      }
+    }
+  };
+
+  return (
+    <AuthLayout titleId="menu.login">
+      <LoginForm
+        contentStyle={{
+          minWidth: 280,
+          maxWidth: '75vw',
+        }}
+        logo={<img alt="logo" src="/logo.svg" />}
+        title="Ant Design"
+        subTitle={intl.formatMessage({
+          id: 'pages.layouts.userLayout.title',
+        })}
+        initialValues={{
+          autoLogin: true,
+        }}
+        actions={[
+          <FormattedMessage key="loginWith" id="pages.login.loginWith" />,
+          <ActionIcons key="icons" />,
+        ]}
+        onFinish={async (values) => {
+          await handleSubmit(values as API.LoginParams);
+        }}
+      >
+        <Tabs
+          activeKey={type}
+          onChange={setType}
+          centered
+          items={[
+            {
+              key: 'account',
+              label: intl.formatMessage({
+                id: 'pages.login.accountLogin.tab',
+              }),
+            },
+            {
+              key: 'mobile',
+              label: intl.formatMessage({
+                id: 'pages.login.phoneLogin.tab',
+              }),
+            },
+          ]}
+        />
+
+        {loginErrorMsg && (
+          <Alert
+            style={{
+              marginBottom: 24,
+            }}
+            title={loginErrorMsg}
+            type="error"
+            showIcon
+          />
+        )}
+        {type === 'account' && (
+          <>
+            <ProFormText
+              name="username"
+              fieldProps={{
+                size: 'large',
+                prefix: <UserOutlined />,
+                onKeyDown: (e) => {
+                  if (e.key === 'Enter' && e.nativeEvent.isComposing) {
+                    e.stopPropagation();
+                  }
+                },
+              }}
+              placeholder={intl.formatMessage({
+                id: 'pages.login.username.placeholder',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: (
+                    <FormattedMessage id="pages.login.username.required" />
+                  ),
+                },
+              ]}
+            />
+            <ProFormText.Password
+              name="password"
+              fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined />,
+                onKeyDown: (e) => {
+                  if (e.key === 'Enter' && e.nativeEvent.isComposing) {
+                    e.stopPropagation();
+                  }
+                },
+              }}
+              placeholder={intl.formatMessage({
+                id: 'pages.login.password.placeholder',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: (
+                    <FormattedMessage id="pages.login.password.required" />
+                  ),
+                },
+              ]}
+            />
+          </>
+        )}
+
+        {type === 'mobile' && (
+          <>
+            <ProFormText
+              fieldProps={{
+                size: 'large',
+                prefix: <MobileOutlined />,
+                onKeyDown: (e) => {
+                  if (e.key === 'Enter' && e.nativeEvent.isComposing) {
+                    e.stopPropagation();
+                  }
+                },
+              }}
+              name="mobile"
+              placeholder={intl.formatMessage({
+                id: 'pages.login.phoneNumber.placeholder',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: (
+                    <FormattedMessage id="pages.login.phoneNumber.required" />
+                  ),
+                },
+                {
+                  pattern: /^1\d{10}$/,
+                  message: (
+                    <FormattedMessage id="pages.login.phoneNumber.invalid" />
+                  ),
+                },
+              ]}
+            />
+            <ProFormCaptcha
+              fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined />,
+                onKeyDown: (e) => {
+                  if (e.key === 'Enter' && e.nativeEvent.isComposing) {
+                    e.stopPropagation();
+                  }
+                },
+              }}
+              captchaProps={{
+                size: 'large',
+              }}
+              placeholder={intl.formatMessage({
+                id: 'pages.login.captcha.placeholder',
+              })}
+              captchaTextRender={(timing, count) => {
+                if (timing) {
+                  return `${count} ${intl.formatMessage({
+                    id: 'pages.getCaptchaSecondText',
+                  })}`;
+                }
+                return intl.formatMessage({
+                  id: 'pages.login.phoneLogin.getVerificationCode',
+                });
+              }}
+              name="captcha"
+              rules={[
+                {
+                  required: true,
+                  message: (
+                    <FormattedMessage id="pages.login.captcha.required" />
+                  ),
+                },
+              ]}
+              onGetCaptcha={async () => {
+                message.success('获取验证码成功！验证码为：1234');
+              }}
+            />
+          </>
+        )}
+        <div
+          style={{
+            marginBottom: 24,
+          }}
+        >
+          <ProFormCheckbox noStyle name="autoLogin">
+            <FormattedMessage id="pages.login.rememberMe" />
+          </ProFormCheckbox>
+          <a
+            href="#"
+            style={{
+              float: 'right',
+            }}
+          >
+            <FormattedMessage id="pages.login.forgotPassword" />
+          </a>
+        </div>
+      </LoginForm>
+      <Footer />
+    </AuthLayout>
+  );
+};
+
+export default Login;

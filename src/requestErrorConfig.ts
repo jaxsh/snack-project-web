@@ -1,81 +1,103 @@
-﻿import type { RequestOptions } from '@@/plugin-request/request';
+import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
 import { getIntl } from '@umijs/max';
-import { message, notification } from 'antd';
+import { staticMessage } from '@/utils/antdStaticApi';
 
-// 错误处理方案： 错误类型
-enum ErrorShowType {
-  SILENT = 0,
-  WARN_MESSAGE = 1,
-  ERROR_MESSAGE = 2,
-  NOTIFICATION = 3,
-  REDIRECT = 9,
-}
-// 与后端约定的响应数据格式
-interface ResponseStructure {
-  success: boolean;
-  data: unknown;
-  errorCode?: number;
-  errorMessage?: string;
-  showType?: ErrorShowType;
-}
-
-/**
- * @name 错误处理
- * pro 自带的错误处理， 可以在这里做自己的改动
- * @doc https://umijs.org/docs/max/request#配置
- */
 export const errorConfig: RequestConfig = {
-  // 错误处理： umi@3 的错误处理方案。
   errorConfig: {
-    // 错误抛出
     errorThrower: (res) => {
-      const { success, data, errorCode, errorMessage, showType } =
-        res as unknown as ResponseStructure;
-      if (!success) {
-        const error: any = new Error(errorMessage);
+      const { success, code, msg, data } = res as unknown as API.ApiResponse;
+      if (success === false) {
+        const error: any = new Error(msg || 'Business Error');
         error.name = 'BizError';
-        error.info = { errorCode, errorMessage, showType, data };
-        throw error; // 抛出自制的错误
+        error.info = { errorCode: code, errorMessage: msg, data };
+        throw error;
       }
     },
-    // 错误接收及处理
     errorHandler: (error: any, opts: any) => {
-      if (opts?.skipErrorHandler) throw error;
-      // 我们的 errorThrower 抛出的错误。
-      if (error.name === 'BizError') {
-        const errorInfo: ResponseStructure | undefined = error.info;
+      const isSkip = opts?.skipErrorHandler || error?.config?.skipErrorHandler;
+      const isNetworkError = !error.response;
+      const canSkip = isSkip && !isNetworkError;
+      if (canSkip) {
+        throw error;
+      }
+
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        void staticMessage().error(
+          getIntl().formatMessage({
+            id: 'app.request.timeout',
+            defaultMessage: '请求超时，请重试。',
+          }),
+        );
+      } else if (error.name === 'BizError') {
+        const errorInfo = error.info as
+          | (API.ApiResponse & { errorCode?: string; errorMessage?: string })
+          | undefined;
         if (errorInfo) {
-          const { errorMessage, errorCode } = errorInfo;
-          switch (errorInfo.showType) {
-            case ErrorShowType.SILENT:
-              // do nothing
-              break;
-            case ErrorShowType.WARN_MESSAGE:
-              message.warning(errorMessage);
-              break;
-            case ErrorShowType.ERROR_MESSAGE:
-              message.error(errorMessage);
-              break;
-            case ErrorShowType.NOTIFICATION:
-              notification.open({
-                title: errorCode,
-                description: errorMessage,
-              });
-              break;
-            case ErrorShowType.REDIRECT:
-              window.location.href = '/user/login';
-              break;
-            default:
-              message.error(errorMessage);
+          const { errorMessage, data } = errorInfo;
+          if (data?.loginUrl) {
+            window.location.href = data.loginUrl;
+            return;
+          }
+          const fieldErrors = Array.isArray(data)
+            ? (data as { field?: string; message?: string }[]).filter(
+                (e) => e.message,
+              )
+            : [];
+          if (fieldErrors.length > 0) {
+            fieldErrors.forEach(
+              (e) => void staticMessage().error(e.message ?? ''),
+            );
+          } else {
+            void staticMessage().error(errorMessage || 'Business Error');
           }
         }
       } else if (error.response) {
-        // Axios 的错误
-        // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-        message.error(`Response status:${error.response.status}`);
+        if (error.response.status === 401) {
+          const loginUrl = error.response.data?.data?.loginUrl;
+          if (loginUrl) {
+            void staticMessage().warning(
+              getIntl().formatMessage({
+                id: 'app.request.session-expired',
+              }),
+            );
+            setTimeout(() => {
+              window.location.href = loginUrl;
+            }, 1500);
+            return;
+          }
+        }
+        if (error.response.status === 400) {
+          const body = error.response.data;
+          const fieldErrors = Array.isArray(body?.data)
+            ? (body.data as { message?: string }[]).filter((e) => e.message)
+            : [];
+          if (fieldErrors.length > 0) {
+            fieldErrors.forEach(
+              (e) => void staticMessage().error(e.message ?? ''),
+            );
+          } else {
+            void staticMessage().error(body?.msg || 'Request failed');
+          }
+        } else if (error.response.status >= 500) {
+          // 5xx：后端服务异常或不可达，优先取 msg，否则提示网络不可用
+          const body = error.response.data as API.ApiResponse | undefined;
+          void staticMessage().error(
+            body?.msg ||
+              getIntl().formatMessage({
+                id: 'app.request.offline',
+                defaultMessage:
+                  'Network unavailable. Please check your connection and try again.',
+              }),
+          );
+        } else {
+          const body = error.response.data as API.ApiResponse | undefined;
+          void staticMessage().error(
+            body?.msg || `Response status:${error.response.status}`,
+          );
+        }
       } else if (typeof navigator !== 'undefined' && !navigator.onLine) {
-        message.error(
+        void staticMessage().error(
           getIntl().formatMessage({
             id: 'app.request.offline',
             defaultMessage:
@@ -83,22 +105,22 @@ export const errorConfig: RequestConfig = {
           }),
         );
       } else if (error.request) {
-        message.error('None response! Please retry.');
+        void staticMessage().error('None response! Please retry.');
       } else {
-        message.error('Request error, please retry.');
+        void staticMessage().error('Request error, please retry.');
+      }
+
+      if (canSkip) {
+        throw error;
       }
     },
   },
 
-  // 请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
-      // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token=123');
-      return { ...config, url };
+      return { ...config };
     },
   ],
 
-  // 响应拦截器
   responseInterceptors: [],
 };
