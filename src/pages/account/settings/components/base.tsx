@@ -5,7 +5,7 @@ import {
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
+import { useIntl, useModel } from '@umijs/max';
 import { App, Button, Upload } from 'antd';
 import React from 'react';
 import { updateProfile } from '@/services/auth';
@@ -16,6 +16,8 @@ const BaseView: React.FC = () => {
   const { message } = App.useApp();
   const { initialState, setInitialState } = useModel('@@initialState');
   const currentUser = initialState?.currentUser;
+  const intl = useIntl();
+  const fmt = (id: string) => intl.formatMessage({ id });
 
   const getAvatarURL = () => {
     if (currentUser?.avatar) {
@@ -48,7 +50,7 @@ const BaseView: React.FC = () => {
           } as API.SysUserVO,
         };
       });
-      message.success('更新基本信息成功');
+      message.success(fmt('pages.base.success'));
     } catch {
       return;
     }
@@ -62,7 +64,7 @@ const BaseView: React.FC = () => {
           onFinish={handleFinish}
           submitter={{
             searchConfig: {
-              submitText: '更新基本信息',
+              submitText: fmt('pages.base.submit'),
             },
             render: (_, dom) => dom[1],
           }}
@@ -77,26 +79,34 @@ const BaseView: React.FC = () => {
           <ProFormText
             width="md"
             name="nickname"
-            label="昵称"
+            label={fmt('pages.base.nickname.label')}
             rules={[
               {
                 required: true,
-                message: '请输入您的昵称!',
+                message: fmt('pages.base.nickname.required'),
               },
             ]}
           />
-          <ProFormText width="md" name="realName" label="真实姓名" />
+          <ProFormText
+            width="md"
+            name="realName"
+            label={fmt('pages.base.realName.label')}
+          />
           <ProFormSelect
             width="md"
             name="gender"
-            label="性别"
+            label={fmt('pages.base.gender.label')}
             options={[
-              { value: 0, label: '未知' },
-              { value: 1, label: '男' },
-              { value: 2, label: '女' },
+              { value: 0, label: fmt('pages.base.gender.unknown') },
+              { value: 1, label: fmt('pages.base.gender.male') },
+              { value: 2, label: fmt('pages.base.gender.female') },
             ]}
           />
-          <ProFormDatePicker width="md" name="birthday" label="生日" />
+          <ProFormDatePicker
+            width="md"
+            name="birthday"
+            label={fmt('pages.base.birthday.label')}
+          />
         </ProForm>
       </div>
       <div className={styles.right}>
@@ -110,10 +120,14 @@ export default BaseView;
 
 const AvatarView = ({ avatar }: { avatar: string }) => {
   const { styles } = useStyles();
+  const intl = useIntl();
+  const fmt = (id: string) => intl.formatMessage({ id });
 
   return (
     <>
-      <div className={styles.avatar_title}>头像</div>
+      <div className={styles.avatar_title}>
+        {fmt('pages.base.avatar.title')}
+      </div>
       <div className={styles.avatar}>
         <img src={avatar} alt="avatar" />
       </div>
@@ -121,7 +135,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => {
         <div className={styles.button_view}>
           <Button>
             <UploadOutlined />
-            更换头像
+            {fmt('pages.base.avatar.change')}
           </Button>
         </div>
       </Upload>

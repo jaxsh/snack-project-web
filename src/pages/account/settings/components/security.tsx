@@ -3,13 +3,12 @@ import { ProForm, ProFormText } from '@ant-design/pro-components';
 import { useIntl, useModel } from '@umijs/max';
 import { App, Modal } from 'antd';
 import React, { useState } from 'react';
-import { changePassword, logout } from '@/services/auth';
-
-const passwordStrength = {
-  strong: <span className="strong">强</span>,
-  medium: <span className="medium">中</span>,
-  weak: <span className="weak">弱 Weak</span>,
-};
+import {
+  changePassword,
+  getSysUserInfo,
+  logout,
+  updateProfile,
+} from '@/services/auth';
 
 const maskMobile = (mobile?: string) => {
   if (!mobile) return '未绑定手机';
@@ -42,6 +41,8 @@ const SecurityView: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [passwordVal, setPasswordVal] = useState('');
+  const [mobileModalOpen, setMobileModalOpen] = useState(false);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
 
   const getStrengthLevel = (val: string): number => {
     if (!val) return 0;
@@ -73,7 +74,6 @@ const SecurityView: React.FC = () => {
     return '#52c41a';
   };
 
-  const strengthTexts = ['', '弱', '中', '强'];
   const textColors = ['', '#faad14', '#a0d911', '#52c41a'];
 
   const handleOpenModal = (e: React.MouseEvent) => {
@@ -106,7 +106,7 @@ const SecurityView: React.FC = () => {
           console.error('Logout failed after password change', e);
         }
 
-        setInitialState((s) => {
+        await setInitialState((s) => {
           if (!s) return s;
           return {
             ...s,
@@ -130,42 +130,96 @@ const SecurityView: React.FC = () => {
     }
   };
 
+  const refreshCurrentUser = async () => {
+    const res = await getSysUserInfo();
+    if (res?.data) {
+      await setInitialState((s) => (s ? { ...s, currentUser: res.data } : s));
+    }
+  };
+
+  const handleMobileSubmit = async (values: { mobile: string }) => {
+    try {
+      await updateProfile({ mobile: values.mobile });
+      antdMessage.success(
+        intl.formatMessage({ id: 'pages.security.mobile.success' }),
+      );
+      setMobileModalOpen(false);
+      await refreshCurrentUser();
+    } catch {
+      return;
+    }
+  };
+
+  const handleEmailSubmit = async (values: { email: string }) => {
+    try {
+      await updateProfile({ email: values.email });
+      antdMessage.success(
+        intl.formatMessage({ id: 'pages.security.email.success' }),
+      );
+      setEmailModalOpen(false);
+      await refreshCurrentUser();
+    } catch {
+      return;
+    }
+  };
+
+  const fmt = (id: string, values?: Record<string, string>) =>
+    intl.formatMessage({ id }, values);
+
+  const strengthTexts = [
+    '',
+    fmt('pages.security.passwordStrength.weak'),
+    fmt('pages.security.passwordStrength.medium'),
+    fmt('pages.security.passwordStrength.strong'),
+  ];
+
   const getData = () => [
     {
-      title: '账户密码',
-      description: (
-        <>
-          当前密码强度：
-          {passwordStrength.strong}
-        </>
-      ),
+      title: fmt('pages.security.password.title'),
+      description: fmt('pages.security.password.description'),
       actions: [
         <a key="Modify" href="#" onClick={handleOpenModal}>
-          修改
+          {fmt('pages.security.modify')}
         </a>,
       ],
     },
     {
-      title: '密保手机',
-      description: `已绑定手机：${maskMobile(currentUser?.mobile)}`,
+      title: fmt('pages.security.mobile.title'),
+      description: currentUser?.mobile
+        ? fmt('pages.security.mobile.bound', {
+            mobile: maskMobile(currentUser.mobile),
+          })
+        : fmt('pages.security.mobile.unbound'),
       actions: [
         <a
           key="Modify"
-          style={{ color: 'rgba(0, 0, 0, 0.25)', cursor: 'not-allowed' }}
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setMobileModalOpen(true);
+          }}
         >
-          修改
+          {fmt('pages.security.modify')}
         </a>,
       ],
     },
     {
-      title: '备用邮箱',
-      description: `已绑定邮箱：${maskEmail(currentUser?.email)}`,
+      title: fmt('pages.security.email.title'),
+      description: currentUser?.email
+        ? fmt('pages.security.email.bound', {
+            email: maskEmail(currentUser.email),
+          })
+        : fmt('pages.security.email.unbound'),
       actions: [
         <a
           key="Modify"
-          style={{ color: 'rgba(0, 0, 0, 0.25)', cursor: 'not-allowed' }}
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setEmailModalOpen(true);
+          }}
         >
-          修改
+          {fmt('pages.security.modify')}
         </a>,
       ],
     },
@@ -276,7 +330,7 @@ const SecurityView: React.FC = () => {
               }}
             >
               <span style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.45)' }}>
-                密码强度：
+                {fmt('pages.security.passwordStrength.label')}
               </span>
               <div style={{ display: 'flex', gap: '4px' }}>
                 {[1, 2, 3].map((idx) => (
@@ -336,6 +390,77 @@ const SecurityView: React.FC = () => {
                   );
                 },
               }),
+            ]}
+          />
+        </ProForm>
+      </Modal>
+      <Modal
+        title={intl.formatMessage({ id: 'pages.security.mobile.modalTitle' })}
+        open={mobileModalOpen}
+        onCancel={() => setMobileModalOpen(false)}
+        footer={null}
+        destroyOnHidden
+        width={400}
+      >
+        <ProForm
+          onFinish={handleMobileSubmit}
+          submitter={{
+            searchConfig: {
+              submitText: intl.formatMessage({ id: 'pages.security.submit' }),
+            },
+            resetButtonProps: false,
+            submitButtonProps: { block: true },
+          }}
+        >
+          <ProFormText
+            name="mobile"
+            label={intl.formatMessage({ id: 'pages.security.mobile.label' })}
+            placeholder={intl.formatMessage({
+              id: 'pages.security.mobile.hint',
+            })}
+            rules={[
+              {
+                pattern: /^1[3-9]\d{9}$/,
+                message: intl.formatMessage({
+                  id: 'pages.security.mobile.hint',
+                }),
+              },
+            ]}
+          />
+        </ProForm>
+      </Modal>
+
+      <Modal
+        title={intl.formatMessage({ id: 'pages.security.email.modalTitle' })}
+        open={emailModalOpen}
+        onCancel={() => setEmailModalOpen(false)}
+        footer={null}
+        destroyOnHidden
+        width={400}
+      >
+        <ProForm
+          onFinish={handleEmailSubmit}
+          submitter={{
+            searchConfig: {
+              submitText: intl.formatMessage({ id: 'pages.security.submit' }),
+            },
+            resetButtonProps: false,
+            submitButtonProps: { block: true },
+          }}
+        >
+          <ProFormText
+            name="email"
+            label={intl.formatMessage({ id: 'pages.security.email.label' })}
+            placeholder={intl.formatMessage({
+              id: 'pages.security.email.hint',
+            })}
+            rules={[
+              {
+                type: 'email',
+                message: intl.formatMessage({
+                  id: 'pages.security.email.hint',
+                }),
+              },
             ]}
           />
         </ProForm>
