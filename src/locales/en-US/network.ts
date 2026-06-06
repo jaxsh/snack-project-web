@@ -14,4 +14,6 @@ export default {
   'app.error.home': 'Back Home',
   'app.request.offline':
     'Network unavailable. Please check your connection and try again.',
+  'app.request.session-expired': 'Session expired, please log in again',
+  'app.request.timeout': 'Request timed out, please try again.',
 };
