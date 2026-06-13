@@ -20,22 +20,50 @@ declare namespace API {
   type SysUserVO = {
     id: number;
     username: string;
+    realName?: string;
     nickname?: string;
     avatar?: string;
-    email?: string;
-    mobile?: string;
-    status: number;
-    access?: string;
-    realName?: string;
     gender?: number;
+    genderLabel?: string;
     birthday?: string;
-    initialPassword?: number;
-    expired?: number;
+    remark?: string;
+    createTime?: string;
+    updateTime?: string;
+    status: number;
+    statusLabel?: string;
+    mobile?: string;
+    email?: string;
+    lastActiveTime?: string;
   };
 
   type CurrentUser = SysUserVO;
 
   type UpdatePasswordParams = {
     password?: string;
+  };
+
+  type SysUserDTO = {
+    username?: string;
+    realName?: string;
+    nickname?: string;
+    avatar?: string;
+    gender?: number;
+    birthday?: string;
+    remark?: string;
+    roleCodes?: string[];
+    orgCodes?: string[];
+    status?: number;
+    mobile?: string;
+    email?: string;
+    password?: string;
+    expireDate?: string;
+  };
+
+  type PageResult<T> = {
+    records: T[];
+    total: number;
+    size: number;
+    current: number;
+    pages: number;
   };
 }
