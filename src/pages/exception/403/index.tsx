@@ -9,11 +9,11 @@ const Exception403: React.FC = () => {
       <Result
         status="403"
         title="403"
-        subTitle={intl.formatMessage({ id: 'pages.403.subTitle' })}
+        subTitle={intl.formatMessage({ id: 'pages.403.text.subTitle' })}
         extra={
           <Link to="/" prefetch>
             <Button type="primary">
-              {intl.formatMessage({ id: 'pages.403.buttonText' })}
+              {intl.formatMessage({ id: 'pages.common.action.backToHome' })}
             </Button>
           </Link>
         }
