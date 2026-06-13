@@ -50,7 +50,7 @@ const ChangePassword: React.FC = () => {
       const res = await changePassword({ password: values.password });
       if (res.success) {
         message.success(
-          intl.formatMessage({ id: 'pages.changePassword.success' }),
+          intl.formatMessage({ id: 'pages.changePassword.feedback.success' }),
         );
 
         let logoutRes: any = null;
@@ -83,7 +83,7 @@ const ChangePassword: React.FC = () => {
   };
 
   return (
-    <AuthLayout titleId="pages.changePassword.title">
+    <AuthLayout titleId="pages.changePassword.text.title">
       <LoginForm
         contentStyle={{
           minWidth: 280,
@@ -91,15 +91,15 @@ const ChangePassword: React.FC = () => {
         }}
         logo={<img alt="logo" src="/logo.svg" />}
         title={intl.formatMessage({
-          id: 'pages.changePassword.title',
+          id: 'pages.changePassword.text.title',
         })}
         subTitle={intl.formatMessage({
-          id: 'pages.changePassword.description',
+          id: 'pages.changePassword.text.description',
         })}
         submitter={{
           searchConfig: {
             submitText: intl.formatMessage({
-              id: 'pages.changePassword.submit',
+              id: 'pages.changePassword.action.submit',
             }),
           },
         }}
@@ -113,27 +113,45 @@ const ChangePassword: React.FC = () => {
             prefix: <LockOutlined />,
             onChange: (e) => setPasswordVal(e.target.value),
           }}
-          placeholder={intl.formatMessage({
-            id: 'pages.changePassword.newPassword.placeholder',
-          })}
+          placeholder={intl.formatMessage(
+            { id: 'pages.common.validation.placeholder.input' },
+            {
+              field: intl.formatMessage({
+                id: 'pages.changePassword.fields.newPassword',
+              }),
+            },
+          )}
           rules={[
             {
               required: true,
-              message: intl.formatMessage({
-                id: 'pages.changePassword.newPassword.required',
-              }),
+              message: intl.formatMessage(
+                { id: 'pages.common.validation.required' },
+                {
+                  field: intl.formatMessage({
+                    id: 'pages.changePassword.fields.newPassword',
+                  }),
+                },
+              ),
             },
             {
               min: 8,
-              message: intl.formatMessage({
-                id: 'pages.changePassword.newPassword.minLen',
-              }),
+              max: 255,
+              message: intl.formatMessage(
+                { id: 'pages.common.validation.rangeLength' },
+                {
+                  field: intl.formatMessage({
+                    id: 'pages.changePassword.fields.newPassword',
+                  }),
+                  min: 8,
+                  max: 255,
+                },
+              ),
             },
             {
               pattern:
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
               message: intl.formatMessage({
-                id: 'pages.changePassword.newPassword.pattern',
+                id: 'pages.common.validation.passwordPattern',
               }),
             },
           ]}
@@ -183,14 +201,14 @@ const ChangePassword: React.FC = () => {
             prefix: <LockOutlined />,
           }}
           placeholder={intl.formatMessage({
-            id: 'pages.changePassword.confirmPassword.placeholder',
+            id: 'pages.changePassword.validation.confirmPassword.placeholder',
           })}
           dependencies={['password']}
           rules={[
             {
               required: true,
               message: intl.formatMessage({
-                id: 'pages.changePassword.confirmPassword.required',
+                id: 'pages.changePassword.validation.confirmPassword.required',
               }),
             },
             ({ getFieldValue }) => ({
@@ -201,7 +219,7 @@ const ChangePassword: React.FC = () => {
                 return Promise.reject(
                   new Error(
                     intl.formatMessage({
-                      id: 'pages.changePassword.confirmPassword.mismatch',
+                      id: 'pages.changePassword.validation.confirmPassword.mismatch',
                     }),
                   ),
                 );
