@@ -28,6 +28,18 @@ export default [
     hideInMenu: true,
   },
   {
+    path: '/system',
+    name: 'system',
+    icon: 'setting',
+    routes: [
+      {
+        path: '/system/user',
+        name: 'user',
+        component: './system/user',
+      },
+    ],
+  },
+  {
     path: '/exception/500',
     name: '500',
     component: './exception/500',

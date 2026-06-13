@@ -69,27 +69,6 @@ export async function updateProfile(
   });
 }
 
-/** 管理员更新用户资料 PUT /api/upms/users/${id} */
-export async function updateUser(
-  id: number,
-  body: {
-    nickname: string;
-    realName?: string | null;
-    gender?: number | null;
-    birthday?: string | null;
-    email?: string | null;
-    mobile?: string | null;
-  },
-  options?: Record<string, any>,
-) {
-  return request<API.ApiResponse<void>>(`/api/upms/users/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
+
 
 
