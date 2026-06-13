@@ -50,7 +50,7 @@ const BaseView: React.FC = () => {
           } as API.SysUserVO,
         };
       });
-      message.success(fmt('pages.base.success'));
+      message.success(fmt('pages.common.feedback.save.success'));
     } catch {
       return;
     }
@@ -64,7 +64,7 @@ const BaseView: React.FC = () => {
           onFinish={handleFinish}
           submitter={{
             searchConfig: {
-              submitText: fmt('pages.base.submit'),
+              submitText: fmt('pages.common.action.save'),
             },
             render: (_, dom) => dom[1],
           }}
@@ -79,33 +79,36 @@ const BaseView: React.FC = () => {
           <ProFormText
             width="md"
             name="nickname"
-            label={fmt('pages.base.nickname.label')}
+            label={fmt('pages.base.fields.nickname')}
             rules={[
               {
                 required: true,
-                message: fmt('pages.base.nickname.required'),
+                message: intl.formatMessage(
+                  { id: 'pages.common.validation.required' },
+                  { field: fmt('pages.base.fields.nickname') },
+                ),
               },
             ]}
           />
           <ProFormText
             width="md"
             name="realName"
-            label={fmt('pages.base.realName.label')}
+            label={fmt('pages.base.fields.realName')}
           />
           <ProFormSelect
             width="md"
             name="gender"
-            label={fmt('pages.base.gender.label')}
+            label={fmt('pages.common.dict.gender.label')}
             options={[
-              { value: 0, label: fmt('pages.base.gender.unknown') },
-              { value: 1, label: fmt('pages.base.gender.male') },
-              { value: 2, label: fmt('pages.base.gender.female') },
+              { value: 0, label: fmt('pages.common.dict.gender.unknown') },
+              { value: 1, label: fmt('pages.common.dict.gender.male') },
+              { value: 2, label: fmt('pages.common.dict.gender.female') },
             ]}
           />
           <ProFormDatePicker
             width="md"
             name="birthday"
-            label={fmt('pages.base.birthday.label')}
+            label={fmt('pages.base.fields.birthday')}
           />
         </ProForm>
       </div>
@@ -126,7 +129,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => {
   return (
     <>
       <div className={styles.avatar_title}>
-        {fmt('pages.base.avatar.title')}
+        {fmt('pages.base.text.avatarTitle')}
       </div>
       <div className={styles.avatar}>
         <img src={avatar} alt="avatar" />
@@ -135,7 +138,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => {
         <div className={styles.button_view}>
           <Button>
             <UploadOutlined />
-            {fmt('pages.base.avatar.change')}
+            {fmt('pages.base.action.changeAvatar')}
           </Button>
         </div>
       </Upload>

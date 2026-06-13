@@ -33,8 +33,8 @@ const Settings: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   const menuMap: Record<string, React.ReactNode> = {
-    base: intl.formatMessage({ id: 'pages.settings.menu.base' }),
-    security: intl.formatMessage({ id: 'pages.settings.menu.security' }),
+    base: intl.formatMessage({ id: 'pages.settings.text.menuBase' }),
+    security: intl.formatMessage({ id: 'pages.settings.text.menuSecurity' }),
   };
   const [initConfig, setInitConfig] = useState<SettingsState>({
     mode: 'inline',

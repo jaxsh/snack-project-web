@@ -44,6 +44,15 @@ const SecurityView: React.FC = () => {
   const [mobileModalOpen, setMobileModalOpen] = useState(false);
   const [emailModalOpen, setEmailModalOpen] = useState(false);
 
+  const getBarColor = (index: number) => {
+    if (level === 0 || index > level) return 'rgba(0, 0, 0, 0.06)';
+    if (level === 1) return '#faad14';
+    if (level === 2) return '#a0d911';
+    return '#52c41a';
+  };
+
+  const textColors = ['', '#faad14', '#a0d911', '#52c41a'];
+
   const getStrengthLevel = (val: string): number => {
     if (!val) return 0;
     if (val.length < 8) return 1;
@@ -67,20 +76,6 @@ const SecurityView: React.FC = () => {
 
   const level = getStrengthLevel(passwordVal);
 
-  const getBarColor = (index: number) => {
-    if (level === 0 || index > level) return 'rgba(0, 0, 0, 0.06)';
-    if (level === 1) return '#faad14';
-    if (level === 2) return '#a0d911';
-    return '#52c41a';
-  };
-
-  const textColors = ['', '#faad14', '#a0d911', '#52c41a'];
-
-  const handleOpenModal = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsModalOpen(true);
-  };
-
   const handleCloseModal = () => {
     if (!submitting) {
       setIsModalOpen(false);
@@ -94,7 +89,7 @@ const SecurityView: React.FC = () => {
       const res = await changePassword({ password: values.password });
       if (res.success) {
         antdMessage.success(
-          intl.formatMessage({ id: 'pages.changePassword.success' }),
+          intl.formatMessage({ id: 'pages.changePassword.feedback.success' }),
         );
         setIsModalOpen(false);
         setPasswordVal('');
@@ -141,7 +136,7 @@ const SecurityView: React.FC = () => {
     try {
       await updateProfile({ mobile: values.mobile });
       antdMessage.success(
-        intl.formatMessage({ id: 'pages.security.mobile.success' }),
+        intl.formatMessage({ id: 'pages.common.feedback.update.success' }),
       );
       setMobileModalOpen(false);
       await refreshCurrentUser();
@@ -154,7 +149,7 @@ const SecurityView: React.FC = () => {
     try {
       await updateProfile({ email: values.email });
       antdMessage.success(
-        intl.formatMessage({ id: 'pages.security.email.success' }),
+        intl.formatMessage({ id: 'pages.common.feedback.update.success' }),
       );
       setEmailModalOpen(false);
       await refreshCurrentUser();
@@ -167,29 +162,28 @@ const SecurityView: React.FC = () => {
     intl.formatMessage({ id }, values);
 
   const strengthTexts = [
-    '',
-    fmt('pages.security.passwordStrength.weak'),
-    fmt('pages.security.passwordStrength.medium'),
-    fmt('pages.security.passwordStrength.strong'),
+    fmt('pages.common.dict.passwordStrength.weak'),
+    fmt('pages.common.dict.passwordStrength.medium'),
+    fmt('pages.common.dict.passwordStrength.strong'),
   ];
 
   const getData = () => [
     {
-      title: fmt('pages.security.password.title'),
-      description: fmt('pages.security.password.description'),
+      title: fmt('pages.security.text.passwordTitle'),
+      description: fmt('pages.security.text.passwordDescription'),
       actions: [
-        <a key="Modify" href="#" onClick={handleOpenModal}>
-          {fmt('pages.security.modify')}
+        <a key="Modify" onClick={() => setIsModalOpen(true)}>
+          {fmt('pages.common.action.modify')}
         </a>,
       ],
     },
     {
-      title: fmt('pages.security.mobile.title'),
+      title: fmt('pages.security.text.mobileTitle'),
       description: currentUser?.mobile
-        ? fmt('pages.security.mobile.bound', {
+        ? fmt('pages.security.text.mobileBound', {
             mobile: maskMobile(currentUser.mobile),
           })
-        : fmt('pages.security.mobile.unbound'),
+        : fmt('pages.security.text.mobileUnbound'),
       actions: [
         <a
           key="Modify"
@@ -199,17 +193,17 @@ const SecurityView: React.FC = () => {
             setMobileModalOpen(true);
           }}
         >
-          {fmt('pages.security.modify')}
+          {fmt('pages.common.action.modify')}
         </a>,
       ],
     },
     {
-      title: fmt('pages.security.email.title'),
+      title: fmt('pages.security.text.emailTitle'),
       description: currentUser?.email
-        ? fmt('pages.security.email.bound', {
+        ? fmt('pages.security.text.emailBound', {
             email: maskEmail(currentUser.email),
           })
-        : fmt('pages.security.email.unbound'),
+        : fmt('pages.security.text.emailUnbound'),
       actions: [
         <a
           key="Modify"
@@ -219,7 +213,7 @@ const SecurityView: React.FC = () => {
             setEmailModalOpen(true);
           }}
         >
-          {fmt('pages.security.modify')}
+          {fmt('pages.common.action.modify')}
         </a>,
       ],
     },
@@ -261,7 +255,9 @@ const SecurityView: React.FC = () => {
       </div>
 
       <Modal
-        title={intl.formatMessage({ id: 'pages.changePassword.modalTitle' })}
+        title={intl.formatMessage({
+          id: 'pages.changePassword.text.modalTitle',
+        })}
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={null}
@@ -275,7 +271,7 @@ const SecurityView: React.FC = () => {
           submitter={{
             searchConfig: {
               submitText: intl.formatMessage({
-                id: 'pages.changePassword.submit',
+                id: 'pages.changePassword.action.submit',
               }),
             },
             resetButtonProps: false,
@@ -288,33 +284,50 @@ const SecurityView: React.FC = () => {
           <ProFormText.Password
             name="password"
             label={intl.formatMessage({
-              id: 'pages.changePassword.newPassword',
+              id: 'pages.security.fields.newPassword',
             })}
             fieldProps={{
               prefix: <LockOutlined />,
               onChange: (e) => setPasswordVal(e.target.value),
             }}
-            placeholder={intl.formatMessage({
-              id: 'pages.changePassword.newPassword.placeholder',
-            })}
+            placeholder={intl.formatMessage(
+              { id: 'pages.common.validation.placeholder.input' },
+              {
+                field: intl.formatMessage({
+                  id: 'pages.security.fields.newPassword',
+                }),
+              },
+            )}
             rules={[
               {
                 required: true,
-                message: intl.formatMessage({
-                  id: 'pages.changePassword.newPassword.required',
-                }),
+                message: intl.formatMessage(
+                  { id: 'pages.common.validation.required' },
+                  {
+                    field: intl.formatMessage({
+                      id: 'pages.security.fields.newPassword',
+                    }),
+                  },
+                ),
               },
               {
                 min: 8,
-                message: intl.formatMessage({
-                  id: 'pages.changePassword.newPassword.minLen',
-                }),
+                message: intl.formatMessage(
+                  { id: 'pages.common.validation.rangeLength' },
+                  {
+                    field: intl.formatMessage({
+                      id: 'pages.security.fields.newPassword',
+                    }),
+                    min: 8,
+                    max: 255,
+                  },
+                ),
               },
               {
                 pattern:
                   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                 message: intl.formatMessage({
-                  id: 'pages.changePassword.newPassword.pattern',
+                  id: 'pages.common.validation.passwordPattern',
                 }),
               },
             ]}
@@ -330,7 +343,7 @@ const SecurityView: React.FC = () => {
               }}
             >
               <span style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.45)' }}>
-                {fmt('pages.security.passwordStrength.label')}
+                {fmt('pages.common.dict.passwordStrength.label')}
               </span>
               <div style={{ display: 'flex', gap: '4px' }}>
                 {[1, 2, 3].map((idx) => (
@@ -360,21 +373,28 @@ const SecurityView: React.FC = () => {
           <ProFormText.Password
             name="confirmPassword"
             label={intl.formatMessage({
-              id: 'pages.changePassword.confirmPassword',
+              id: 'pages.security.fields.confirmPassword',
             })}
-            fieldProps={{
-              prefix: <LockOutlined />,
-            }}
-            placeholder={intl.formatMessage({
-              id: 'pages.changePassword.confirmPassword.placeholder',
-            })}
+            placeholder={intl.formatMessage(
+              { id: 'pages.common.validation.placeholder.input' },
+              {
+                field: intl.formatMessage({
+                  id: 'pages.security.fields.confirmPassword',
+                }),
+              },
+            )}
             dependencies={['password']}
             rules={[
               {
                 required: true,
-                message: intl.formatMessage({
-                  id: 'pages.changePassword.confirmPassword.required',
-                }),
+                message: intl.formatMessage(
+                  { id: 'pages.common.validation.required' },
+                  {
+                    field: intl.formatMessage({
+                      id: 'pages.security.fields.confirmPassword',
+                    }),
+                  },
+                ),
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
@@ -384,7 +404,7 @@ const SecurityView: React.FC = () => {
                   return Promise.reject(
                     new Error(
                       intl.formatMessage({
-                        id: 'pages.changePassword.confirmPassword.mismatch',
+                        id: 'pages.changePassword.validation.confirmPassword.mismatch',
                       }),
                     ),
                   );
@@ -395,7 +415,9 @@ const SecurityView: React.FC = () => {
         </ProForm>
       </Modal>
       <Modal
-        title={intl.formatMessage({ id: 'pages.security.mobile.modalTitle' })}
+        title={intl.formatMessage({
+          id: 'pages.security.text.mobileModalTitle',
+        })}
         open={mobileModalOpen}
         onCancel={() => setMobileModalOpen(false)}
         footer={null}
@@ -406,7 +428,9 @@ const SecurityView: React.FC = () => {
           onFinish={handleMobileSubmit}
           submitter={{
             searchConfig: {
-              submitText: intl.formatMessage({ id: 'pages.security.submit' }),
+              submitText: intl.formatMessage({
+                id: 'pages.security.action.submit',
+              }),
             },
             resetButtonProps: false,
             submitButtonProps: { block: true },
@@ -414,16 +438,26 @@ const SecurityView: React.FC = () => {
         >
           <ProFormText
             name="mobile"
-            label={intl.formatMessage({ id: 'pages.security.mobile.label' })}
-            placeholder={intl.formatMessage({
-              id: 'pages.security.mobile.hint',
-            })}
+            label={intl.formatMessage({ id: 'pages.security.fields.mobile' })}
+            placeholder={intl.formatMessage(
+              { id: 'pages.common.validation.placeholder.input' },
+              {
+                field: intl.formatMessage({
+                  id: 'pages.security.fields.mobile',
+                }),
+              },
+            )}
             rules={[
               {
                 pattern: /^1[3-9]\d{9}$/,
-                message: intl.formatMessage({
-                  id: 'pages.security.mobile.hint',
-                }),
+                message: intl.formatMessage(
+                  { id: 'pages.common.validation.invalid' },
+                  {
+                    field: intl.formatMessage({
+                      id: 'pages.security.fields.mobile',
+                    }),
+                  },
+                ),
               },
             ]}
           />
@@ -431,7 +465,9 @@ const SecurityView: React.FC = () => {
       </Modal>
 
       <Modal
-        title={intl.formatMessage({ id: 'pages.security.email.modalTitle' })}
+        title={intl.formatMessage({
+          id: 'pages.security.text.emailModalTitle',
+        })}
         open={emailModalOpen}
         onCancel={() => setEmailModalOpen(false)}
         footer={null}
@@ -442,7 +478,9 @@ const SecurityView: React.FC = () => {
           onFinish={handleEmailSubmit}
           submitter={{
             searchConfig: {
-              submitText: intl.formatMessage({ id: 'pages.security.submit' }),
+              submitText: intl.formatMessage({
+                id: 'pages.security.action.submit',
+              }),
             },
             resetButtonProps: false,
             submitButtonProps: { block: true },
@@ -450,16 +488,26 @@ const SecurityView: React.FC = () => {
         >
           <ProFormText
             name="email"
-            label={intl.formatMessage({ id: 'pages.security.email.label' })}
-            placeholder={intl.formatMessage({
-              id: 'pages.security.email.hint',
-            })}
+            label={intl.formatMessage({ id: 'pages.security.fields.email' })}
+            placeholder={intl.formatMessage(
+              { id: 'pages.common.validation.placeholder.input' },
+              {
+                field: intl.formatMessage({
+                  id: 'pages.security.fields.email',
+                }),
+              },
+            )}
             rules={[
               {
                 type: 'email',
-                message: intl.formatMessage({
-                  id: 'pages.security.email.hint',
-                }),
+                message: intl.formatMessage(
+                  { id: 'pages.common.validation.invalid' },
+                  {
+                    field: intl.formatMessage({
+                      id: 'pages.security.fields.email',
+                    }),
+                  },
+                ),
               },
             ]}
           />
