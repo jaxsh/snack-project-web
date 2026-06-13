@@ -1,90 +1,151 @@
 export default {
-  'pages.layouts.userLayout.title':
-    'Ant Design 是西湖区最具影响力的 Web 设计规范',
-  'pages.login.accountLogin.tab': '账户密码登录',
+  // ==========================================
+  // 通用多语言配置 (Common i18n Configuration)
+  // ==========================================
 
-  'pages.login.success': '登录成功！',
-  'pages.login.username.placeholder': '用户名',
-  'pages.login.username.required': '用户名是必填项！',
-  'pages.login.password.placeholder': '密码',
-  'pages.login.password.required': '密码是必填项！',
-  'pages.login.phoneLogin.tab': '手机号登录',
+  // 动作 (Actions)
+  'pages.common.action.ok': '确定',
+  'pages.common.action.cancel': '取消',
+  'pages.common.action.columnLabel': '操作',
+  'pages.common.action.create': '新建',
+  'pages.common.action.edit': '编辑',
+  'pages.common.action.modify': '修改',
+  'pages.common.action.delete': '删除',
+  'pages.common.action.batchDelete': '批量删除',
+  'pages.common.action.confirmDelete': '确认删除',
+  'pages.common.action.save': '保存',
+  'pages.common.action.backToHome': '返回首页',
 
-  'pages.login.phoneNumber.placeholder': '请输入手机号！',
-  'pages.login.phoneNumber.required': '手机号是必填项！',
-  'pages.login.phoneNumber.invalid': '不合法的手机号！',
-  'pages.login.captcha.placeholder': '请输入验证码！',
-  'pages.login.captcha.required': '验证码是必填项！',
-  'pages.login.phoneLogin.getVerificationCode': '获取验证码',
-  'pages.getCaptchaSecondText': '秒后重新获取',
-  'pages.login.rememberMe': '自动登录',
-  'pages.login.forgotPassword': '忘记密码 ?',
-  'pages.login.submit': '登录',
-  'pages.login.loginWith': '其他登录方式 :',
+  // 交互结果反馈 (Interaction Feedback)
+  'pages.common.feedback.create.success': '创建成功',
+  'pages.common.feedback.update.success': '修改成功',
+  'pages.common.feedback.delete.success': '删除成功',
+  'pages.common.feedback.save.success': '保存成功',
+  'pages.common.feedback.delete.confirm': '确定要删除 {name} 吗？',
+  'pages.common.feedback.batchDelete.confirm':
+    '确定要删除这 {count} 项吗？此操作无法撤销。',
 
-  'pages.404.subTitle': '抱歉，您访问的页面不存在。',
-  'pages.404.buttonText': '返回首页',
-  'pages.403.subTitle': '抱歉，您无权访问此页面。',
-  'pages.403.buttonText': '返回首页',
-  'pages.500.subTitle': '抱歉，服务器出错了。',
-  'pages.500.buttonText': '返回首页',
+  // 数据字典 (Dictionaries)
+  'pages.common.dict.status.label': '状态',
+  'pages.common.dict.status.enabled': '启用',
+  'pages.common.dict.status.disabled': '禁用',
+  'pages.common.dict.gender.label': '性别',
+  'pages.common.dict.gender.unknown': '未知',
+  'pages.common.dict.gender.male': '男',
+  'pages.common.dict.gender.female': '女',
+  'pages.common.dict.passwordStrength.label': '密码强度：',
+  'pages.common.dict.passwordStrength.weak': '弱',
+  'pages.common.dict.passwordStrength.medium': '中',
+  'pages.common.dict.passwordStrength.strong': '强',
+  'pages.common.dict.theme.auto': '跟随系统',
+  'pages.common.dict.theme.light': '浅色主题',
+  'pages.common.dict.theme.dark': '暗黑主题',
 
-  'pages.changePassword.title': '强制重置密码',
-  'pages.changePassword.modalTitle': '修改密码',
-  'pages.changePassword.description':
-    '为了您的账号安全，系统检测到您当前使用的是初始密码或密码已过期，请修改密码后继续使用.',
-  'pages.changePassword.submit': '确认修改并重新登录',
-  'pages.changePassword.success': '密码修改成功，请使用新密码重新登录',
-  'pages.changePassword.newPassword': '新密码',
-  'pages.changePassword.newPassword.placeholder': '请输入新密码',
-  'pages.changePassword.newPassword.required': '请输入新密码！',
-  'pages.changePassword.newPassword.minLen': '密码长度不能少于 8 位！',
-  'pages.changePassword.newPassword.pattern':
+  // 校验规则与占位符 (Validation & Placeholders)
+  'pages.common.validation.placeholder.input': '请输入{field}',
+  'pages.common.validation.required': '{field}是必填项！',
+  'pages.common.validation.invalid': '不合法的{field}格式！',
+  'pages.common.validation.maxLength': '{field}不能超过 {max} 个字符',
+  'pages.common.validation.rangeLength':
+    '{field}长度在 {min} 到 {max} 个字符之间',
+  'pages.common.validation.passwordPattern':
     '密码必须包含大小写字母、数字和特殊字符！',
-  'pages.changePassword.confirmPassword': '确认新密码',
-  'pages.changePassword.confirmPassword.placeholder': '请再次输入新密码',
-  'pages.changePassword.confirmPassword.required':
+
+  // 文案 (Text)
+  'pages.common.text.themeSwitch': '主题切换',
+  'pages.common.text.langSwitch': '语言切换',
+
+  // ==========================================
+  // 各业务页面专属配置 (Page Specific Configuration)
+  // ==========================================
+
+  // 404/403/500 页面
+  'pages.404.text.subTitle': '抱歉，您访问的页面不存在。',
+  'pages.403.text.subTitle': '抱歉，您无权访问此页面。',
+  'pages.500.text.subTitle': '抱歉，服务器出错了。',
+
+  // 登录页面
+  'pages.login.text.layoutTitle':
+    'Ant Design 是西湖区最具影响力的 Web 设计规范',
+  'pages.login.text.accountLoginTab': '账户密码登录',
+  'pages.login.text.phoneLoginTab': '手机号登录',
+  'pages.login.text.captchaCountdown': '秒后重新获取',
+  'pages.login.text.loginWith': '其他登录方式 :',
+  'pages.login.action.getVerificationCode': '获取验证码',
+  'pages.login.action.forgotPassword': '忘记密码 ?',
+  'pages.login.action.submit': '登录',
+  'pages.login.feedback.success': '登录成功！',
+  'pages.login.fields.username': '用户名',
+  'pages.login.fields.password': '密码',
+  'pages.login.fields.mobile': '手机号',
+  'pages.login.fields.captcha': '验证码',
+  'pages.login.fields.rememberMe': '自动登录',
+
+  // 强制/修改密码页面
+  'pages.changePassword.text.title': '强制重置密码',
+  'pages.changePassword.text.modalTitle': '修改密码',
+  'pages.changePassword.text.description':
+    '当前使用的是初始密码或密码已过期，请修改密码后继续使用。',
+  'pages.changePassword.action.submit': '确认修改并重新登录',
+  'pages.changePassword.feedback.success': '密码修改成功，请使用新密码重新登录',
+  'pages.changePassword.fields.newPassword': '新密码',
+  'pages.changePassword.fields.confirmPassword': '确认新密码',
+  'pages.changePassword.validation.confirmPassword.placeholder':
+    '请再次输入新密码',
+  'pages.changePassword.validation.confirmPassword.required':
     '请再次输入新密码以进行确认！',
-  'pages.changePassword.confirmPassword.mismatch': '两次输入的密码不一致！',
-  'components.RightContent.theme.auto': '跟随系统',
-  'components.RightContent.theme.light': '浅色主题',
-  'components.RightContent.theme.dark': '暗黑主题',
-  'components.RightContent.theme.switch': '主题切换',
-  'components.RightContent.lang.title': '语言切换',
-  'pages.security.mobile.modalTitle': '修改手机号',
-  'pages.security.mobile.label': '手机号',
-  'pages.security.mobile.hint': '请输入有效的中国大陆手机号',
-  'pages.security.mobile.success': '手机号更新成功',
-  'pages.security.email.modalTitle': '修改邮箱',
-  'pages.security.email.label': '邮箱',
-  'pages.security.email.hint': '请输入有效的邮箱地址',
-  'pages.security.email.success': '邮箱更新成功',
-  'pages.security.submit': '确认修改',
-  'pages.security.password.title': '账户密码',
-  'pages.security.password.description': '当前密码强度：强',
-  'pages.security.mobile.title': '手机号',
-  'pages.security.mobile.bound': '已绑定：{mobile}',
-  'pages.security.mobile.unbound': '未绑定',
-  'pages.security.email.title': '邮箱',
-  'pages.security.email.bound': '已绑定：{email}',
-  'pages.security.email.unbound': '未绑定',
-  'pages.security.modify': '修改',
-  'pages.settings.menu.base': '基本设置',
-  'pages.settings.menu.security': '安全设置',
-  'pages.base.submit': '更新基本信息',
-  'pages.base.success': '更新基本信息成功',
-  'pages.base.nickname.label': '昵称',
-  'pages.base.nickname.required': '请输入您的昵称！',
-  'pages.base.realName.label': '真实姓名',
-  'pages.base.gender.label': '性别',
-  'pages.base.gender.unknown': '未知',
-  'pages.base.gender.male': '男',
-  'pages.base.gender.female': '女',
-  'pages.base.birthday.label': '生日',
-  'pages.base.avatar.title': '头像',
-  'pages.base.avatar.change': '更换头像',
-  'pages.security.passwordStrength.label': '密码强度：',
-  'pages.security.passwordStrength.weak': '弱',
-  'pages.security.passwordStrength.medium': '中',
-  'pages.security.passwordStrength.strong': '强',
+  'pages.changePassword.validation.confirmPassword.mismatch':
+    '两次输入的密码不一致！',
+
+  // 个人中心/设置
+  'pages.settings.text.menuBase': '基本设置',
+  'pages.settings.text.menuSecurity': '安全设置',
+
+  // 个人中心/设置 - 基本设置
+  'pages.base.fields.nickname': '昵称',
+  'pages.base.fields.realName': '真实姓名',
+  'pages.base.fields.birthday': '生日',
+  'pages.base.text.avatarTitle': '头像',
+  'pages.base.action.changeAvatar': '更换头像',
+
+  // 个人中心/设置 - 安全设置
+  'pages.security.text.passwordTitle': '账户密码',
+  'pages.security.text.passwordDescription': '当前密码强度：强',
+  'pages.security.text.mobileTitle': '手机号',
+  'pages.security.text.mobileBound': '已绑定：{mobile}',
+  'pages.security.text.mobileUnbound': '未绑定',
+  'pages.security.text.mobileModalTitle': '修改手机号',
+  'pages.security.text.emailTitle': '邮箱',
+  'pages.security.text.emailBound': '已绑定：{email}',
+  'pages.security.text.emailUnbound': '未绑定',
+  'pages.security.text.emailModalTitle': '修改邮箱',
+  'pages.security.action.submit': '确认修改',
+  'pages.security.fields.password': '账户密码',
+  'pages.security.fields.mobile': '手机号',
+  'pages.security.fields.email': '邮箱',
+  'pages.security.fields.newPassword': '新密码',
+  'pages.security.fields.confirmPassword': '确认新密码',
+
+  // 系统管理 - 用户管理页面
+  'pages.system.user.feedback.resetPassword.success': '密码重置成功',
+  'pages.system.user.feedback.unlock.success': '解锁成功',
+  'pages.system.user.feedback.revoke.success': '强制下线成功',
+  'pages.system.user.action.unlock': '解锁账号',
+  'pages.system.user.action.revoke': '强制下线',
+  'pages.system.user.action.resetPassword': '重置密码',
+  'pages.system.user.text.resetPasswordTitle': '重置密码 - {username}',
+
+  // 系统管理 - 用户管理页面字段 label
+  'pages.system.user.fields.newPassword': '新密码',
+  'pages.system.user.fields.avatar': '头像',
+  'pages.system.user.fields.username': '用户名',
+  'pages.system.user.fields.realName': '真实姓名',
+  'pages.system.user.fields.nickname': '昵称',
+  'pages.system.user.fields.gender': '性别',
+  'pages.system.user.fields.birthday': '生日',
+  'pages.system.user.fields.mobile': '手机',
+  'pages.system.user.fields.email': '邮箱',
+  'pages.system.user.fields.status': '状态',
+  'pages.system.user.fields.remark': '备注',
+  'pages.system.user.fields.lastActiveTime': '最后活跃时间',
 };

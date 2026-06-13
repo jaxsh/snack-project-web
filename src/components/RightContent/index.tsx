@@ -80,7 +80,7 @@ export const LangDropdown: React.FC = () => {
         type="text"
         className={styles.action}
         aria-label={intl.formatMessage({
-          id: 'components.RightContent.lang.title',
+          id: 'pages.common.text.langSwitch',
         })}
       >
         <GlobalOutlined />
@@ -109,7 +109,7 @@ export const ThemeDropdown: React.FC = () => {
         ) : (
           <span style={{ display: 'inline-block', width: 14 }} />
         ),
-      label: intl.formatMessage({ id: 'components.RightContent.theme.auto' }),
+      label: intl.formatMessage({ id: 'pages.common.dict.theme.auto' }),
     },
     {
       key: 'light',
@@ -119,7 +119,7 @@ export const ThemeDropdown: React.FC = () => {
         ) : (
           <span style={{ display: 'inline-block', width: 14 }} />
         ),
-      label: intl.formatMessage({ id: 'components.RightContent.theme.light' }),
+      label: intl.formatMessage({ id: 'pages.common.dict.theme.light' }),
     },
     {
       key: 'realDark',
@@ -129,7 +129,7 @@ export const ThemeDropdown: React.FC = () => {
         ) : (
           <span style={{ display: 'inline-block', width: 14 }} />
         ),
-      label: intl.formatMessage({ id: 'components.RightContent.theme.dark' }),
+      label: intl.formatMessage({ id: 'pages.common.dict.theme.dark' }),
     },
   ];
 
@@ -168,7 +168,7 @@ export const ThemeDropdown: React.FC = () => {
         type="text"
         className={styles.action}
         aria-label={intl.formatMessage({
-          id: 'components.RightContent.theme.switch',
+          id: 'pages.common.text.themeSwitch',
         })}
       >
         <BgColorsOutlined />

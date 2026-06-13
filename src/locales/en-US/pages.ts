@@ -1,96 +1,155 @@
 export default {
-  'pages.layouts.userLayout.title':
-    'Ant Design is the most influential web design specification in Xihu district',
-  'pages.login.accountLogin.tab': 'Account Login',
+  // ==========================================
+  // 通用多语言配置 (Common i18n Configuration)
+  // ==========================================
 
-  'pages.login.success': 'Login successful!',
-  'pages.login.username.placeholder': 'Username',
-  'pages.login.username.required': 'Please input your username!',
-  'pages.login.password.placeholder': 'Password',
-  'pages.login.password.required': 'Please input your password!',
-  'pages.login.phoneLogin.tab': 'Phone Login',
+  // 动作 (Actions)
+  'pages.common.action.ok': 'OK',
+  'pages.common.action.cancel': 'Cancel',
+  'pages.common.action.columnLabel': 'Actions',
+  'pages.common.action.create': 'Create',
+  'pages.common.action.edit': 'Edit',
+  'pages.common.action.modify': 'Modify',
+  'pages.common.action.delete': 'Delete',
+  'pages.common.action.batchDelete': 'Batch Delete',
+  'pages.common.action.confirmDelete': 'Confirm Delete',
+  'pages.common.action.save': 'Save',
+  'pages.common.action.backToHome': 'Back Home',
 
-  'pages.login.phoneNumber.placeholder': 'Phone Number',
-  'pages.login.phoneNumber.required': 'Please input your phone number!',
-  'pages.login.phoneNumber.invalid': 'Phone number is invalid!',
-  'pages.login.captcha.placeholder': 'Verification Code',
-  'pages.login.captcha.required': 'Please input verification code!',
-  'pages.login.phoneLogin.getVerificationCode': 'Get Code',
-  'pages.getCaptchaSecondText': 'sec(s)',
-  'pages.login.rememberMe': 'Remember me',
-  'pages.login.forgotPassword': 'Forgot Password ?',
-  'pages.login.submit': 'Login',
-  'pages.login.loginWith': 'Login with :',
+  // 交互结果反馈 (Interaction Feedback)
+  'pages.common.feedback.create.success': 'Created successfully',
+  'pages.common.feedback.update.success': 'Updated successfully',
+  'pages.common.feedback.delete.success': 'Deleted successfully',
+  'pages.common.feedback.save.success': 'Saved successfully',
+  'pages.common.feedback.delete.confirm':
+    'Are you sure you want to delete {name}?',
+  'pages.common.feedback.batchDelete.confirm':
+    'Are you sure you want to delete these {count} items? This action cannot be undone.',
 
-  'pages.404.subTitle': 'Sorry, the page you visited does not exist.',
-  'pages.404.buttonText': 'Back Home',
-  'pages.403.subTitle': 'Sorry, you are not authorized to access this page.',
-  'pages.403.buttonText': 'Back Home',
-  'pages.500.subTitle': 'Sorry, something went wrong.',
-  'pages.500.buttonText': 'Back Home',
+  // 数据字典 (Dictionaries)
+  'pages.common.dict.status.label': 'Status',
+  'pages.common.dict.status.enabled': 'Enabled',
+  'pages.common.dict.status.disabled': 'Disabled',
+  'pages.common.dict.gender.label': 'Gender',
+  'pages.common.dict.gender.unknown': 'Unknown',
+  'pages.common.dict.gender.male': 'Male',
+  'pages.common.dict.gender.female': 'Female',
+  'pages.common.dict.passwordStrength.label': 'Strength: ',
+  'pages.common.dict.passwordStrength.weak': 'Weak',
+  'pages.common.dict.passwordStrength.medium': 'Medium',
+  'pages.common.dict.passwordStrength.strong': 'Strong',
+  'pages.common.dict.theme.auto': 'Follow system',
+  'pages.common.dict.theme.light': 'Light Theme',
+  'pages.common.dict.theme.dark': 'Dark Theme',
 
-  'pages.changePassword.title': 'Reset Password Required',
-  'pages.changePassword.modalTitle': 'Change Password',
-  'pages.changePassword.description':
-    'For security reasons, system detected that you are using a temporary password or your password has expired. Please update your password to continue.',
-  'pages.changePassword.submit': 'Confirm and Re-login',
-  'pages.changePassword.success':
-    'Password changed successfully, please log in again with your new password',
-  'pages.changePassword.newPassword': 'New Password',
-  'pages.changePassword.newPassword.placeholder':
-    'Please enter your new password',
-  'pages.changePassword.newPassword.required':
-    'Please enter your new password!',
-  'pages.changePassword.newPassword.minLen':
-    'Password length must be at least 8 characters!',
-  'pages.changePassword.newPassword.pattern':
+  // 校验规则与占位符 (Validation & Placeholders)
+  'pages.common.validation.placeholder.input': 'Please enter {field}',
+  'pages.common.validation.required': '{field} is required!',
+  'pages.common.validation.invalid': 'Invalid {field} format!',
+  'pages.common.validation.maxLength': '{field} cannot exceed {max} characters',
+  'pages.common.validation.rangeLength':
+    '{field} length must be between {min} and {max} characters',
+  'pages.common.validation.passwordPattern':
     'Password must contain uppercase and lowercase letters, numbers, and special characters!',
-  'pages.changePassword.confirmPassword': 'Confirm New Password',
-  'pages.changePassword.confirmPassword.placeholder':
+
+  // 文案 (Text)
+  'pages.common.text.themeSwitch': 'Switch Theme',
+  'pages.common.text.langSwitch': 'Switch Language',
+
+  // ==========================================
+  // 各业务页面专属配置 (Page Specific Configuration)
+  // ==========================================
+
+  // 404/403/500 Pages
+  'pages.404.text.subTitle': 'Sorry, the page you visited does not exist.',
+  'pages.403.text.subTitle':
+    'Sorry, you are not authorized to access this page.',
+  'pages.500.text.subTitle': 'Sorry, something went wrong on the server.',
+
+  // Login Page
+  'pages.login.text.layoutTitle':
+    'Ant Design is the most influential web design specification in Xihu district',
+  'pages.login.text.accountLoginTab': 'Account Login',
+  'pages.login.text.phoneLoginTab': 'Phone Login',
+  'pages.login.text.captchaCountdown': 's later',
+  'pages.login.text.loginWith': 'Login with :',
+  'pages.login.action.getVerificationCode': 'Get Captcha',
+  'pages.login.action.forgotPassword': 'Forgot Password ?',
+  'pages.login.action.submit': 'Login',
+  'pages.login.feedback.success': 'Login successfully!',
+  'pages.login.fields.username': 'Username',
+  'pages.login.fields.password': 'Password',
+  'pages.login.fields.mobile': 'Mobile',
+  'pages.login.fields.captcha': 'Captcha',
+  'pages.login.fields.rememberMe': 'Remember me',
+
+  // Change Password Page
+  'pages.changePassword.text.title': 'Force Reset Password',
+  'pages.changePassword.text.modalTitle': 'Change Password',
+  'pages.changePassword.text.description':
+    'Your password is temporary or has expired. Please update it to continue.',
+  'pages.changePassword.action.submit': 'Confirm and Re-login',
+  'pages.changePassword.feedback.success':
+    'Password changed successfully, please log in again with your new password',
+  'pages.changePassword.fields.newPassword': 'New Password',
+  'pages.changePassword.fields.confirmPassword': 'Confirm New Password',
+  'pages.changePassword.validation.confirmPassword.placeholder':
     'Please confirm your new password',
-  'pages.changePassword.confirmPassword.required':
+  'pages.changePassword.validation.confirmPassword.required':
     'Please confirm your new password!',
-  'pages.changePassword.confirmPassword.mismatch':
+  'pages.changePassword.validation.confirmPassword.mismatch':
     'The passwords entered twice do not match!',
-  'components.RightContent.theme.auto': 'Follow system',
-  'components.RightContent.theme.light': 'Light Theme',
-  'components.RightContent.theme.dark': 'Dark Theme',
-  'components.RightContent.theme.switch': 'Switch Theme',
-  'components.RightContent.lang.title': 'Switch Language',
-  'pages.security.mobile.modalTitle': 'Update Phone Number',
-  'pages.security.mobile.label': 'Phone Number',
-  'pages.security.mobile.hint': 'Please enter a valid Chinese mobile number',
-  'pages.security.mobile.success': 'Phone number updated successfully',
-  'pages.security.email.modalTitle': 'Update Email',
-  'pages.security.email.label': 'Email',
-  'pages.security.email.hint': 'Please enter a valid email address',
-  'pages.security.email.success': 'Email updated successfully',
-  'pages.security.submit': 'Confirm',
-  'pages.security.password.title': 'Password',
-  'pages.security.password.description': 'Current password strength: Strong',
-  'pages.security.mobile.title': 'Phone Number',
-  'pages.security.mobile.bound': 'Bound: {mobile}',
-  'pages.security.mobile.unbound': 'Not bound',
-  'pages.security.email.title': 'Email',
-  'pages.security.email.bound': 'Bound: {email}',
-  'pages.security.email.unbound': 'Not bound',
-  'pages.security.modify': 'Modify',
-  'pages.settings.menu.base': 'Basic Settings',
-  'pages.settings.menu.security': 'Security Settings',
-  'pages.base.submit': 'Update Profile',
-  'pages.base.success': 'Profile updated successfully',
-  'pages.base.nickname.label': 'Nickname',
-  'pages.base.nickname.required': 'Please enter your nickname!',
-  'pages.base.realName.label': 'Real Name',
-  'pages.base.gender.label': 'Gender',
-  'pages.base.gender.unknown': 'Unknown',
-  'pages.base.gender.male': 'Male',
-  'pages.base.gender.female': 'Female',
-  'pages.base.birthday.label': 'Birthday',
-  'pages.base.avatar.title': 'Avatar',
-  'pages.base.avatar.change': 'Change Avatar',
-  'pages.security.passwordStrength.label': 'Strength: ',
-  'pages.security.passwordStrength.weak': 'Weak',
-  'pages.security.passwordStrength.medium': 'Medium',
-  'pages.security.passwordStrength.strong': 'Strong',
+
+  // Account Settings
+  'pages.settings.text.menuBase': 'Basic Settings',
+  'pages.settings.text.menuSecurity': 'Security Settings',
+
+  // Account Settings - Basic
+  'pages.base.fields.nickname': 'Nickname',
+  'pages.base.fields.realName': 'Real Name',
+  'pages.base.fields.birthday': 'Birthday',
+  'pages.base.text.avatarTitle': 'Avatar',
+  'pages.base.action.changeAvatar': 'Change Avatar',
+
+  // Account Settings - Security
+  'pages.security.text.passwordTitle': 'Account Password',
+  'pages.security.text.passwordDescription':
+    'Current password strength: Strong',
+  'pages.security.text.mobileTitle': 'Mobile Number',
+  'pages.security.text.mobileBound': 'Bound: {mobile}',
+  'pages.security.text.mobileUnbound': 'Not bound',
+  'pages.security.text.mobileModalTitle': 'Change Mobile Number',
+  'pages.security.text.emailTitle': 'Email Address',
+  'pages.security.text.emailBound': 'Bound: {email}',
+  'pages.security.text.emailUnbound': 'Not bound',
+  'pages.security.text.emailModalTitle': 'Change Email Address',
+  'pages.security.action.submit': 'Confirm Modify',
+  'pages.security.fields.password': 'Password',
+  'pages.security.fields.mobile': 'Mobile',
+  'pages.security.fields.email': 'Email',
+  'pages.security.fields.newPassword': 'New Password',
+  'pages.security.fields.confirmPassword': 'Confirm New Password',
+
+  // User Management
+  'pages.system.user.feedback.resetPassword.success': 'Password reset',
+  'pages.system.user.feedback.unlock.success': 'Account unlocked',
+  'pages.system.user.feedback.revoke.success': 'Forced offline',
+  'pages.system.user.action.unlock': 'Unlock',
+  'pages.system.user.action.revoke': 'Force Offline',
+  'pages.system.user.action.resetPassword': 'Reset Password',
+  'pages.system.user.text.resetPasswordTitle': 'Reset Password - {username}',
+
+  // User Management fields label
+  'pages.system.user.fields.newPassword': 'New Password',
+  'pages.system.user.fields.avatar': 'Avatar',
+  'pages.system.user.fields.username': 'Username',
+  'pages.system.user.fields.realName': 'Real Name',
+  'pages.system.user.fields.nickname': 'Nickname',
+  'pages.system.user.fields.gender': 'Gender',
+  'pages.system.user.fields.birthday': 'Birthday',
+  'pages.system.user.fields.mobile': 'Mobile',
+  'pages.system.user.fields.email': 'Email',
+  'pages.system.user.fields.status': 'Status',
+  'pages.system.user.fields.remark': 'Remark',
+  'pages.system.user.fields.lastActiveTime': 'Last Active',
 };
