@@ -84,12 +84,17 @@ const Login: React.FC = () => {
       const msg = await login({ ...values, type }, { skipErrorHandler: true });
       if (msg.success) {
         const defaultLoginSuccessMessage = intl.formatMessage({
-          id: 'pages.login.success',
+          id: 'pages.login.feedback.success',
         });
         message.success(defaultLoginSuccessMessage);
 
         const urlParams = new URL(window.location.href).searchParams;
         const redirect = urlParams.get('redirect');
+
+        if (values.autoLogin) {
+          document.cookie =
+            'x-remember-me=1; max-age=300; path=/; SameSite=Lax';
+        }
 
         window.location.href =
           msg.data?.redirectUrl || getSafeRedirectUrl(redirect);
@@ -105,7 +110,6 @@ const Login: React.FC = () => {
         setLoginErrorMsg(
           intl.formatMessage({
             id: 'pages.login.networkError',
-            defaultMessage: '网络错误，请检查连接后重试',
           }),
         );
       }
@@ -122,13 +126,13 @@ const Login: React.FC = () => {
         logo={<img alt="logo" src="/logo.svg" />}
         title="Ant Design"
         subTitle={intl.formatMessage({
-          id: 'pages.layouts.userLayout.title',
+          id: 'pages.login.text.layoutTitle',
         })}
         initialValues={{
           autoLogin: true,
         }}
         actions={[
-          <FormattedMessage key="loginWith" id="pages.login.loginWith" />,
+          <FormattedMessage key="loginWith" id="pages.login.text.loginWith" />,
           <ActionIcons key="icons" />,
         ]}
         onFinish={async (values) => {
@@ -143,13 +147,13 @@ const Login: React.FC = () => {
             {
               key: 'account',
               label: intl.formatMessage({
-                id: 'pages.login.accountLogin.tab',
+                id: 'pages.login.text.accountLoginTab',
               }),
             },
             {
               key: 'mobile',
               label: intl.formatMessage({
-                id: 'pages.login.phoneLogin.tab',
+                id: 'pages.login.text.phoneLoginTab',
               }),
             },
           ]}
@@ -178,14 +182,24 @@ const Login: React.FC = () => {
                   }
                 },
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.username.placeholder',
-              })}
+              placeholder={intl.formatMessage(
+                { id: 'pages.common.validation.placeholder.input' },
+                {
+                  field: intl.formatMessage({
+                    id: 'pages.login.fields.username',
+                  }),
+                },
+              )}
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage id="pages.login.username.required" />
+                  message: intl.formatMessage(
+                    { id: 'pages.common.validation.required' },
+                    {
+                      field: intl.formatMessage({
+                        id: 'pages.login.fields.username',
+                      }),
+                    },
                   ),
                 },
               ]}
@@ -201,14 +215,24 @@ const Login: React.FC = () => {
                   }
                 },
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.password.placeholder',
-              })}
+              placeholder={intl.formatMessage(
+                { id: 'pages.common.validation.placeholder.input' },
+                {
+                  field: intl.formatMessage({
+                    id: 'pages.login.fields.password',
+                  }),
+                },
+              )}
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage id="pages.login.password.required" />
+                  message: intl.formatMessage(
+                    { id: 'pages.common.validation.required' },
+                    {
+                      field: intl.formatMessage({
+                        id: 'pages.login.fields.password',
+                      }),
+                    },
                   ),
                 },
               ]}
@@ -229,20 +253,35 @@ const Login: React.FC = () => {
                 },
               }}
               name="mobile"
-              placeholder={intl.formatMessage({
-                id: 'pages.login.phoneNumber.placeholder',
-              })}
+              placeholder={intl.formatMessage(
+                { id: 'pages.common.validation.placeholder.input' },
+                {
+                  field: intl.formatMessage({
+                    id: 'pages.login.fields.mobile',
+                  }),
+                },
+              )}
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage id="pages.login.phoneNumber.required" />
+                  message: intl.formatMessage(
+                    { id: 'pages.common.validation.required' },
+                    {
+                      field: intl.formatMessage({
+                        id: 'pages.login.fields.mobile',
+                      }),
+                    },
                   ),
                 },
                 {
-                  pattern: /^1\d{10}$/,
-                  message: (
-                    <FormattedMessage id="pages.login.phoneNumber.invalid" />
+                  pattern: /^1[3-9]\d{9}$/,
+                  message: intl.formatMessage(
+                    { id: 'pages.common.validation.invalid' },
+                    {
+                      field: intl.formatMessage({
+                        id: 'pages.login.fields.mobile',
+                      }),
+                    },
                   ),
                 },
               ]}
@@ -260,25 +299,35 @@ const Login: React.FC = () => {
               captchaProps={{
                 size: 'large',
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.captcha.placeholder',
-              })}
+              placeholder={intl.formatMessage(
+                { id: 'pages.common.validation.placeholder.input' },
+                {
+                  field: intl.formatMessage({
+                    id: 'pages.login.fields.captcha',
+                  }),
+                },
+              )}
               captchaTextRender={(timing, count) => {
                 if (timing) {
                   return `${count} ${intl.formatMessage({
-                    id: 'pages.getCaptchaSecondText',
+                    id: 'pages.login.text.captchaCountdown',
                   })}`;
                 }
                 return intl.formatMessage({
-                  id: 'pages.login.phoneLogin.getVerificationCode',
+                  id: 'pages.login.action.getVerificationCode',
                 });
               }}
               name="captcha"
               rules={[
                 {
                   required: true,
-                  message: (
-                    <FormattedMessage id="pages.login.captcha.required" />
+                  message: intl.formatMessage(
+                    { id: 'pages.common.validation.required' },
+                    {
+                      field: intl.formatMessage({
+                        id: 'pages.login.fields.captcha',
+                      }),
+                    },
                   ),
                 },
               ]}
@@ -294,7 +343,7 @@ const Login: React.FC = () => {
           }}
         >
           <ProFormCheckbox noStyle name="autoLogin">
-            <FormattedMessage id="pages.login.rememberMe" />
+            <FormattedMessage id="pages.login.fields.rememberMe" />
           </ProFormCheckbox>
           <a
             href="#"
@@ -302,7 +351,7 @@ const Login: React.FC = () => {
               float: 'right',
             }}
           >
-            <FormattedMessage id="pages.login.forgotPassword" />
+            <FormattedMessage id="pages.login.action.forgotPassword" />
           </a>
         </div>
       </LoginForm>

@@ -8,7 +8,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
 import { bindAntdApis } from '@/utils/antdStaticApi';
 
-// Initialize dayjs plugins globally
 dayjs.extend(relativeTime);
 
 import {
@@ -35,12 +34,10 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   themePreference?: 'auto' | 'light' | 'realDark';
   currentUser?: API.CurrentUser;
-  changePasswordRequired?: boolean;
   hasNetworkError?: boolean;
   loading?: boolean;
   fetchUserInfo?: () => Promise<{
     currentUser: API.CurrentUser | undefined;
-    changePasswordRequired: boolean;
     hasNetworkError?: boolean;
   }>;
 }> {
@@ -67,16 +64,8 @@ export async function getInitialState(): Promise<{
       });
       const profile = sysUserRes?.data;
       if (profile) {
-        if (profile.initialPassword === 1 || profile.expired === 1) {
-          return {
-            currentUser: profile,
-            changePasswordRequired: true,
-            hasNetworkError: false,
-          };
-        }
         return {
           currentUser: profile,
-          changePasswordRequired: false,
           hasNetworkError: false,
         };
       }
@@ -86,12 +75,10 @@ export async function getInitialState(): Promise<{
         window.location.href = loginUrl;
         return {
           currentUser: undefined,
-          changePasswordRequired: false,
           hasNetworkError: false,
         };
       }
 
-      // 如果是底层的网络超时/服务器故障/断网等错误，只标记 hasNetworkError 为 true 且不强转重定向
       const isNetworkError =
         error.code === 'ECONNABORTED' ||
         error.message?.includes('timeout') ||
@@ -108,31 +95,20 @@ export async function getInitialState(): Promise<{
 
       return {
         currentUser: undefined,
-        changePasswordRequired: false,
         hasNetworkError: isNetworkError,
       };
     }
     return {
       currentUser: undefined,
-      changePasswordRequired: false,
       hasNetworkError: false,
     };
   };
   const { location } = history;
-  if (
-    ![
-      loginPath,
-      '/user/register',
-      '/user/register-result',
-      '/account/change-password',
-    ].includes(location.pathname)
-  ) {
-    const { currentUser, changePasswordRequired, hasNetworkError } =
-      await fetchUserInfo();
+  if (![loginPath, '/account/change-password'].includes(location.pathname)) {
+    const { currentUser, hasNetworkError } = await fetchUserInfo();
     return {
       fetchUserInfo,
       currentUser,
-      changePasswordRequired,
       hasNetworkError,
       settings: initialSettings,
       themePreference: themePref,
@@ -184,14 +160,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         return;
       }
       if (
-        initialState?.changePasswordRequired &&
-        location.pathname !== '/account/change-password'
-      ) {
-        history.replace('/account/change-password');
-      }
-      if (
         initialState?.currentUser &&
-        !initialState?.changePasswordRequired &&
         location.pathname === '/account/change-password'
       ) {
         history.replace('/');
@@ -225,8 +194,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
           </Link>,
         ]
       : [],
-    // Replace ProLayout's default ErrorBoundary with our offline-aware version,
-    // so chunk load errors show friendly messages instead of "Something went wrong."
     ErrorBoundary,
     childrenRender: (children) => {
       return (
