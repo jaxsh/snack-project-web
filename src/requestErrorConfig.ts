@@ -26,7 +26,6 @@ export const errorConfig: RequestConfig = {
         void staticMessage().error(
           getIntl().formatMessage({
             id: 'app.request.timeout',
-            defaultMessage: '请求超时，请重试。',
           }),
         );
       } else if (error.name === 'BizError') {
@@ -57,9 +56,8 @@ export const errorConfig: RequestConfig = {
           const loginUrl = error.response.data?.data?.loginUrl;
           if (loginUrl) {
             void staticMessage().warning(
-              getIntl().formatMessage({
-                id: 'app.request.session-expired',
-              }),
+              error.response.data?.msg ||
+                getIntl().formatMessage({ id: 'app.request.session-expired' }),
             );
             setTimeout(() => {
               window.location.href = loginUrl;
@@ -86,8 +84,6 @@ export const errorConfig: RequestConfig = {
             body?.msg ||
               getIntl().formatMessage({
                 id: 'app.request.offline',
-                defaultMessage:
-                  'Network unavailable. Please check your connection and try again.',
               }),
           );
         } else {
@@ -100,8 +96,6 @@ export const errorConfig: RequestConfig = {
         void staticMessage().error(
           getIntl().formatMessage({
             id: 'app.request.offline',
-            defaultMessage:
-              'Network unavailable. Please check your connection and try again.',
           }),
         );
       } else if (error.request) {
