@@ -67,13 +67,6 @@ export async function getInitialState(): Promise<{
       });
       const profile = sysUserRes?.data;
       if (profile) {
-        if (profile.initialPassword === 1 || profile.expired === 1) {
-          return {
-            currentUser: profile,
-            changePasswordRequired: true,
-            hasNetworkError: false,
-          };
-        }
         return {
           currentUser: profile,
           changePasswordRequired: false,
@@ -119,14 +112,7 @@ export async function getInitialState(): Promise<{
     };
   };
   const { location } = history;
-  if (
-    ![
-      loginPath,
-      '/user/register',
-      '/user/register-result',
-      '/account/change-password',
-    ].includes(location.pathname)
-  ) {
+  if (![loginPath, '/account/change-password'].includes(location.pathname)) {
     const { currentUser, changePasswordRequired, hasNetworkError } =
       await fetchUserInfo();
     return {
