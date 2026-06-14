@@ -89,9 +89,9 @@ export default {
   'pages.changePassword.text.modalTitle': 'パスワードの変更',
   'pages.changePassword.text.description':
     '初期パスワードまたは期限切れのパスワードを変更してください。',
-  'pages.changePassword.action.submit': '確認して再ログイン',
+  'pages.changePassword.action.submit': '確認',
   'pages.changePassword.feedback.success':
-    'パスワードの変更に成功しました。新しいパスワードで再ログインしてください',
+    'パスワードの変更に成功しました。リダイレクト中…',
   'pages.changePassword.fields.newPassword': '新しいパスワード',
   'pages.changePassword.fields.confirmPassword': '新しいパスワード（確認）',
   'pages.changePassword.validation.confirmPassword.placeholder':

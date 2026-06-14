@@ -86,8 +86,8 @@ export default {
   'pages.changePassword.text.modalTitle': '修改密码',
   'pages.changePassword.text.description':
     '当前使用的是初始密码或密码已过期，请修改密码后继续使用。',
-  'pages.changePassword.action.submit': '确认修改并重新登录',
-  'pages.changePassword.feedback.success': '密码修改成功，请使用新密码重新登录',
+  'pages.changePassword.action.submit': '确认修改',
+  'pages.changePassword.feedback.success': '密码修改成功，正在跳转…',
   'pages.changePassword.fields.newPassword': '新密码',
   'pages.changePassword.fields.confirmPassword': '确认新密码',
   'pages.changePassword.validation.confirmPassword.placeholder':

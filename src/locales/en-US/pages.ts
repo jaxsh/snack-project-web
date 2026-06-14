@@ -88,9 +88,9 @@ export default {
   'pages.changePassword.text.modalTitle': 'Change Password',
   'pages.changePassword.text.description':
     'Your password is temporary or has expired. Please update it to continue.',
-  'pages.changePassword.action.submit': 'Confirm and Re-login',
+  'pages.changePassword.action.submit': 'Confirm',
   'pages.changePassword.feedback.success':
-    'Password changed successfully, please log in again with your new password',
+    'Password changed successfully, redirecting…',
   'pages.changePassword.fields.newPassword': 'New Password',
   'pages.changePassword.fields.confirmPassword': 'Confirm New Password',
   'pages.changePassword.validation.confirmPassword.placeholder':

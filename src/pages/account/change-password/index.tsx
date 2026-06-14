@@ -1,14 +1,12 @@
 import { LockOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
-import { useIntl, useModel } from '@umijs/max';
+import { request, useIntl } from '@umijs/max';
 import { App } from 'antd';
 import React, { useState } from 'react';
-import { changePassword, logout } from '@/services/auth';
 import { AuthLayout } from '../components/AuthLayout';
 
 const ChangePassword: React.FC = () => {
   const { message } = App.useApp();
-  const { setInitialState } = useModel('@@initialState');
   const intl = useIntl();
   const [passwordVal, setPasswordVal] = useState('');
 
@@ -47,35 +45,18 @@ const ChangePassword: React.FC = () => {
 
   const handleSubmit = async (values: API.UpdatePasswordParams) => {
     try {
-      const res = await changePassword({ password: values.password });
-      if (res.success) {
-        message.success(
-          intl.formatMessage({ id: 'pages.changePassword.feedback.success' }),
-        );
-
-        let logoutRes: any = null;
-        try {
-          logoutRes = await logout();
-        } catch (e) {
-          console.error('Logout failed after password change', e);
-        }
-
-        await setInitialState((s) => {
-          if (!s) return s;
-          return {
-            ...s,
-            currentUser: undefined,
-            changePasswordRequired: false,
-          };
-        });
-
-        setTimeout(() => {
-          if (logoutRes?.redirectUrl) {
-            window.location.href = logoutRes.redirectUrl;
-          } else {
-            window.location.href = '/user/login';
-          }
-        }, 1500);
+      const res = await request<{ redirectUrl?: string }>(
+        '/oauth2/account/change-password',
+        {
+          method: 'POST',
+          data: { password: values.password },
+        },
+      );
+      message.success(
+        intl.formatMessage({ id: 'pages.changePassword.feedback.success' }),
+      );
+      if (res?.redirectUrl) {
+        window.location.href = res.redirectUrl;
       }
     } catch {
       return;
