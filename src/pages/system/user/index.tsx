@@ -2,6 +2,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   KeyOutlined,
+  LockOutlined,
   LogoutOutlined,
   MoreOutlined,
   PlusOutlined,
@@ -193,6 +194,20 @@ const UserList: React.FC = () => {
     }
   };
 
+  const handleResetMfa = async (record: API.SysUserVO) => {
+    try {
+      await updateUser(record.id, { mfaEnabled: 0 } as API.SysUserDTO);
+      message.success(
+        intl.formatMessage({
+          id: 'pages.system.user.feedback.resetMfa.success',
+        }),
+      );
+      actionRef.current?.reload();
+    } catch (error) {
+      console.error('Reset MFA failed:', error);
+    }
+  };
+
   const columns: ProColumns<API.SysUserVO>[] = [
     {
       title: intl.formatMessage({ id: 'pages.system.user.fields.avatar' }),
@@ -350,6 +365,34 @@ const UserList: React.FC = () => {
                   }),
                   icon: <UnlockOutlined />,
                   onClick: () => handleUnlockUser(record),
+                },
+                {
+                  key: 'resetMfa',
+                  label: (
+                    <Popconfirm
+                      title={intl.formatMessage({
+                        id: 'pages.system.user.action.resetMfa',
+                      })}
+                      description={intl.formatMessage(
+                        { id: 'pages.system.user.text.resetMfaConfirm' },
+                        { name: record.username },
+                      )}
+                      onConfirm={() => handleResetMfa(record)}
+                      okText={intl.formatMessage({
+                        id: 'pages.common.action.ok',
+                      })}
+                      cancelText={intl.formatMessage({
+                        id: 'pages.common.action.cancel',
+                      })}
+                    >
+                      <span>
+                        {intl.formatMessage({
+                          id: 'pages.system.user.action.resetMfa',
+                        })}
+                      </span>
+                    </Popconfirm>
+                  ),
+                  icon: <LockOutlined />,
                 },
                 {
                   key: 'revokeTokens',
