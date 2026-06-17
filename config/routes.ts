@@ -16,6 +16,11 @@ export default [
     component: './account/change-password',
   },
   {
+    path: '/account/verify-mfa',
+    layout: false,
+    component: './account/verify-mfa',
+  },
+  {
     path: '/account/settings',
     name: 'settings',
     component: './account/settings',

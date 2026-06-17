@@ -56,6 +56,9 @@ export async function updateProfile(
     birthday?: string | null;
     email?: string | null;
     mobile?: string | null;
+    mfaEnabled?: number | null;
+    mfaSecret?: string | null;
+    mfaCode?: string | null;
   },
   options?: Record<string, any>,
 ) {
@@ -64,6 +67,26 @@ export async function updateProfile(
     headers: {
       'Content-Type': 'application/json',
     },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取 MFA TOTP 密钥和二维码 URI GET /api/upms/users/mfa/setup */
+export async function getMfaSetup(options?: Record<string, any>) {
+  return request<API.ApiResponse<API.MfaSetupVO>>('/api/upms/users/mfa/setup', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** MFA 登录验证 POST /oauth2/account/verify-mfa */
+export async function verifyMfa(
+  body: { code: string },
+  options?: Record<string, any>,
+) {
+  return request<{ redirectUrl?: string }>('/oauth2/account/verify-mfa', {
+    method: 'POST',
     data: body,
     ...(options || {}),
   });

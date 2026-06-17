@@ -99,6 +99,12 @@ export default {
     'Please confirm your new password!',
   'pages.changePassword.validation.confirmPassword.mismatch':
     'The passwords entered twice do not match!',
+  'pages.verifyMfa.text.title': 'MFA Verification',
+  'pages.verifyMfa.text.description':
+    'Enter the 6-digit code displayed in your authenticator app',
+  'pages.verifyMfa.action.submit': 'Verify',
+  'pages.verifyMfa.fields.code': 'Verification Code',
+  'pages.verifyMfa.feedback.success': 'Verified successfully, redirecting…',
 
   // Account Settings
   'pages.settings.text.menuBase': 'Basic Settings',
@@ -129,15 +135,35 @@ export default {
   'pages.security.fields.email': 'Email',
   'pages.security.fields.newPassword': 'New Password',
   'pages.security.fields.confirmPassword': 'Confirm New Password',
+  'pages.security.text.mfaTitle': 'MFA Device',
+  'pages.security.text.mfaEnabled': 'Bound',
+  'pages.security.text.mfaDisabled':
+    'No MFA device bound. Bind one to enable two-factor verification.',
+  'pages.security.text.mfaModalTitle': 'Bind MFA Device',
+  'pages.security.text.mfaDescription':
+    'Scan the QR code with an authenticator app and enter the 6-digit code to complete binding',
+  'pages.security.text.mfaSecret': 'Or enter key manually',
+  'pages.security.text.mfaDisableConfirm':
+    'Login will no longer require two-factor verification. Are you sure you want to unbind?',
+  'pages.security.action.mfaEnable': 'Bind',
+  'pages.security.action.mfaDisable': 'Unbind',
+  'pages.security.action.mfaConfirm': 'Confirm Bind',
+  'pages.security.fields.mfaCode': 'Verification Code',
+  'pages.security.validation.mfaCode':
+    'Please enter a 6-digit verification code',
 
   // User Management
   'pages.system.user.feedback.resetPassword.success': 'Password reset',
   'pages.system.user.feedback.unlock.success': 'Account unlocked',
   'pages.system.user.feedback.revoke.success': 'Forced offline',
+  'pages.system.user.feedback.resetMfa.success': 'MFA reset successfully',
   'pages.system.user.action.unlock': 'Unlock',
   'pages.system.user.action.revoke': 'Force Offline',
   'pages.system.user.action.resetPassword': 'Reset Password',
+  'pages.system.user.action.resetMfa': 'Reset MFA',
   'pages.system.user.text.resetPasswordTitle': 'Reset Password - {username}',
+  'pages.system.user.text.resetMfaConfirm':
+    'Are you sure you want to reset MFA for {name}? The user will need to re-bind their authenticator.',
 
   // User Management fields label
   'pages.system.user.fields.newPassword': 'New Password',

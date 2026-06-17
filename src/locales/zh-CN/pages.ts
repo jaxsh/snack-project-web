@@ -96,6 +96,11 @@ export default {
     '请再次输入新密码以进行确认！',
   'pages.changePassword.validation.confirmPassword.mismatch':
     '两次输入的密码不一致！',
+  'pages.verifyMfa.text.title': 'MFA 验证',
+  'pages.verifyMfa.text.description': '请输入验证器 App 中显示的 6 位验证码',
+  'pages.verifyMfa.action.submit': '验证',
+  'pages.verifyMfa.fields.code': '验证码',
+  'pages.verifyMfa.feedback.success': '验证成功，正在跳转…',
 
   // 个人中心/设置
   'pages.settings.text.menuBase': '基本设置',
@@ -125,15 +130,34 @@ export default {
   'pages.security.fields.email': '邮箱',
   'pages.security.fields.newPassword': '新密码',
   'pages.security.fields.confirmPassword': '确认新密码',
+  'pages.security.text.mfaTitle': 'MFA 设备',
+  'pages.security.text.mfaEnabled': '已绑定',
+  'pages.security.text.mfaDisabled':
+    '未绑定 MFA 设备，绑定后，可以进行二次确认',
+  'pages.security.text.mfaModalTitle': '绑定 MFA 设备',
+  'pages.security.text.mfaDescription':
+    '使用验证器 App 扫描二维码，输入 6 位验证码完成绑定',
+  'pages.security.text.mfaSecret': '手动输入密钥',
+  'pages.security.text.mfaDisableConfirm':
+    '解绑后登录将不再需要二次验证，确定解绑吗？',
+  'pages.security.action.mfaEnable': '绑定',
+  'pages.security.action.mfaDisable': '解绑',
+  'pages.security.action.mfaConfirm': '确认绑定',
+  'pages.security.fields.mfaCode': '验证码',
+  'pages.security.validation.mfaCode': '请输入 6 位数字验证码',
 
   // 系统管理 - 用户管理页面
   'pages.system.user.feedback.resetPassword.success': '密码重置成功',
   'pages.system.user.feedback.unlock.success': '解锁成功',
   'pages.system.user.feedback.revoke.success': '强制下线成功',
+  'pages.system.user.feedback.resetMfa.success': 'MFA 重置成功',
   'pages.system.user.action.unlock': '解锁账号',
   'pages.system.user.action.revoke': '强制下线',
   'pages.system.user.action.resetPassword': '重置密码',
+  'pages.system.user.action.resetMfa': '重置 MFA',
   'pages.system.user.text.resetPasswordTitle': '重置密码 - {username}',
+  'pages.system.user.text.resetMfaConfirm':
+    '确定要重置 {name} 的 MFA 绑定吗？重置后用户需重新绑定验证器才能使用 MFA。',
 
   // 系统管理 - 用户管理页面字段 label
   'pages.system.user.fields.newPassword': '新密码',

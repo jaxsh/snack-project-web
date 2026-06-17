@@ -100,6 +100,12 @@ export default {
     '確認のため、もう一度新しいパスワードを入力してください！',
   'pages.changePassword.validation.confirmPassword.mismatch':
     '入力されたパスワードが一致しません！',
+  'pages.verifyMfa.text.title': 'MFA 認証',
+  'pages.verifyMfa.text.description':
+    '認証アプリに表示されている 6 桁のコードを入力してください',
+  'pages.verifyMfa.action.submit': '認証',
+  'pages.verifyMfa.fields.code': '確認コード',
+  'pages.verifyMfa.feedback.success': '認証に成功しました。リダイレクト中…',
 
   // アカウント設定
   'pages.settings.text.menuBase': '基本設定',
@@ -129,16 +135,35 @@ export default {
   'pages.security.fields.email': 'メールアドレス',
   'pages.security.fields.newPassword': '新しいパスワード',
   'pages.security.fields.confirmPassword': '新しいパスワード（確認）',
+  'pages.security.text.mfaTitle': 'MFA デバイス',
+  'pages.security.text.mfaEnabled': '登録済み',
+  'pages.security.text.mfaDisabled':
+    'MFA デバイスが未登録です。登録すると二段階認証が利用できます。',
+  'pages.security.text.mfaModalTitle': 'MFA デバイスを登録する',
+  'pages.security.text.mfaDescription':
+    '認証アプリでQRコードをスキャンし、6桁のコードを入力してください',
+  'pages.security.text.mfaSecret': '手動でキーを入力',
+  'pages.security.text.mfaDisableConfirm':
+    '登録解除するとログイン時の二段階認証が不要になります。解除しますか？',
+  'pages.security.action.mfaEnable': '登録',
+  'pages.security.action.mfaDisable': '解除',
+  'pages.security.action.mfaConfirm': '登録を確認',
+  'pages.security.fields.mfaCode': '確認コード',
+  'pages.security.validation.mfaCode': '6桁の数字コードを入力してください',
 
   // システム管理 - ユーザー管理
   'pages.system.user.feedback.resetPassword.success': 'パスワードリセット完了',
   'pages.system.user.feedback.unlock.success': 'ロック解除完了',
   'pages.system.user.feedback.revoke.success': '強制ログアウト完了',
+  'pages.system.user.feedback.resetMfa.success': 'MFA リセット完了',
   'pages.system.user.action.unlock': 'アカウントロック解除',
   'pages.system.user.action.revoke': '強制ログアウト',
   'pages.system.user.action.resetPassword': 'パスワードリセット',
+  'pages.system.user.action.resetMfa': 'MFA リセット',
   'pages.system.user.text.resetPasswordTitle':
     'パスワードリセット - {username}',
+  'pages.system.user.text.resetMfaConfirm':
+    '{name} の MFA をリセットしてもよろしいですか？リセット後、ユーザーは認証アプリを再登録する必要があります。',
 
   // システム管理 - ユーザー管理フィールド
   'pages.system.user.fields.newPassword': '新しいパスワード',

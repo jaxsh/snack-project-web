@@ -34,6 +34,12 @@ declare namespace API {
     mobile?: string;
     email?: string;
     lastActiveTime?: string;
+    mfaEnabled?: number;
+  };
+
+  type MfaSetupVO = {
+    secret: string;
+    otpauthUri: string;
   };
 
   type CurrentUser = SysUserVO;
