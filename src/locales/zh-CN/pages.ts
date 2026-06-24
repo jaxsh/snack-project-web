@@ -5,6 +5,7 @@ export default {
 
   // 动作 (Actions)
   'pages.common.action.ok': '确定',
+  'pages.common.action.confirm': '确认操作',
   'pages.common.action.cancel': '取消',
   'pages.common.action.columnLabel': '操作',
   'pages.common.action.create': '新建',
@@ -12,7 +13,9 @@ export default {
   'pages.common.action.modify': '修改',
   'pages.common.action.delete': '删除',
   'pages.common.action.batchDelete': '批量删除',
+  'pages.common.action.clearSelection': '取消选择',
   'pages.common.action.confirmDelete': '确认删除',
+  'pages.common.action.reset': '重置',
   'pages.common.action.save': '保存',
   'pages.common.action.backToHome': '返回首页',
 
@@ -25,10 +28,15 @@ export default {
   'pages.common.feedback.batchDelete.confirm':
     '确定要删除这 {count} 项吗？此操作无法撤销。',
 
+  // 通用字段 (Common Fields)
+  'pages.common.fields.createTime': '创建时间',
+
   // 数据字典 (Dictionaries)
   'pages.common.dict.status.label': '状态',
   'pages.common.dict.status.enabled': '启用',
   'pages.common.dict.status.disabled': '禁用',
+  'pages.common.dict.yesNo.yes': '是',
+  'pages.common.dict.yesNo.no': '否',
   'pages.common.dict.gender.label': '性别',
   'pages.common.dict.gender.unknown': '未知',
   'pages.common.dict.gender.male': '男',
@@ -43,6 +51,7 @@ export default {
 
   // 校验规则与占位符 (Validation & Placeholders)
   'pages.common.validation.placeholder.input': '请输入{field}',
+  'pages.common.validation.placeholder.select': '请选择{field}',
   'pages.common.validation.required': '{field}是必填项！',
   'pages.common.validation.invalid': '不合法的{field}格式！',
   'pages.common.validation.maxLength': '{field}不能超过 {max} 个字符',
@@ -54,6 +63,7 @@ export default {
   // 文案 (Text)
   'pages.common.text.themeSwitch': '主题切换',
   'pages.common.text.langSwitch': '语言切换',
+  'pages.common.text.selectedCount': '已选 {count} 项',
 
   // ==========================================
   // 各业务页面专属配置 (Page Specific Configuration)
@@ -136,8 +146,7 @@ export default {
     '未绑定 MFA 设备，绑定后，可以进行二次确认',
   'pages.security.text.mfaModalTitle': '绑定 MFA 设备',
   'pages.security.text.mfaDescription':
-    '使用验证器 App 扫描二维码，输入 6 位验证码完成绑定',
-  'pages.security.text.mfaSecret': '手动输入密钥',
+    '使用验证器 App 扫描二维码，输入 6 位验证码完成绑定。若 App 中已有此账号的条目，无需重新扫码，直接输入验证码即可。',
   'pages.security.text.mfaDisableConfirm':
     '解绑后登录将不再需要二次验证，确定解绑吗？',
   'pages.security.action.mfaEnable': '绑定',
@@ -159,6 +168,42 @@ export default {
   'pages.system.user.text.resetMfaConfirm':
     '确定要重置 {name} 的 MFA 绑定吗？重置后用户需重新绑定验证器才能使用 MFA。',
 
+  // 系统管理 - 角色管理页面
+  'pages.system.role.fields.roleName': '角色名称',
+  'pages.system.role.fields.roleCode': '角色编码',
+  'pages.system.role.fields.roleDesc': '角色描述',
+  'pages.system.role.fields.status': '状态',
+  'pages.system.role.fields.resources': '资源权限',
+  'pages.system.role.action.assignResources': '权限配置',
+  'pages.system.role.text.assignResourcesTitle': '权限配置 - {roleName}',
+  'pages.system.role.placeholder.searchResources': '搜索资源名称',
+  'pages.system.role.action.expandAll': '展开全部',
+  'pages.system.role.action.collapseAll': '折叠全部',
+  'pages.system.role.action.checkAll': '全选',
+  'pages.system.role.action.uncheckAll': '清空',
+  'pages.system.role.text.selectedCount': '已选 {count} 项',
+
+  // 系统管理 - 权限管理页面
+  'pages.system.resource.fields.parentId': '父节点',
+  'pages.system.resource.fields.name': '资源名称',
+  'pages.system.resource.fields.type': '类型',
+  'pages.system.resource.fields.permission': '权限标识',
+  'pages.system.resource.fields.path': '路径',
+  'pages.system.resource.fields.component': '组件路径',
+  'pages.system.resource.fields.icon': '图标',
+  'pages.system.resource.fields.sortOrder': '排序',
+  'pages.system.resource.fields.visible': '是否显示',
+  'pages.system.resource.fields.method': '请求方法',
+  'pages.system.resource.fields.status': '状态',
+  'pages.system.resource.type.menu': '菜单',
+  'pages.system.resource.type.button': '按钮',
+  'pages.system.resource.type.api': '接口',
+  'pages.system.resource.action.addChild': '添加下级',
+  'pages.system.resource.action.deleteWithChildren':
+    '将同时删除所有下级资源，确认继续？',
+  'pages.system.resource.disableChildren.confirm':
+    '禁用后，所有下级资源将一并禁用，确认继续？',
+
   // 系统管理 - 用户管理页面字段 label
   'pages.system.user.fields.newPassword': '新密码',
   'pages.system.user.fields.avatar': '头像',
@@ -172,4 +217,11 @@ export default {
   'pages.system.user.fields.status': '状态',
   'pages.system.user.fields.remark': '备注',
   'pages.system.user.fields.lastActiveTime': '最后活跃时间',
+  'pages.system.user.fields.roleCodes': '角色',
+  'pages.system.user.fields.expireDate': '到期日',
+  'pages.system.user.fields.locked': '锁定状态',
+  'pages.system.user.fields.initialPassword': '初始密码',
+  'pages.system.user.fields.mfaEnabled': 'MFA',
+  'pages.system.user.text.expireDateTip': '留空表示永不到期',
+  'pages.system.user.text.authInfoTitle': '认证信息',
 };

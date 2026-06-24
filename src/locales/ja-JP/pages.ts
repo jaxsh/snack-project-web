@@ -5,6 +5,7 @@ export default {
 
   // 動作 (Actions)
   'pages.common.action.ok': '確定',
+  'pages.common.action.confirm': '確認',
   'pages.common.action.cancel': 'キャンセル',
   'pages.common.action.columnLabel': '操作',
   'pages.common.action.create': '新規作成',
@@ -12,7 +13,9 @@ export default {
   'pages.common.action.modify': '変更',
   'pages.common.action.delete': '削除',
   'pages.common.action.batchDelete': '一括削除',
+  'pages.common.action.clearSelection': '選択解除',
   'pages.common.action.confirmDelete': '削除の確認',
+  'pages.common.action.reset': 'リセット',
   'pages.common.action.save': '保存',
   'pages.common.action.backToHome': 'ホームに戻る',
 
@@ -25,10 +28,15 @@ export default {
   'pages.common.feedback.batchDelete.confirm':
     'これら {count} 件のアイテムを削除してもよろしいですか？この操作は取り消せません。',
 
+  // 共通フィールド (Common Fields)
+  'pages.common.fields.createTime': '作成日時',
+
   // データ辞書 (Dictionaries)
   'pages.common.dict.status.label': 'ステータス',
   'pages.common.dict.status.enabled': '有効',
   'pages.common.dict.status.disabled': '無効',
+  'pages.common.dict.yesNo.yes': 'はい',
+  'pages.common.dict.yesNo.no': 'いいえ',
   'pages.common.dict.gender.label': '性別',
   'pages.common.dict.gender.unknown': '不明',
   'pages.common.dict.gender.male': '男性',
@@ -43,6 +51,7 @@ export default {
 
   // バリデーションルールとプレースホルダー (Validation & Placeholders)
   'pages.common.validation.placeholder.input': '{field}を入力してください',
+  'pages.common.validation.placeholder.select': '{field}を選択してください',
   'pages.common.validation.required': '{field}を入力してください！',
   'pages.common.validation.invalid': '無効な{field}形式です！',
   'pages.common.validation.maxLength': '{field}は最大 {max} 文字です',
@@ -54,6 +63,7 @@ export default {
   // テキスト (Text)
   'pages.common.text.themeSwitch': 'テーマ切り替え',
   'pages.common.text.langSwitch': '言語切り替え',
+  'pages.common.text.selectedCount': '{count}件選択中',
 
   // ==========================================
   // 各業務ページ専用設定 (Page Specific Configuration)
@@ -141,8 +151,7 @@ export default {
     'MFA デバイスが未登録です。登録すると二段階認証が利用できます。',
   'pages.security.text.mfaModalTitle': 'MFA デバイスを登録する',
   'pages.security.text.mfaDescription':
-    '認証アプリでQRコードをスキャンし、6桁のコードを入力してください',
-  'pages.security.text.mfaSecret': '手動でキーを入力',
+    '認証アプリでQRコードをスキャンし、6桁のコードを入力してください。アプリにすでにこのアカウントの項目がある場合は、再スキャン不要です。そのままコードを入力してください。',
   'pages.security.text.mfaDisableConfirm':
     '登録解除するとログイン時の二段階認証が不要になります。解除しますか？',
   'pages.security.action.mfaEnable': '登録',
@@ -178,4 +187,47 @@ export default {
   'pages.system.user.fields.status': 'ステータス',
   'pages.system.user.fields.remark': '備考',
   'pages.system.user.fields.lastActiveTime': '最終アクティブ',
+  'pages.system.user.fields.roleCodes': 'ロール',
+  'pages.system.user.fields.expireDate': '有効期限',
+  'pages.system.user.fields.locked': 'ロック状態',
+  'pages.system.user.fields.initialPassword': '初期パスワード',
+  'pages.system.user.fields.mfaEnabled': 'MFA',
+  'pages.system.user.text.expireDateTip': '空欄の場合は無期限',
+  'pages.system.user.text.authInfoTitle': '認証情報',
+
+  // システム管理 - ロール管理
+  'pages.system.role.fields.roleName': 'ロール名',
+  'pages.system.role.fields.roleCode': 'ロールコード',
+  'pages.system.role.fields.roleDesc': '説明',
+  'pages.system.role.fields.status': 'ステータス',
+  'pages.system.role.fields.resources': 'リソース権限',
+  'pages.system.role.action.assignResources': '権限設定',
+  'pages.system.role.text.assignResourcesTitle': '権限設定 - {roleName}',
+  'pages.system.role.placeholder.searchResources': 'リソース名で検索',
+  'pages.system.role.action.expandAll': '全て展開',
+  'pages.system.role.action.collapseAll': '全て折りたたみ',
+  'pages.system.role.action.checkAll': '全て選択',
+  'pages.system.role.action.uncheckAll': 'クリア',
+  'pages.system.role.text.selectedCount': '{count} 件選択中',
+
+  // システム管理 - 権限管理
+  'pages.system.resource.fields.parentId': '親ノード',
+  'pages.system.resource.fields.name': 'リソース名',
+  'pages.system.resource.fields.type': 'タイプ',
+  'pages.system.resource.fields.permission': '権限識別子',
+  'pages.system.resource.fields.path': 'パス',
+  'pages.system.resource.fields.component': 'コンポーネントパス',
+  'pages.system.resource.fields.icon': 'アイコン',
+  'pages.system.resource.fields.sortOrder': '並び順',
+  'pages.system.resource.fields.visible': '表示',
+  'pages.system.resource.fields.method': 'HTTPメソッド',
+  'pages.system.resource.fields.status': 'ステータス',
+  'pages.system.resource.type.menu': 'メニュー',
+  'pages.system.resource.type.button': 'ボタン',
+  'pages.system.resource.type.api': 'API',
+  'pages.system.resource.action.addChild': '下位追加',
+  'pages.system.resource.action.deleteWithChildren':
+    'すべての下位リソースも削除されます。続行しますか？',
+  'pages.system.resource.disableChildren.confirm':
+    '無効にすると、すべての下位リソースも無効になります。続行しますか？',
 };

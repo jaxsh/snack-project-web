@@ -5,6 +5,7 @@ export default {
 
   // 动作 (Actions)
   'pages.common.action.ok': 'OK',
+  'pages.common.action.confirm': 'Confirm',
   'pages.common.action.cancel': 'Cancel',
   'pages.common.action.columnLabel': 'Actions',
   'pages.common.action.create': 'Create',
@@ -12,7 +13,9 @@ export default {
   'pages.common.action.modify': 'Modify',
   'pages.common.action.delete': 'Delete',
   'pages.common.action.batchDelete': 'Batch Delete',
+  'pages.common.action.clearSelection': 'Clear Selection',
   'pages.common.action.confirmDelete': 'Confirm Delete',
+  'pages.common.action.reset': 'Reset',
   'pages.common.action.save': 'Save',
   'pages.common.action.backToHome': 'Back Home',
 
@@ -26,10 +29,15 @@ export default {
   'pages.common.feedback.batchDelete.confirm':
     'Are you sure you want to delete these {count} items? This action cannot be undone.',
 
+  // 通用字段 (Common Fields)
+  'pages.common.fields.createTime': 'Create Time',
+
   // 数据字典 (Dictionaries)
   'pages.common.dict.status.label': 'Status',
   'pages.common.dict.status.enabled': 'Enabled',
   'pages.common.dict.status.disabled': 'Disabled',
+  'pages.common.dict.yesNo.yes': 'Yes',
+  'pages.common.dict.yesNo.no': 'No',
   'pages.common.dict.gender.label': 'Gender',
   'pages.common.dict.gender.unknown': 'Unknown',
   'pages.common.dict.gender.male': 'Male',
@@ -44,6 +52,7 @@ export default {
 
   // 校验规则与占位符 (Validation & Placeholders)
   'pages.common.validation.placeholder.input': 'Please enter {field}',
+  'pages.common.validation.placeholder.select': 'Please select {field}',
   'pages.common.validation.required': '{field} is required!',
   'pages.common.validation.invalid': 'Invalid {field} format!',
   'pages.common.validation.maxLength': '{field} cannot exceed {max} characters',
@@ -55,6 +64,7 @@ export default {
   // 文案 (Text)
   'pages.common.text.themeSwitch': 'Switch Theme',
   'pages.common.text.langSwitch': 'Switch Language',
+  'pages.common.text.selectedCount': '{count} item(s) selected',
 
   // ==========================================
   // 各业务页面专属配置 (Page Specific Configuration)
@@ -141,8 +151,7 @@ export default {
     'No MFA device bound. Bind one to enable two-factor verification.',
   'pages.security.text.mfaModalTitle': 'Bind MFA Device',
   'pages.security.text.mfaDescription':
-    'Scan the QR code with an authenticator app and enter the 6-digit code to complete binding',
-  'pages.security.text.mfaSecret': 'Or enter key manually',
+    'Scan the QR code with your authenticator app and enter the 6-digit code to complete binding. If your app already has an entry for this account, skip scanning and just enter the code.',
   'pages.security.text.mfaDisableConfirm':
     'Login will no longer require two-factor verification. Are you sure you want to unbind?',
   'pages.security.action.mfaEnable': 'Bind',
@@ -165,6 +174,42 @@ export default {
   'pages.system.user.text.resetMfaConfirm':
     'Are you sure you want to reset MFA for {name}? The user will need to re-bind their authenticator.',
 
+  // Role Management
+  'pages.system.role.fields.roleName': 'Role Name',
+  'pages.system.role.fields.roleCode': 'Role Code',
+  'pages.system.role.fields.roleDesc': 'Description',
+  'pages.system.role.fields.status': 'Status',
+  'pages.system.role.fields.resources': 'Resources',
+  'pages.system.role.action.assignResources': 'Resources',
+  'pages.system.role.text.assignResourcesTitle': 'Resources - {roleName}',
+  'pages.system.role.placeholder.searchResources': 'Search resources',
+  'pages.system.role.action.expandAll': 'Expand All',
+  'pages.system.role.action.collapseAll': 'Collapse All',
+  'pages.system.role.action.checkAll': 'Select All',
+  'pages.system.role.action.uncheckAll': 'Clear All',
+  'pages.system.role.text.selectedCount': '{count} selected',
+
+  // Permission Management
+  'pages.system.resource.fields.parentId': 'Parent',
+  'pages.system.resource.fields.name': 'Name',
+  'pages.system.resource.fields.type': 'Type',
+  'pages.system.resource.fields.permission': 'Permission',
+  'pages.system.resource.fields.path': 'Path',
+  'pages.system.resource.fields.component': 'Component',
+  'pages.system.resource.fields.icon': 'Icon',
+  'pages.system.resource.fields.sortOrder': 'Sort Order',
+  'pages.system.resource.fields.visible': 'Visible',
+  'pages.system.resource.fields.method': 'Method',
+  'pages.system.resource.fields.status': 'Status',
+  'pages.system.resource.type.menu': 'Menu',
+  'pages.system.resource.type.button': 'Button',
+  'pages.system.resource.type.api': 'API',
+  'pages.system.resource.action.addChild': 'Add Child',
+  'pages.system.resource.action.deleteWithChildren':
+    'This will also delete all child resources. Continue?',
+  'pages.system.resource.disableChildren.confirm':
+    'Disabling this will also disable all child resources. Continue?',
+
   // User Management fields label
   'pages.system.user.fields.newPassword': 'New Password',
   'pages.system.user.fields.avatar': 'Avatar',
@@ -178,4 +223,11 @@ export default {
   'pages.system.user.fields.status': 'Status',
   'pages.system.user.fields.remark': 'Remark',
   'pages.system.user.fields.lastActiveTime': 'Last Active',
+  'pages.system.user.fields.roleCodes': 'Roles',
+  'pages.system.user.fields.expireDate': 'Expiry Date',
+  'pages.system.user.fields.locked': 'Locked',
+  'pages.system.user.fields.initialPassword': 'Initial Password',
+  'pages.system.user.fields.mfaEnabled': 'MFA',
+  'pages.system.user.text.expireDateTip': 'Leave empty for no expiry',
+  'pages.system.user.text.authInfoTitle': 'Authentication Info',
 };
