@@ -1,5 +1,8 @@
 import { LinkOutlined } from '@ant-design/icons';
-import type { Settings as LayoutSettings } from '@ant-design/pro-components';
+import type {
+  Settings as LayoutSettings,
+  MenuDataItem,
+} from '@ant-design/pro-components';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link, useModel } from '@umijs/max';
 import { App } from 'antd';
@@ -18,7 +21,9 @@ import {
   OfflineBanner,
   ThemeDropdown,
 } from '@/components';
+import { ICON_MAP } from '@/components/IconPicker';
 import { getSysUserInfo } from '@/services/auth';
+import { getMyResources } from '@/services/system/resource';
 import { getSystemNavTheme } from '@/utils/theme';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
@@ -34,6 +39,7 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   themePreference?: 'auto' | 'light' | 'realDark';
   currentUser?: API.CurrentUser;
+  menuResources?: API.SysResourceVO[];
   hasNetworkError?: boolean;
   loading?: boolean;
   fetchUserInfo?: () => Promise<{
@@ -106,9 +112,17 @@ export async function getInitialState(): Promise<{
   const { location } = history;
   if (![loginPath, '/account/change-password'].includes(location.pathname)) {
     const { currentUser, hasNetworkError } = await fetchUserInfo();
+    let menuResources: API.SysResourceVO[] = [];
+    if (currentUser) {
+      try {
+        const res = await getMyResources({ skipErrorHandler: true });
+        menuResources = res?.data ?? [];
+      } catch {}
+    }
     return {
       fetchUserInfo,
       currentUser,
+      menuResources,
       hasNetworkError,
       settings: initialSettings,
       themePreference: themePref,
@@ -121,17 +135,60 @@ export async function getInitialState(): Promise<{
   };
 }
 
+function getMenuIcon(iconName?: string): React.ReactNode {
+  if (!iconName) return undefined;
+  const Icon = ICON_MAP[iconName];
+  return Icon ? React.createElement(Icon) : undefined;
+}
+
+function buildMenuTree(
+  resources: API.SysResourceVO[],
+  parentId = 0,
+): MenuDataItem[] {
+  return resources
+    .filter(
+      (r) => r.type === 0 && r.visible === 1 && (r.parentId ?? 0) === parentId,
+    )
+    .map((r) => {
+      const children = buildMenuTree(resources, r.id);
+      return {
+        path: r.path,
+        name: r.name,
+        locale: false,
+        icon: getMenuIcon(r.icon),
+        children: children.length ? children : undefined,
+      };
+    });
+}
+
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
+    menu: { autoClose: false },
+    menuDataRender: () => buildMenuTree(initialState?.menuResources ?? []),
     menuItemRender: (item, dom) => {
-      if (item.path) {
-        return (
-          <Link to={item.path} prefetch>
-            {dom}
-          </Link>
+      if (!item.path) return dom;
+      const resource = (initialState?.menuResources ?? []).find(
+        (r) => r.path === item.path,
+      );
+      // Folder menus (type=0 without component) only toggle open/close, no navigation
+      if (resource?.type === 0 && !resource?.component) return dom;
+      return (
+        <Link to={item.path} prefetch>
+          {dom}
+        </Link>
+      );
+    },
+    breadcrumbProps: {
+      itemRender: (item: any, _: any, items: any[]) => {
+        const isLast = items.indexOf(item) === items.length - 1;
+        const hasPage = (initialState?.menuResources ?? []).some(
+          (r) => r.path === item.path && r.component,
         );
-      }
-      return dom;
+        if (!isLast && hasPage && item.path) {
+          return <Link to={item.path}>{item.title}</Link>;
+        }
+        return <span>{item.title}</span>;
+      },
     },
     actionsRender: () => [
       <ThemeDropdown key="theme" />,
