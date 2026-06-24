@@ -23,20 +23,20 @@ export async function logout(options?: Record<string, any>) {
   });
 }
 
-/** 获取业务相关的个人信息 GET /api/upms/users/info */
+/** 获取业务相关的个人信息 GET /api/upms/user */
 export async function getSysUserInfo(options?: Record<string, any>) {
-  return request<API.ApiResponse<API.SysUserVO>>('/api/upms/users/info', {
+  return request<API.ApiResponse<API.SysUserVO>>('/api/upms/user', {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-/** 修改当前用户密码 PUT /api/upms/users/password */
+/** 修改当前用户密码 PUT /api/upms/user/password */
 export async function changePassword(
   body: API.UpdatePasswordParams,
   options?: Record<string, any>,
 ) {
-  return request<API.ApiResponse<void>>('/api/upms/users/password', {
+  return request<API.ApiResponse<void>>('/api/upms/user/password', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export async function changePassword(
   });
 }
 
-/** 自助更新当前登录用户的个人资料 PUT /api/upms/users/profile */
+/** 自助更新当前登录用户的个人资料 PUT /api/upms/user */
 export async function updateProfile(
   body: {
     nickname?: string | null;
@@ -62,7 +62,7 @@ export async function updateProfile(
   },
   options?: Record<string, any>,
 ) {
-  return request<API.ApiResponse<void>>('/api/upms/users/profile', {
+  return request<API.ApiResponse<void>>('/api/upms/user', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -72,9 +72,9 @@ export async function updateProfile(
   });
 }
 
-/** 获取 MFA TOTP 密钥和二维码 URI GET /api/upms/users/mfa/setup */
+/** 获取 MFA TOTP 密钥和二维码 URI GET /api/upms/user/mfa */
 export async function getMfaSetup(options?: Record<string, any>) {
-  return request<API.ApiResponse<API.MfaSetupVO>>('/api/upms/users/mfa/setup', {
+  return request<API.ApiResponse<API.MfaSetupVO>>('/api/upms/user/mfa', {
     method: 'GET',
     ...(options || {}),
   });

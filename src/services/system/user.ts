@@ -23,6 +23,17 @@ export async function queryUsers(
   );
 }
 
+/** 查询用户详情(含 oauth 聚合信息) GET /api/upms/users/${id} */
+export async function getUser(
+  id: number | string,
+  options?: Record<string, any>,
+) {
+  return request<API.ApiResponse<API.SysUserVO>>(`/api/upms/users/${id}`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 创建用户 POST /api/upms/users */
 export async function createUser(
   body: API.SysUserDTO,
