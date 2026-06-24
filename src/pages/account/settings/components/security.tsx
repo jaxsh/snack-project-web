@@ -1,7 +1,7 @@
 import { LockOutlined } from '@ant-design/icons';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
 import { useIntl, useModel } from '@umijs/max';
-import { App, Modal, QRCode, Spin, theme } from 'antd';
+import { Alert, App, Modal, QRCode, Spin, theme } from 'antd';
 import React, { useState } from 'react';
 import {
   changePassword,
@@ -606,25 +606,26 @@ const SecurityView: React.FC = () => {
         closable={!mfaSubmitting}
         width={400}
       >
-        <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 16,
+          }}
+        >
           {mfaSetupData ? (
-            <>
-              <QRCode value={mfaSetupData.otpauthUri} size={200} />
-            </>
+            <QRCode value={mfaSetupData.otpauthUri} size={200} />
           ) : (
             <Spin style={{ padding: '20px 0' }} />
           )}
         </div>
-        <div
-          style={{
-            fontSize: 12,
-            color: token.colorTextSecondary,
-            marginBottom: 16,
-            textAlign: 'center',
-          }}
-        >
-          {fmt('pages.security.text.mfaDescription')}
-        </div>
+        <Alert
+          title={fmt('pages.security.text.mfaDescription')}
+          type="info"
+          showIcon
+          style={{ marginBottom: 16 }}
+        />
         <ProForm
           onFinish={handleMfaSubmit}
           submitter={{
@@ -672,16 +673,12 @@ const SecurityView: React.FC = () => {
         closable={!mfaDisableSubmitting}
         width={400}
       >
-        <div
-          style={{
-            fontSize: 12,
-            color: token.colorTextSecondary,
-            marginBottom: 16,
-            textAlign: 'center',
-          }}
-        >
-          {fmt('pages.security.text.mfaDisableConfirm')}
-        </div>
+        <Alert
+          title={fmt('pages.security.text.mfaDisableConfirm')}
+          type="warning"
+          showIcon
+          style={{ marginBottom: 16 }}
+        />
         <ProForm
           onFinish={handleMfaDisable}
           submitter={{
