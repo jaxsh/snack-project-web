@@ -35,7 +35,7 @@ const BaseView: React.FC = () => {
         nickname: values.nickname,
         realName: values.realName,
         gender: values.gender,
-        birthday: values.birthday,
+        birthday: values.birthday || null,
       });
       setInitialState((s) => {
         if (!s) return s;
@@ -68,12 +68,12 @@ const BaseView: React.FC = () => {
             },
             render: (_, dom) => dom[1],
           }}
-          initialValues={{
+          request={async () => ({
             nickname: currentUser?.nickname || currentUser?.username,
             realName: currentUser?.realName,
             gender: currentUser?.gender ?? 0,
             birthday: currentUser?.birthday,
-          }}
+          })}
           requiredMark={false}
         >
           <ProFormText

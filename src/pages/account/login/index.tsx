@@ -24,7 +24,7 @@ const useStyles = createStyles(({ token }) => {
   return {
     action: {
       marginLeft: '8px',
-      color: 'rgba(0, 0, 0, 0.2)',
+      color: token.colorTextQuaternary,
       fontSize: '24px',
       verticalAlign: 'middle',
       cursor: 'pointer',

@@ -1,47 +1,82 @@
 import { LockOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { request, useIntl } from '@umijs/max';
-import { App } from 'antd';
+import { App, theme } from 'antd';
 import React, { useState } from 'react';
 import { AuthLayout } from '../components/AuthLayout';
+
+const STRENGTH_COLORS = ['', '#faad14', '#a0d911', '#52c41a'];
+
+const getStrengthLevel = (val: string): number => {
+  if (!val) return 0;
+  if (val.length < 8) return 1;
+  const hasUpperCase = /[A-Z]/.test(val);
+  const hasLowerCase = /[a-z]/.test(val);
+  const hasDigit = /\d/.test(val);
+  const hasSpecial = /[@$!%*?&]/.test(val);
+  if (hasUpperCase && hasLowerCase && hasDigit && hasSpecial) return 3;
+  if (hasDigit && /[a-zA-Z]/.test(val)) return 2;
+  return 1;
+};
+
+const PasswordStrengthBar: React.FC<{ level: number }> = ({ level }) => {
+  const { token } = theme.useToken();
+  const intl = useIntl();
+  const strengthTexts = [
+    '',
+    intl.formatMessage({ id: 'pages.common.dict.passwordStrength.weak' }),
+    intl.formatMessage({ id: 'pages.common.dict.passwordStrength.medium' }),
+    intl.formatMessage({ id: 'pages.common.dict.passwordStrength.strong' }),
+  ];
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        marginBottom: '16px',
+        marginTop: '-12px',
+      }}
+    >
+      <span style={{ fontSize: '12px', color: token.colorTextSecondary }}>
+        {intl.formatMessage({ id: 'pages.common.dict.passwordStrength.label' })}
+      </span>
+      <div style={{ display: 'flex', gap: '4px' }}>
+        {[1, 2, 3].map((idx) => (
+          <div
+            key={idx}
+            style={{
+              width: '24px',
+              height: '6px',
+              borderRadius: '3px',
+              backgroundColor:
+                level === 0 || idx > level
+                  ? token.colorFillSecondary
+                  : STRENGTH_COLORS[level],
+              transition: 'background-color 0.3s ease',
+            }}
+          />
+        ))}
+      </div>
+      <span
+        style={{
+          fontSize: '12px',
+          color: STRENGTH_COLORS[level],
+          fontWeight: 500,
+        }}
+      >
+        {strengthTexts[level]}
+      </span>
+    </div>
+  );
+};
 
 const ChangePassword: React.FC = () => {
   const { message } = App.useApp();
   const intl = useIntl();
   const [passwordVal, setPasswordVal] = useState('');
 
-  const getStrengthLevel = (val: string): number => {
-    if (!val) return 0;
-    if (val.length < 8) return 1;
-
-    const hasUpperCase = /[A-Z]/.test(val);
-    const hasLowerCase = /[a-z]/.test(val);
-    const hasDigit = /\d/.test(val);
-    const hasSpecial = /[@$!%*?&]/.test(val);
-
-    if (hasUpperCase && hasLowerCase && hasDigit && hasSpecial) {
-      return 3;
-    }
-
-    const hasLetter = /[a-zA-Z]/.test(val);
-    if (hasDigit && hasLetter) {
-      return 2;
-    }
-
-    return 1;
-  };
-
   const level = getStrengthLevel(passwordVal);
-
-  const getBarColor = (index: number) => {
-    if (level === 0 || index > level) return 'rgba(0, 0, 0, 0.06)';
-    if (level === 1) return '#faad14';
-    if (level === 2) return '#a0d911';
-    return '#52c41a';
-  };
-
-  const strengthTexts = ['', '弱', '中', '强'];
-  const textColors = ['', '#faad14', '#a0d911', '#52c41a'];
 
   const handleSubmit = async (values: API.UpdatePasswordParams) => {
     try {
@@ -137,44 +172,7 @@ const ChangePassword: React.FC = () => {
             },
           ]}
         />
-        {passwordVal && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              marginBottom: '16px',
-              marginTop: '-12px',
-            }}
-          >
-            <span style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.45)' }}>
-              密码强度：
-            </span>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              {[1, 2, 3].map((idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    width: '24px',
-                    height: '6px',
-                    borderRadius: '3px',
-                    backgroundColor: getBarColor(idx),
-                    transition: 'background-color 0.3s ease',
-                  }}
-                />
-              ))}
-            </div>
-            <span
-              style={{
-                fontSize: '12px',
-                color: textColors[level],
-                fontWeight: 500,
-              }}
-            >
-              {strengthTexts[level]}
-            </span>
-          </div>
-        )}
+        {passwordVal && <PasswordStrengthBar level={level} />}
         <ProFormText.Password
           name="confirmPassword"
           fieldProps={{

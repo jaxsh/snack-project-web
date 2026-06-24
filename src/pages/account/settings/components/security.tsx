@@ -1,7 +1,7 @@
 import { LockOutlined } from '@ant-design/icons';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
 import { useIntl, useModel } from '@umijs/max';
-import { App, Modal, Popconfirm, QRCode, Spin } from 'antd';
+import { App, Modal, QRCode, Spin, theme } from 'antd';
 import React, { useState } from 'react';
 import {
   changePassword,
@@ -35,6 +35,7 @@ const maskEmail = (email?: string) => {
 
 const SecurityView: React.FC = () => {
   const { message: antdMessage } = App.useApp();
+  const { token } = theme.useToken();
   const { initialState, setInitialState } = useModel('@@initialState');
   const currentUser = initialState?.currentUser;
   const intl = useIntl();
@@ -47,9 +48,11 @@ const SecurityView: React.FC = () => {
   const [mfaModalOpen, setMfaModalOpen] = useState(false);
   const [mfaSetupData, setMfaSetupData] = useState<API.MfaSetupVO | null>(null);
   const [mfaSubmitting, setMfaSubmitting] = useState(false);
+  const [mfaDisableModalOpen, setMfaDisableModalOpen] = useState(false);
+  const [mfaDisableSubmitting, setMfaDisableSubmitting] = useState(false);
 
   const getBarColor = (index: number) => {
-    if (level === 0 || index > level) return 'rgba(0, 0, 0, 0.06)';
+    if (level === 0 || index > level) return token.colorFillSecondary;
     if (level === 1) return '#faad14';
     if (level === 2) return '#a0d911';
     return '#52c41a';
@@ -201,13 +204,17 @@ const SecurityView: React.FC = () => {
     }
   };
 
-  const handleMfaDisable = async () => {
+  const handleMfaDisable = async (values: { mfaCode: string }) => {
+    setMfaDisableSubmitting(true);
     try {
-      await updateProfile({ mfaEnabled: 0 });
+      await updateProfile({ mfaEnabled: 0, mfaCode: values.mfaCode });
       antdMessage.success(fmt('pages.common.feedback.update.success'));
+      setMfaDisableModalOpen(false);
       await refreshCurrentUser();
     } catch {
       return;
+    } finally {
+      setMfaDisableSubmitting(false);
     }
   };
 
@@ -273,21 +280,15 @@ const SecurityView: React.FC = () => {
     {
       title: fmt('pages.security.text.mfaTitle'),
       description:
-        currentUser?.mfaEnabled === 1
+        currentUser?.oauthVO?.mfaEnabled === 1
           ? fmt('pages.security.text.mfaEnabled')
           : fmt('pages.security.text.mfaDisabled'),
       actions:
-        currentUser?.mfaEnabled === 1
+        currentUser?.oauthVO?.mfaEnabled === 1
           ? [
-              <Popconfirm
-                key="Disable"
-                title={fmt('pages.security.text.mfaDisableConfirm')}
-                onConfirm={handleMfaDisable}
-                okText={fmt('pages.common.action.ok')}
-                cancelText={fmt('pages.common.action.cancel')}
-              >
-                <a>{fmt('pages.security.action.mfaDisable')}</a>
-              </Popconfirm>,
+              <a key="Disable" onClick={() => setMfaDisableModalOpen(true)}>
+                {fmt('pages.security.action.mfaDisable')}
+              </a>,
             ]
           : [
               <a key="Enable" onClick={handleMfaOpen}>
@@ -310,7 +311,9 @@ const SecurityView: React.FC = () => {
               alignItems: 'center',
               padding: '16px 0',
               borderBottom:
-                index < data.length - 1 ? '1px solid #f0f0f0' : 'none',
+                index < data.length - 1
+                  ? `1px solid ${token.colorBorderSecondary}`
+                  : 'none',
             }}
           >
             <div>
@@ -318,12 +321,12 @@ const SecurityView: React.FC = () => {
                 style={{
                   fontWeight: 500,
                   marginBottom: 4,
-                  color: 'rgba(0, 0, 0, 0.88)',
+                  color: token.colorText,
                 }}
               >
                 {item.title}
               </div>
-              <div style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 14 }}>
+              <div style={{ color: token.colorTextSecondary, fontSize: 14 }}>
                 {item.description}
               </div>
             </div>
@@ -420,7 +423,9 @@ const SecurityView: React.FC = () => {
                 marginTop: '-12px',
               }}
             >
-              <span style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.45)' }}>
+              <span
+                style={{ fontSize: '12px', color: token.colorTextSecondary }}
+              >
                 {fmt('pages.common.dict.passwordStrength.label')}
               </span>
               <div style={{ display: 'flex', gap: '4px' }}>
@@ -605,16 +610,6 @@ const SecurityView: React.FC = () => {
           {mfaSetupData ? (
             <>
               <QRCode value={mfaSetupData.otpauthUri} size={200} />
-              <div
-                style={{
-                  marginTop: 8,
-                  fontSize: 12,
-                  color: 'rgba(0,0,0,0.45)',
-                  wordBreak: 'break-all',
-                }}
-              >
-                {fmt('pages.security.text.mfaSecret')}: {mfaSetupData.secret}
-              </div>
             </>
           ) : (
             <Spin style={{ padding: '20px 0' }} />
@@ -623,7 +618,7 @@ const SecurityView: React.FC = () => {
         <div
           style={{
             fontSize: 12,
-            color: 'rgba(0,0,0,0.45)',
+            color: token.colorTextSecondary,
             marginBottom: 16,
             textAlign: 'center',
           }}
@@ -641,6 +636,63 @@ const SecurityView: React.FC = () => {
               loading: mfaSubmitting,
               block: true,
               disabled: !mfaSetupData,
+            },
+          }}
+        >
+          <ProFormText
+            name="mfaCode"
+            label={fmt('pages.security.fields.mfaCode')}
+            placeholder={fmt('pages.common.validation.placeholder.input', {
+              field: fmt('pages.security.fields.mfaCode'),
+            })}
+            rules={[
+              {
+                required: true,
+                message: fmt('pages.common.validation.required', {
+                  field: fmt('pages.security.fields.mfaCode'),
+                }),
+              },
+              {
+                pattern: /^[0-9]{6}$/,
+                message: fmt('pages.security.validation.mfaCode'),
+              },
+            ]}
+          />
+        </ProForm>
+      </Modal>
+
+      <Modal
+        title={fmt('pages.security.action.mfaDisable')}
+        open={mfaDisableModalOpen}
+        onCancel={() => {
+          if (!mfaDisableSubmitting) setMfaDisableModalOpen(false);
+        }}
+        footer={null}
+        destroyOnHidden
+        closable={!mfaDisableSubmitting}
+        width={400}
+      >
+        <div
+          style={{
+            fontSize: 12,
+            color: token.colorTextSecondary,
+            marginBottom: 16,
+            textAlign: 'center',
+          }}
+        >
+          {fmt('pages.security.text.mfaDisableConfirm')}
+        </div>
+        <ProForm
+          onFinish={handleMfaDisable}
+          submitter={{
+            searchConfig: {
+              submitText: fmt('pages.security.action.mfaDisable'),
+            },
+            resetButtonProps: false,
+            submitButtonProps: {
+              loading: mfaDisableSubmitting,
+              block: true,
+              danger: true,
             },
           }}
         >
