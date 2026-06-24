@@ -99,7 +99,6 @@ export default {
   'pages.changePassword.text.modalTitle': 'パスワードの変更',
   'pages.changePassword.text.description':
     '初期パスワードまたは期限切れのパスワードを変更してください。',
-  'pages.changePassword.action.submit': '確認',
   'pages.changePassword.feedback.success':
     'パスワードの変更に成功しました。リダイレクト中…',
   'pages.changePassword.fields.newPassword': '新しいパスワード',
@@ -139,7 +138,6 @@ export default {
   'pages.security.text.emailBound': '登録済み：{email}',
   'pages.security.text.emailUnbound': '未登録',
   'pages.security.text.emailModalTitle': 'メールアドレスの変更',
-  'pages.security.action.submit': '変更を確認',
   'pages.security.fields.password': 'パスワード',
   'pages.security.fields.mobile': '携帯電話番号',
   'pages.security.fields.email': 'メールアドレス',
@@ -156,7 +154,6 @@ export default {
     '登録解除するとログイン時の二段階認証が不要になります。解除しますか？',
   'pages.security.action.mfaEnable': '登録',
   'pages.security.action.mfaDisable': '解除',
-  'pages.security.action.mfaConfirm': '登録を確認',
   'pages.security.fields.mfaCode': '確認コード',
   'pages.security.validation.mfaCode': '6桁の数字コードを入力してください',
 

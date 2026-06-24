@@ -352,7 +352,7 @@ const SecurityView: React.FC = () => {
           submitter={{
             searchConfig: {
               submitText: intl.formatMessage({
-                id: 'pages.changePassword.action.submit',
+                id: 'pages.common.action.confirm',
               }),
             },
             resetButtonProps: false,
@@ -512,7 +512,7 @@ const SecurityView: React.FC = () => {
           submitter={{
             searchConfig: {
               submitText: intl.formatMessage({
-                id: 'pages.security.action.submit',
+                id: 'pages.common.action.confirm',
               }),
             },
             resetButtonProps: false,
@@ -562,7 +562,7 @@ const SecurityView: React.FC = () => {
           submitter={{
             searchConfig: {
               submitText: intl.formatMessage({
-                id: 'pages.security.action.submit',
+                id: 'pages.common.action.confirm',
               }),
             },
             resetButtonProps: false,
@@ -629,7 +629,7 @@ const SecurityView: React.FC = () => {
           onFinish={handleMfaSubmit}
           submitter={{
             searchConfig: {
-              submitText: fmt('pages.security.action.mfaConfirm'),
+              submitText: fmt('pages.common.action.confirm'),
             },
             resetButtonProps: false,
             submitButtonProps: {
@@ -686,7 +686,7 @@ const SecurityView: React.FC = () => {
           onFinish={handleMfaDisable}
           submitter={{
             searchConfig: {
-              submitText: fmt('pages.security.action.mfaDisable'),
+              submitText: fmt('pages.common.action.confirm'),
             },
             resetButtonProps: false,
             submitButtonProps: {

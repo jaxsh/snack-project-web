@@ -115,7 +115,7 @@ const ChangePassword: React.FC = () => {
         submitter={{
           searchConfig: {
             submitText: intl.formatMessage({
-              id: 'pages.changePassword.action.submit',
+              id: 'pages.common.action.confirm',
             }),
           },
         }}

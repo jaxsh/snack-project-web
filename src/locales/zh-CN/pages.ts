@@ -5,7 +5,7 @@ export default {
 
   // 动作 (Actions)
   'pages.common.action.ok': '确定',
-  'pages.common.action.confirm': '确认操作',
+  'pages.common.action.confirm': '确认',
   'pages.common.action.cancel': '取消',
   'pages.common.action.columnLabel': '操作',
   'pages.common.action.create': '新建',
@@ -96,7 +96,6 @@ export default {
   'pages.changePassword.text.modalTitle': '修改密码',
   'pages.changePassword.text.description':
     '当前使用的是初始密码或密码已过期，请修改密码后继续使用。',
-  'pages.changePassword.action.submit': '确认修改',
   'pages.changePassword.feedback.success': '密码修改成功，正在跳转…',
   'pages.changePassword.fields.newPassword': '新密码',
   'pages.changePassword.fields.confirmPassword': '确认新密码',
@@ -134,7 +133,6 @@ export default {
   'pages.security.text.emailBound': '已绑定：{email}',
   'pages.security.text.emailUnbound': '未绑定',
   'pages.security.text.emailModalTitle': '修改邮箱',
-  'pages.security.action.submit': '确认修改',
   'pages.security.fields.password': '账户密码',
   'pages.security.fields.mobile': '手机号',
   'pages.security.fields.email': '邮箱',
@@ -151,7 +149,6 @@ export default {
     '解绑后登录将不再需要二次验证，确定解绑吗？',
   'pages.security.action.mfaEnable': '绑定',
   'pages.security.action.mfaDisable': '解绑',
-  'pages.security.action.mfaConfirm': '确认绑定',
   'pages.security.fields.mfaCode': '验证码',
   'pages.security.validation.mfaCode': '请输入 6 位数字验证码',
 

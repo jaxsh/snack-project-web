@@ -98,7 +98,6 @@ export default {
   'pages.changePassword.text.modalTitle': 'Change Password',
   'pages.changePassword.text.description':
     'Your password is temporary or has expired. Please update it to continue.',
-  'pages.changePassword.action.submit': 'Confirm',
   'pages.changePassword.feedback.success':
     'Password changed successfully, redirecting…',
   'pages.changePassword.fields.newPassword': 'New Password',
@@ -139,7 +138,6 @@ export default {
   'pages.security.text.emailBound': 'Bound: {email}',
   'pages.security.text.emailUnbound': 'Not bound',
   'pages.security.text.emailModalTitle': 'Change Email Address',
-  'pages.security.action.submit': 'Confirm Modify',
   'pages.security.fields.password': 'Password',
   'pages.security.fields.mobile': 'Mobile',
   'pages.security.fields.email': 'Email',
@@ -156,7 +154,6 @@ export default {
     'Login will no longer require two-factor verification. Are you sure you want to unbind?',
   'pages.security.action.mfaEnable': 'Bind',
   'pages.security.action.mfaDisable': 'Unbind',
-  'pages.security.action.mfaConfirm': 'Confirm Bind',
   'pages.security.fields.mfaCode': 'Verification Code',
   'pages.security.validation.mfaCode':
     'Please enter a 6-digit verification code',
