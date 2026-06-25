@@ -19,6 +19,7 @@ import {
   Space,
   Switch,
   Tag,
+  Typography,
   theme,
 } from 'antd';
 import React, { useRef } from 'react';
@@ -31,6 +32,7 @@ import {
 } from '@/services/system/user';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import UserCreateForm from './components/UserCreateForm';
+import UserDetailDrawer from './components/UserDetailDrawer';
 import UserEditForm from './components/UserEditForm';
 
 const UserList: React.FC = () => {
@@ -49,7 +51,7 @@ const UserList: React.FC = () => {
   const { mutate: deleteRun } = useMutation({
     mutationFn: (id: string | number) => deleteUsers(id),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.delete.success' }),
       );
       actionRef.current?.reloadAndRest?.();
@@ -60,7 +62,7 @@ const UserList: React.FC = () => {
     {
       mutationFn: (ids: string) => deleteUsers(ids),
       onSuccess: () => {
-        message.success(
+        void message.success(
           intl.formatMessage({ id: 'pages.common.feedback.delete.success' }),
         );
         actionRef.current?.clearSelected?.();
@@ -72,7 +74,7 @@ const UserList: React.FC = () => {
   const { mutate: unlockRun } = useMutation({
     mutationFn: (id: number) => unlockUser(id),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.system.user.feedback.unlock.success' }),
       );
       actionRef.current?.reload();
@@ -82,7 +84,7 @@ const UserList: React.FC = () => {
   const { mutate: revokeRun } = useMutation({
     mutationFn: (id: number) => revokeUserTokens(id),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.system.user.feedback.revoke.success' }),
       );
       actionRef.current?.reload();
@@ -93,7 +95,7 @@ const UserList: React.FC = () => {
     mutationFn: (id: number) =>
       updateUser(id, { mfaEnabled: 0 } as API.SysUserDTO),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({
           id: 'pages.system.user.feedback.resetMfa.success',
         }),
@@ -174,8 +176,21 @@ const UserList: React.FC = () => {
       title: intl.formatMessage({ id: 'pages.system.user.fields.username' }),
       dataIndex: 'username',
       key: 'username',
-      copyable: true,
       sorter: true,
+      render: (_, record) => (
+        <Space size={4}>
+          <UserDetailDrawer
+            record={record}
+            trigger={
+              <a onClick={(e) => e.stopPropagation()}>{record.username}</a>
+            }
+          />
+          <Typography.Text
+            copyable={{ text: record.username }}
+            style={{ color: token.colorTextDescription }}
+          />
+        </Space>
+      ),
     },
     {
       title: intl.formatMessage({ id: 'pages.system.user.fields.realName' }),
@@ -186,15 +201,15 @@ const UserList: React.FC = () => {
       title: intl.formatMessage({ id: 'pages.system.user.fields.nickname' }),
       dataIndex: 'nickname',
       key: 'nickname',
-      search: false,
       hideInTable: true,
+      search: false,
     },
     {
       title: intl.formatMessage({ id: 'pages.system.user.fields.gender' }),
       dataIndex: 'gender',
       key: 'gender',
-      search: false,
       hideInTable: true,
+      search: false,
       valueType: 'select',
       valueEnum: {
         0: {
@@ -224,7 +239,7 @@ const UserList: React.FC = () => {
       hideInTable: true,
     },
     {
-      title: intl.formatMessage({ id: 'pages.system.user.fields.status' }),
+      title: intl.formatMessage({ id: 'pages.common.fields.status' }),
       dataIndex: 'status',
       key: 'status',
       valueType: 'select',
@@ -289,124 +304,132 @@ const UserList: React.FC = () => {
       key: 'option',
       onHeaderCell: () => ({ style: { whiteSpace: 'nowrap' as const } }),
       onCell: () => ({ style: { whiteSpace: 'nowrap' as const } }),
-      render: (_, record) => (
-        <Space size="middle">
-          <UserEditForm
-            trigger={
-              <a>
-                <EditOutlined style={{ marginRight: 4 }} />
-                {intl.formatMessage({ id: 'pages.common.action.edit' })}
-              </a>
-            }
-            record={record}
-            onOk={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  key: 'resetPwd',
-                  label: (
-                    <ResetPasswordForm
-                      trigger={
-                        <span>
-                          {intl.formatMessage({
-                            id: 'pages.system.user.action.resetPassword',
-                          })}
-                        </span>
-                      }
-                      record={record}
-                    />
-                  ),
-                  icon: <KeyOutlined />,
-                },
-                {
-                  key: 'unlock',
-                  label: intl.formatMessage({
-                    id: 'pages.system.user.action.unlock',
-                  }),
-                  icon: <UnlockOutlined />,
-                  onClick: () => unlockRun(record.id),
-                },
-                {
-                  key: 'resetMfa',
-                  label: (
-                    <Popconfirm
-                      title={intl.formatMessage({
-                        id: 'pages.system.user.action.resetMfa',
-                      })}
-                      description={intl.formatMessage(
-                        { id: 'pages.system.user.text.resetMfaConfirm' },
-                        { name: record.username },
-                      )}
-                      onConfirm={() => resetMfaRun(record.id)}
-                      okText={intl.formatMessage({
-                        id: 'pages.common.action.ok',
-                      })}
-                      cancelText={intl.formatMessage({
-                        id: 'pages.common.action.cancel',
-                      })}
-                    >
-                      <span>
-                        {intl.formatMessage({
-                          id: 'pages.system.user.action.resetMfa',
-                        })}
-                      </span>
-                    </Popconfirm>
-                  ),
-                  icon: <LockOutlined />,
-                },
-                {
-                  key: 'revokeTokens',
-                  label: intl.formatMessage({
-                    id: 'pages.system.user.action.revoke',
-                  }),
-                  icon: <LogoutOutlined />,
-                  danger: true,
-                  disabled: !record.lastActiveTime,
-                  onClick: () => revokeRun(record.id),
-                },
-                { type: 'divider' },
-                {
-                  key: 'delete',
-                  label: (
-                    <Popconfirm
-                      title={intl.formatMessage({
-                        id: 'pages.common.action.confirmDelete',
-                      })}
-                      description={intl.formatMessage(
-                        { id: 'pages.common.feedback.delete.confirm' },
-                        { name: record.username },
-                      )}
-                      onConfirm={() => deleteRun(record.id)}
-                      okText={intl.formatMessage({
-                        id: 'pages.common.action.ok',
-                      })}
-                      cancelText={intl.formatMessage({
-                        id: 'pages.common.action.cancel',
-                      })}
-                    >
-                      <span>
-                        {intl.formatMessage({
-                          id: 'pages.common.action.delete',
-                        })}
-                      </span>
-                    </Popconfirm>
-                  ),
-                  icon: <DeleteOutlined />,
-                  danger: true,
-                },
-              ],
-            }}
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <MoreOutlined style={{ fontSize: 16, cursor: 'pointer' }} />
-            </a>
-          </Dropdown>
-        </Space>
-      ),
+      render: (_, record) => {
+        const dropdownItems = [
+          canAccess('sys:user:reset-password') && {
+            key: 'resetPwd',
+            label: (
+              <ResetPasswordForm
+                trigger={
+                  <span>
+                    {intl.formatMessage({
+                      id: 'pages.system.user.action.resetPassword',
+                    })}
+                  </span>
+                }
+                record={record}
+              />
+            ),
+            icon: <KeyOutlined />,
+          },
+          canAccess('sys:user:unlock') && {
+            key: 'unlock',
+            label: intl.formatMessage({
+              id: 'pages.system.user.action.unlock',
+            }),
+            icon: <UnlockOutlined />,
+            onClick: () => unlockRun(record.id),
+          },
+          canAccess('sys:user:reset-mfa') && {
+            key: 'resetMfa',
+            label: (
+              <Popconfirm
+                title={intl.formatMessage({
+                  id: 'pages.system.user.action.resetMfa',
+                })}
+                description={intl.formatMessage(
+                  { id: 'pages.system.user.text.resetMfaConfirm' },
+                  { name: record.username },
+                )}
+                onConfirm={() => resetMfaRun(record.id)}
+                okText={intl.formatMessage({
+                  id: 'pages.common.action.ok',
+                })}
+                cancelText={intl.formatMessage({
+                  id: 'pages.common.action.cancel',
+                })}
+              >
+                <span>
+                  {intl.formatMessage({
+                    id: 'pages.system.user.action.resetMfa',
+                  })}
+                </span>
+              </Popconfirm>
+            ),
+            icon: <LockOutlined />,
+          },
+          canAccess('sys:user:revoke-token') && {
+            key: 'revokeTokens',
+            label: intl.formatMessage({
+              id: 'pages.system.user.action.revoke',
+            }),
+            icon: <LogoutOutlined />,
+            danger: true,
+            disabled: !record.lastActiveTime,
+            onClick: () => revokeRun(record.id),
+          },
+          (canAccess('sys:user:reset-password') ||
+            canAccess('sys:user:unlock') ||
+            canAccess('sys:user:reset-mfa') ||
+            canAccess('sys:user:revoke-token')) &&
+            canAccess('sys:user:delete') && { type: 'divider' as const },
+          canAccess('sys:user:delete') && {
+            key: 'delete',
+            label: (
+              <Popconfirm
+                title={intl.formatMessage({
+                  id: 'pages.common.action.confirmDelete',
+                })}
+                description={intl.formatMessage(
+                  { id: 'pages.common.feedback.delete.confirm' },
+                  { name: record.username },
+                )}
+                onConfirm={() => deleteRun(record.id)}
+                okText={intl.formatMessage({
+                  id: 'pages.common.action.ok',
+                })}
+                cancelText={intl.formatMessage({
+                  id: 'pages.common.action.cancel',
+                })}
+              >
+                <span>
+                  {intl.formatMessage({
+                    id: 'pages.common.action.delete',
+                  })}
+                </span>
+              </Popconfirm>
+            ),
+            icon: <DeleteOutlined />,
+            danger: true,
+          },
+        ].filter(Boolean) as any[];
+
+        return (
+          <Space size="middle">
+            {canAccess('sys:user:update') && (
+              <UserEditForm
+                trigger={
+                  <a>
+                    <EditOutlined style={{ marginRight: 4 }} />
+                    {intl.formatMessage({ id: 'pages.common.action.edit' })}
+                  </a>
+                }
+                record={record}
+                onOk={() => {
+                  actionRef.current?.reload();
+                }}
+              />
+            )}
+            {dropdownItems.length > 0 && (
+              <Dropdown menu={{ items: dropdownItems }}>
+                <a onClick={(e) => e.preventDefault()}>
+                  <MoreOutlined style={{ fontSize: 16, cursor: 'pointer' }} />
+                </a>
+              </Dropdown>
+            )}
+          </Space>
+        );
+      },
     },
   ];
 
@@ -417,14 +440,18 @@ const UserList: React.FC = () => {
         rowKey="id"
         search={{ labelWidth: 'auto', defaultCollapsed: false }}
         pagination={{ defaultPageSize: 10, showSizeChanger: true }}
-        toolBarRender={() => [
-          <UserCreateForm
-            key="create"
-            onSuccess={() => {
-              actionRef.current?.reload();
-            }}
-          />,
-        ]}
+        toolBarRender={() =>
+          [
+            canAccess('sys:user:create') && (
+              <UserCreateForm
+                key="create"
+                onSuccess={() => {
+                  actionRef.current?.reload();
+                }}
+              />
+            ),
+          ].filter(Boolean) as React.ReactNode[]
+        }
         tableAlertOptionRender={({ selectedRowKeys, onCleanSelected }) => (
           <Space size={16}>
             {canAccess('sys:user:delete') && (
