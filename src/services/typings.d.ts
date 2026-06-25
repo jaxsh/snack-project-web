@@ -36,7 +36,6 @@ declare namespace API {
     expireDate?: string;
     lastActiveTime?: string;
     roleCodes?: string[];
-    // 认证侧信息(登录/锁定/初始密码/MFA 等), 由 oauth_user 聚合
     oauthVO?: OAuthUserVO;
   };
 
@@ -73,7 +72,6 @@ declare namespace API {
     username?: string;
     realName?: string;
     nickname?: string;
-    // 可清空字段(后端 JsonNullable): 传 null 表示清空
     avatar?: string | null;
     gender?: number;
     birthday?: string | null;

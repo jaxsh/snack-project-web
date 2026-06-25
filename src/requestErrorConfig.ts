@@ -1,6 +1,6 @@
 import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
-import { getIntl } from '@umijs/max';
+import { getIntl, getLocale } from '@umijs/max';
 import { staticMessage } from '@/utils/antdStaticApi';
 
 export const errorConfig: RequestConfig = {
@@ -111,7 +111,19 @@ export const errorConfig: RequestConfig = {
 
   requestInterceptors: [
     (config: RequestOptions) => {
-      return { ...config };
+      const locale = getLocale();
+      const params = { ...config.params };
+      if (locale) {
+        params.locale = locale;
+      }
+
+      const headers = { ...config.headers };
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (timezone) {
+        headers['X-Timezone'] = timezone;
+      }
+
+      return { ...config, params, headers };
     },
   ],
 

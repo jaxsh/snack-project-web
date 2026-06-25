@@ -80,12 +80,31 @@ export async function getMfaSetup(options?: Record<string, any>) {
   });
 }
 
+/** 绑定或解绑当前用户 MFA PUT /api/upms/user/mfa */
+export async function updateMfa(
+  body: {
+    mfaEnabled: number;
+    mfaSecret?: string | null;
+    mfaCode: string;
+  },
+  options?: Record<string, any>,
+) {
+  return request<API.ApiResponse<void>>('/api/upms/user/mfa', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** MFA 登录验证 POST /oauth2/account/verify-mfa */
 export async function verifyMfa(
   body: { code: string },
   options?: Record<string, any>,
 ) {
-  return request<{ redirectUrl?: string }>('/oauth2/account/verify-mfa', {
+  return request<API.ApiResponse<{ redirectUrl?: string }>>('/oauth2/account/verify-mfa', {
     method: 'POST',
     data: body,
     ...(options || {}),
