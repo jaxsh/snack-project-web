@@ -3,7 +3,6 @@ import {
   DrawerForm,
   ProFormDatePicker,
   ProFormSelect,
-  ProFormSwitch,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
@@ -31,7 +30,7 @@ const UserCreateForm: FC<Props> = ({ onSuccess }) => {
         expireDate: values.expireDate || null,
       }),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.create.success' }),
       );
       onSuccess?.();
@@ -42,11 +41,7 @@ const UserCreateForm: FC<Props> = ({ onSuccess }) => {
     <DrawerForm
       title={intl.formatMessage({ id: 'pages.common.action.create' })}
       trigger={
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          style={{ borderRadius: 6 }}
-        >
+        <Button type="primary" icon={<PlusOutlined />}>
           {intl.formatMessage({ id: 'pages.common.action.create' })}
         </Button>
       }
@@ -238,7 +233,7 @@ const UserCreateForm: FC<Props> = ({ onSuccess }) => {
       />
       <ProFormSelect
         name="status"
-        label={intl.formatMessage({ id: 'pages.system.user.fields.status' })}
+        label={intl.formatMessage({ id: 'pages.common.fields.status' })}
         options={[
           {
             value: 1,
@@ -261,17 +256,17 @@ const UserCreateForm: FC<Props> = ({ onSuccess }) => {
         })}
         fieldProps={{ allowClear: true }}
         tooltip={intl.formatMessage({
-          id: 'pages.system.user.text.expireDateTip',
+          id: 'pages.system.user.fields.expireDateTip',
         })}
       />
       <ProFormTextArea
         name="remark"
-        label={intl.formatMessage({ id: 'pages.system.user.fields.remark' })}
+        label={intl.formatMessage({ id: 'pages.common.fields.remark' })}
         placeholder={intl.formatMessage(
           { id: 'pages.common.validation.placeholder.input' },
           {
             field: intl.formatMessage({
-              id: 'pages.system.user.fields.remark',
+              id: 'pages.common.fields.remark',
             }),
           },
         )}
@@ -282,7 +277,7 @@ const UserCreateForm: FC<Props> = ({ onSuccess }) => {
               { id: 'pages.common.validation.maxLength' },
               {
                 field: intl.formatMessage({
-                  id: 'pages.system.user.fields.remark',
+                  id: 'pages.common.fields.remark',
                 }),
                 max: 500,
               },

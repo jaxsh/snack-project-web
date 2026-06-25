@@ -186,12 +186,14 @@ const UserList: React.FC = () => {
       title: intl.formatMessage({ id: 'pages.system.user.fields.nickname' }),
       dataIndex: 'nickname',
       key: 'nickname',
+      search: false,
       hideInTable: true,
     },
     {
       title: intl.formatMessage({ id: 'pages.system.user.fields.gender' }),
       dataIndex: 'gender',
       key: 'gender',
+      search: false,
       hideInTable: true,
       valueType: 'select',
       valueEnum: {

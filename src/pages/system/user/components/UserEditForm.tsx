@@ -2,7 +2,6 @@ import {
   DrawerForm,
   ProFormDatePicker,
   ProFormSelect,
-  ProFormSwitch,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
@@ -32,7 +31,7 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         expireDate: values.expireDate || null,
       }),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.update.success' }),
       );
       onOk?.();
@@ -209,7 +208,7 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
       />
       <ProFormSelect
         name="status"
-        label={intl.formatMessage({ id: 'pages.system.user.fields.status' })}
+        label={intl.formatMessage({ id: 'pages.common.fields.status' })}
         options={[
           {
             value: 1,
@@ -232,17 +231,17 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         })}
         fieldProps={{ allowClear: true }}
         tooltip={intl.formatMessage({
-          id: 'pages.system.user.text.expireDateTip',
+          id: 'pages.system.user.fields.expireDateTip',
         })}
       />
       <ProFormTextArea
         name="remark"
-        label={intl.formatMessage({ id: 'pages.system.user.fields.remark' })}
+        label={intl.formatMessage({ id: 'pages.common.fields.remark' })}
         placeholder={intl.formatMessage(
           { id: 'pages.common.validation.placeholder.input' },
           {
             field: intl.formatMessage({
-              id: 'pages.system.user.fields.remark',
+              id: 'pages.common.fields.remark',
             }),
           },
         )}
@@ -253,7 +252,7 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
               { id: 'pages.common.validation.maxLength' },
               {
                 field: intl.formatMessage({
-                  id: 'pages.system.user.fields.remark',
+                  id: 'pages.common.fields.remark',
                 }),
                 max: 500,
               },

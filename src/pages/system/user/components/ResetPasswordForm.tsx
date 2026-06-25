@@ -18,7 +18,7 @@ const ResetPasswordForm: FC<Props> = ({ trigger, record }) => {
     mutationFn: (values: { password?: string }) =>
       resetUserPassword(record.id, { password: values.password }),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({
           id: 'pages.system.user.feedback.resetPassword.success',
         }),
