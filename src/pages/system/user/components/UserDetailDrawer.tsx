@@ -110,7 +110,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
               dataIndex: 'email',
             },
             {
-              title: fmt('pages.system.user.fields.remark'),
+              title: fmt('pages.common.fields.remark'),
               dataIndex: 'remark',
             },
           ]}
