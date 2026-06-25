@@ -3,8 +3,8 @@ import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { request, useIntl } from '@umijs/max';
 import { App } from 'antd';
 import React, { useState } from 'react';
+import { PasswordStrengthBar } from '@/components/PasswordStrengthBar';
 import { AuthLayout } from '../components/AuthLayout';
-import { PasswordStrengthBar } from '../components/PasswordStrengthBar';
 
 const ChangePassword: React.FC = () => {
   const { message } = App.useApp();

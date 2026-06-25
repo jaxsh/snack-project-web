@@ -3,6 +3,7 @@ import { ProForm, ProFormText } from '@ant-design/pro-components';
 import { useIntl, useModel } from '@umijs/max';
 import { Alert, App, List, Modal, QRCode, Spin } from 'antd';
 import React, { useState } from 'react';
+import { PasswordStrengthBar } from '@/components/PasswordStrengthBar';
 import {
   changePassword,
   getMfaSetup,
@@ -11,10 +12,9 @@ import {
   updateMfa,
   updateProfile,
 } from '@/services/auth';
-import { PasswordStrengthBar } from '../../components/PasswordStrengthBar';
 
 const maskMobile = (mobile?: string) => {
-  if (!mobile) return '未绑定手机';
+  if (!mobile) return '';
   if (mobile.length >= 7) {
     return `${mobile.slice(0, 3)}****${mobile.slice(-4)}`;
   }
@@ -22,7 +22,7 @@ const maskMobile = (mobile?: string) => {
 };
 
 const maskEmail = (email?: string) => {
-  if (!email) return '未绑定邮箱';
+  if (!email) return '';
   const parts = email.split('@');
   if (parts.length === 2) {
     const name = parts[0];
