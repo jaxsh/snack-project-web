@@ -18,6 +18,12 @@ export default {
   'pages.common.action.reset': 'リセット',
   'pages.common.action.save': '保存',
   'pages.common.action.backToHome': 'ホームに戻る',
+  'pages.common.action.modifyField': '{field}の変更',
+  'pages.common.action.bindField': '{field}の登録',
+  'pages.common.action.unbindField': '{field}の登録解除',
+  'pages.common.action.bind': '登録',
+  'pages.common.action.unbind': '解除',
+  'pages.common.action.changeAvatar': 'アバター変更',
 
   // インタラクション結果フィードバック (Interaction Feedback)
   'pages.common.feedback.create.success': '作成に成功しました',
@@ -28,8 +34,11 @@ export default {
   'pages.common.feedback.batchDelete.confirm':
     'これら {count} 件のアイテムを削除してもよろしいですか？この操作は取り消せません。',
 
-  // 共通フィールド (Common Fields)
+  // 通用フィールド (Common Fields)
   'pages.common.fields.createTime': '作成日時',
+  'pages.common.fields.updateTime': '更新日時',
+  'pages.common.fields.status': 'ステータス',
+  'pages.common.fields.remark': '備考',
 
   // データ辞書 (Dictionaries)
   'pages.common.dict.status.label': 'ステータス',
@@ -61,6 +70,8 @@ export default {
     'パスワードには大文字、小文字、数字、および特殊文字を含める必要があります！',
 
   // テキスト (Text)
+  'pages.common.text.bound': '登録済み',
+  'pages.common.text.unbound': '未登録',
   'pages.common.text.themeSwitch': 'テーマ切り替え',
   'pages.common.text.langSwitch': '言語切り替え',
   'pages.common.text.selectedCount': '{count}件選択中',
@@ -92,11 +103,10 @@ export default {
   'pages.login.fields.password': 'パスワード',
   'pages.login.fields.mobile': '携帯電話番号',
   'pages.login.fields.captcha': '確認コード',
-  'pages.login.fields.rememberMe': '自動ログイン',
+  'pages.login.fields.rememberMe': '次回から自動ログイン',
 
   // パスワード変更ページ
   'pages.changePassword.text.title': 'パスワードの強制再設定',
-  'pages.changePassword.text.modalTitle': 'パスワードの変更',
   'pages.changePassword.text.description':
     '初期パスワードまたは期限切れのパスワードを変更してください。',
   'pages.changePassword.feedback.success':
@@ -120,41 +130,14 @@ export default {
   'pages.settings.text.menuBase': '基本設定',
   'pages.settings.text.menuSecurity': 'セキュリティ設定',
 
-  // アカウント設定 - 基本設定
-  'pages.base.fields.nickname': 'ニックネーム',
-  'pages.base.fields.realName': '本名',
-  'pages.base.fields.birthday': '誕生日',
-  'pages.base.text.avatarTitle': 'アバター',
-  'pages.base.action.changeAvatar': 'アバター変更',
+  // 個人設定 - 基本設定
 
   // アカウント設定 - セキュリティ設定
-  'pages.security.text.passwordTitle': 'パスワード',
-  'pages.security.text.passwordDescription': '現在のパスワード強度：強',
-  'pages.security.text.mobileTitle': '携帯電話番号',
-  'pages.security.text.mobileBound': '登録済み：{mobile}',
-  'pages.security.text.mobileUnbound': '未登録',
-  'pages.security.text.mobileModalTitle': '携帯電話番号の変更',
-  'pages.security.text.emailTitle': 'メールアドレス',
-  'pages.security.text.emailBound': '登録済み：{email}',
-  'pages.security.text.emailUnbound': '未登録',
-  'pages.security.text.emailModalTitle': 'メールアドレスの変更',
-  'pages.security.fields.password': 'パスワード',
-  'pages.security.fields.mobile': '携帯電話番号',
-  'pages.security.fields.email': 'メールアドレス',
-  'pages.security.fields.newPassword': '新しいパスワード',
-  'pages.security.fields.confirmPassword': '新しいパスワード（確認）',
   'pages.security.text.mfaTitle': 'MFA デバイス',
-  'pages.security.text.mfaEnabled': '登録済み',
-  'pages.security.text.mfaDisabled':
-    'MFA デバイスが未登録です。登録すると二段階認証が利用できます。',
-  'pages.security.text.mfaModalTitle': 'MFA デバイスを登録する',
   'pages.security.text.mfaDescription':
-    '認証アプリでQRコードをスキャンし、6桁のコードを入力してください。アプリにすでにこのアカウントの項目がある場合は、再スキャン不要です。そのままコードを入力してください。',
+    '認証アプリでQRコードをスキャンし、6桁の確認コードを入力して紐付けを完了します。すでにこのアカウントの項目がある場合は、スキャンせずにコードを入力してください。',
   'pages.security.text.mfaDisableConfirm':
-    '登録解除するとログイン時の二段階認証が不要になります。解除しますか？',
-  'pages.security.action.mfaEnable': '登録',
-  'pages.security.action.mfaDisable': '解除',
-  'pages.security.fields.mfaCode': '確認コード',
+    '解除するとログイン時に2段階認証が不要になります。本当に解除しますか？',
   'pages.security.validation.mfaCode': '6桁の数字コードを入力してください',
 
   // システム管理 - ユーザー管理
@@ -170,27 +153,34 @@ export default {
     'パスワードリセット - {username}',
   'pages.system.user.text.resetMfaConfirm':
     '{name} の MFA をリセットしてもよろしいですか？リセット後、ユーザーは認証アプリを再登録する必要があります。',
+  'pages.system.user.text.detailTitle': 'ユーザー詳細 - {username}',
+  'pages.system.user.text.tabBasic': '基本情報',
+  'pages.system.user.text.tabUpms': 'システムと権限',
+  'pages.system.user.text.tabSecurity': 'セキュリティとアカウント',
+  'pages.system.user.text.expireNever': '無期限',
+  'pages.system.user.text.authInfoTitle': '認証情報',
 
-  // システム管理 - ユーザー管理フィールド
-  'pages.system.user.fields.newPassword': '新しいパスワード',
-  'pages.system.user.fields.avatar': 'アバター',
+  // ユーザー管理フィールド
   'pages.system.user.fields.username': 'ユーザー名',
-  'pages.system.user.fields.realName': '本名',
+  'pages.system.user.fields.password': 'パスワード',
+  'pages.system.user.fields.newPassword': '新しいパスワード',
+  'pages.system.user.fields.confirmPassword': '新しいパスワード（確認）',
   'pages.system.user.fields.nickname': 'ニックネーム',
+  'pages.system.user.fields.realName': '本名',
+  'pages.system.user.fields.avatar': 'アバター',
   'pages.system.user.fields.gender': '性別',
   'pages.system.user.fields.birthday': '誕生日',
-  'pages.system.user.fields.mobile': '携帯電話',
+  'pages.system.user.fields.mobile': '携帯電話番号',
   'pages.system.user.fields.email': 'メールアドレス',
-  'pages.system.user.fields.status': 'ステータス',
-  'pages.system.user.fields.remark': '備考',
   'pages.system.user.fields.lastActiveTime': '最終アクティブ',
   'pages.system.user.fields.roleCodes': 'ロール',
   'pages.system.user.fields.expireDate': '有効期限',
+  'pages.system.user.fields.expireDateTip': '未入力の場合は無期限',
   'pages.system.user.fields.locked': 'ロック状態',
   'pages.system.user.fields.initialPassword': '初期パスワード',
   'pages.system.user.fields.mfaEnabled': 'MFA',
-  'pages.system.user.text.expireDateTip': '空欄の場合は無期限',
-  'pages.system.user.text.authInfoTitle': '認証情報',
+  'pages.system.user.fields.credentialStatus': '認証ステータス',
+  'pages.system.user.fields.mfaCode': '確認コード',
 
   // システム管理 - ロール管理
   'pages.system.role.fields.roleName': 'ロール名',
