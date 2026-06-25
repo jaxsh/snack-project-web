@@ -1,97 +1,30 @@
 import { LockOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { request, useIntl } from '@umijs/max';
-import { App, theme } from 'antd';
+import { App } from 'antd';
 import React, { useState } from 'react';
 import { AuthLayout } from '../components/AuthLayout';
-
-const STRENGTH_COLORS = ['', '#faad14', '#a0d911', '#52c41a'];
-
-const getStrengthLevel = (val: string): number => {
-  if (!val) return 0;
-  if (val.length < 8) return 1;
-  const hasUpperCase = /[A-Z]/.test(val);
-  const hasLowerCase = /[a-z]/.test(val);
-  const hasDigit = /\d/.test(val);
-  const hasSpecial = /[@$!%*?&]/.test(val);
-  if (hasUpperCase && hasLowerCase && hasDigit && hasSpecial) return 3;
-  if (hasDigit && /[a-zA-Z]/.test(val)) return 2;
-  return 1;
-};
-
-const PasswordStrengthBar: React.FC<{ level: number }> = ({ level }) => {
-  const { token } = theme.useToken();
-  const intl = useIntl();
-  const strengthTexts = [
-    '',
-    intl.formatMessage({ id: 'pages.common.dict.passwordStrength.weak' }),
-    intl.formatMessage({ id: 'pages.common.dict.passwordStrength.medium' }),
-    intl.formatMessage({ id: 'pages.common.dict.passwordStrength.strong' }),
-  ];
-  return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        marginBottom: '16px',
-        marginTop: '-12px',
-      }}
-    >
-      <span style={{ fontSize: '12px', color: token.colorTextSecondary }}>
-        {intl.formatMessage({ id: 'pages.common.dict.passwordStrength.label' })}
-      </span>
-      <div style={{ display: 'flex', gap: '4px' }}>
-        {[1, 2, 3].map((idx) => (
-          <div
-            key={idx}
-            style={{
-              width: '24px',
-              height: '6px',
-              borderRadius: '3px',
-              backgroundColor:
-                level === 0 || idx > level
-                  ? token.colorFillSecondary
-                  : STRENGTH_COLORS[level],
-              transition: 'background-color 0.3s ease',
-            }}
-          />
-        ))}
-      </div>
-      <span
-        style={{
-          fontSize: '12px',
-          color: STRENGTH_COLORS[level],
-          fontWeight: 500,
-        }}
-      >
-        {strengthTexts[level]}
-      </span>
-    </div>
-  );
-};
+import { PasswordStrengthBar } from '../components/PasswordStrengthBar';
 
 const ChangePassword: React.FC = () => {
   const { message } = App.useApp();
   const intl = useIntl();
   const [passwordVal, setPasswordVal] = useState('');
 
-  const level = getStrengthLevel(passwordVal);
-
   const handleSubmit = async (values: API.UpdatePasswordParams) => {
     try {
-      const res = await request<{ redirectUrl?: string }>(
+      const res = await request<API.ApiResponse<{ redirectUrl?: string }>>(
         '/oauth2/account/change-password',
         {
           method: 'POST',
           data: { password: values.password },
         },
       );
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.changePassword.feedback.success' }),
       );
-      if (res?.redirectUrl) {
-        window.location.href = res.redirectUrl;
+      if (res?.data?.redirectUrl) {
+        window.location.href = res.data.redirectUrl;
       }
     } catch {
       return;
@@ -172,7 +105,7 @@ const ChangePassword: React.FC = () => {
             },
           ]}
         />
-        {passwordVal && <PasswordStrengthBar level={level} />}
+        <PasswordStrengthBar password={passwordVal} />
         <ProFormText.Password
           name="confirmPassword"
           fieldProps={{

@@ -86,7 +86,7 @@ const Login: React.FC = () => {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.feedback.success',
         });
-        message.success(defaultLoginSuccessMessage);
+        void message.success(defaultLoginSuccessMessage);
 
         const urlParams = new URL(window.location.href).searchParams;
         const redirect = urlParams.get('redirect');
@@ -332,7 +332,7 @@ const Login: React.FC = () => {
                 },
               ]}
               onGetCaptcha={async () => {
-                message.success('获取验证码成功！验证码为：1234');
+                void message.success('获取验证码成功！验证码为：1234');
               }}
             />
           </>

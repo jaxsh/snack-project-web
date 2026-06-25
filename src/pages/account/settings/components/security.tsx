@@ -1,15 +1,17 @@
 import { LockOutlined } from '@ant-design/icons';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
 import { useIntl, useModel } from '@umijs/max';
-import { Alert, App, Modal, QRCode, Spin, theme } from 'antd';
+import { Alert, App, List, Modal, QRCode, Spin } from 'antd';
 import React, { useState } from 'react';
 import {
   changePassword,
   getMfaSetup,
   getSysUserInfo,
   logout,
+  updateMfa,
   updateProfile,
 } from '@/services/auth';
+import { PasswordStrengthBar } from '../../components/PasswordStrengthBar';
 
 const maskMobile = (mobile?: string) => {
   if (!mobile) return '未绑定手机';
@@ -35,7 +37,7 @@ const maskEmail = (email?: string) => {
 
 const SecurityView: React.FC = () => {
   const { message: antdMessage } = App.useApp();
-  const { token } = theme.useToken();
+
   const { initialState, setInitialState } = useModel('@@initialState');
   const currentUser = initialState?.currentUser;
   const intl = useIntl();
@@ -50,38 +52,6 @@ const SecurityView: React.FC = () => {
   const [mfaSubmitting, setMfaSubmitting] = useState(false);
   const [mfaDisableModalOpen, setMfaDisableModalOpen] = useState(false);
   const [mfaDisableSubmitting, setMfaDisableSubmitting] = useState(false);
-
-  const getBarColor = (index: number) => {
-    if (level === 0 || index > level) return token.colorFillSecondary;
-    if (level === 1) return '#faad14';
-    if (level === 2) return '#a0d911';
-    return '#52c41a';
-  };
-
-  const textColors = ['', '#faad14', '#a0d911', '#52c41a'];
-
-  const getStrengthLevel = (val: string): number => {
-    if (!val) return 0;
-    if (val.length < 8) return 1;
-
-    const hasUpperCase = /[A-Z]/.test(val);
-    const hasLowerCase = /[a-z]/.test(val);
-    const hasDigit = /\d/.test(val);
-    const hasSpecial = /[@$!%*?&]/.test(val);
-
-    if (hasUpperCase && hasLowerCase && hasDigit && hasSpecial) {
-      return 3;
-    }
-
-    const hasLetter = /[a-zA-Z]/.test(val);
-    if (hasDigit && hasLetter) {
-      return 2;
-    }
-
-    return 1;
-  };
-
-  const level = getStrengthLevel(passwordVal);
 
   const handleCloseModal = () => {
     if (!submitting) {
@@ -188,7 +158,7 @@ const SecurityView: React.FC = () => {
     if (!mfaSetupData) return;
     setMfaSubmitting(true);
     try {
-      await updateProfile({
+      await updateMfa({
         mfaEnabled: 1,
         mfaSecret: mfaSetupData.secret,
         mfaCode: values.mfaCode,
@@ -207,7 +177,7 @@ const SecurityView: React.FC = () => {
   const handleMfaDisable = async (values: { mfaCode: string }) => {
     setMfaDisableSubmitting(true);
     try {
-      await updateProfile({ mfaEnabled: 0, mfaCode: values.mfaCode });
+      await updateMfa({ mfaEnabled: 0, mfaCode: values.mfaCode });
       antdMessage.success(fmt('pages.common.feedback.update.success'));
       setMfaDisableModalOpen(false);
       await refreshCurrentUser();
@@ -221,16 +191,9 @@ const SecurityView: React.FC = () => {
   const fmt = (id: string, values?: Record<string, string>) =>
     intl.formatMessage({ id }, values);
 
-  const strengthTexts = [
-    fmt('pages.common.dict.passwordStrength.weak'),
-    fmt('pages.common.dict.passwordStrength.medium'),
-    fmt('pages.common.dict.passwordStrength.strong'),
-  ];
-
   const getData = () => [
     {
-      title: fmt('pages.security.text.passwordTitle'),
-      description: fmt('pages.security.text.passwordDescription'),
+      title: fmt('pages.system.user.fields.password'),
       actions: [
         <a key="Modify" onClick={() => setIsModalOpen(true)}>
           {fmt('pages.common.action.modify')}
@@ -238,12 +201,10 @@ const SecurityView: React.FC = () => {
       ],
     },
     {
-      title: fmt('pages.security.text.mobileTitle'),
+      title: fmt('pages.system.user.fields.mobile'),
       description: currentUser?.mobile
-        ? fmt('pages.security.text.mobileBound', {
-            mobile: maskMobile(currentUser.mobile),
-          })
-        : fmt('pages.security.text.mobileUnbound'),
+        ? `${fmt('pages.common.text.bound')} : ${maskMobile(currentUser.mobile)}`
+        : fmt('pages.common.text.unbound'),
       actions: [
         <a
           key="Modify"
@@ -258,12 +219,10 @@ const SecurityView: React.FC = () => {
       ],
     },
     {
-      title: fmt('pages.security.text.emailTitle'),
+      title: fmt('pages.system.user.fields.email'),
       description: currentUser?.email
-        ? fmt('pages.security.text.emailBound', {
-            email: maskEmail(currentUser.email),
-          })
-        : fmt('pages.security.text.emailUnbound'),
+        ? `${fmt('pages.common.text.bound')} : ${maskEmail(currentUser.email)}`
+        : fmt('pages.common.text.unbound'),
       actions: [
         <a
           key="Modify"
@@ -281,18 +240,18 @@ const SecurityView: React.FC = () => {
       title: fmt('pages.security.text.mfaTitle'),
       description:
         currentUser?.oauthVO?.mfaEnabled === 1
-          ? fmt('pages.security.text.mfaEnabled')
-          : fmt('pages.security.text.mfaDisabled'),
+          ? fmt('pages.common.text.bound')
+          : fmt('pages.common.text.unbound'),
       actions:
         currentUser?.oauthVO?.mfaEnabled === 1
           ? [
               <a key="Disable" onClick={() => setMfaDisableModalOpen(true)}>
-                {fmt('pages.security.action.mfaDisable')}
+                {fmt('pages.common.action.unbind')}
               </a>,
             ]
           : [
               <a key="Enable" onClick={handleMfaOpen}>
-                {fmt('pages.security.action.mfaEnable')}
+                {fmt('pages.common.action.bind')}
               </a>,
             ],
     },
@@ -301,43 +260,19 @@ const SecurityView: React.FC = () => {
   const data = getData();
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {data.map((item, index) => (
-          <div
-            key={item.title}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '16px 0',
-              borderBottom:
-                index < data.length - 1
-                  ? `1px solid ${token.colorBorderSecondary}`
-                  : 'none',
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  fontWeight: 500,
-                  marginBottom: 4,
-                  color: token.colorText,
-                }}
-              >
-                {item.title}
-              </div>
-              <div style={{ color: token.colorTextSecondary, fontSize: 14 }}>
-                {item.description}
-              </div>
-            </div>
-            <div>{item.actions}</div>
-          </div>
-        ))}
-      </div>
+      <List
+        itemLayout="horizontal"
+        dataSource={data}
+        renderItem={(item) => (
+          <List.Item actions={item.actions}>
+            <List.Item.Meta title={item.title} description={item.description} />
+          </List.Item>
+        )}
+      />
 
       <Modal
-        title={intl.formatMessage({
-          id: 'pages.changePassword.text.modalTitle',
+        title={fmt('pages.common.action.modifyField', {
+          field: fmt('pages.system.user.fields.password'),
         })}
         open={isModalOpen}
         onCancel={handleCloseModal}
@@ -365,7 +300,7 @@ const SecurityView: React.FC = () => {
           <ProFormText.Password
             name="password"
             label={intl.formatMessage({
-              id: 'pages.security.fields.newPassword',
+              id: 'pages.system.user.fields.newPassword',
             })}
             fieldProps={{
               prefix: <LockOutlined />,
@@ -375,7 +310,7 @@ const SecurityView: React.FC = () => {
               { id: 'pages.common.validation.placeholder.input' },
               {
                 field: intl.formatMessage({
-                  id: 'pages.security.fields.newPassword',
+                  id: 'pages.system.user.fields.newPassword',
                 }),
               },
             )}
@@ -386,7 +321,7 @@ const SecurityView: React.FC = () => {
                   { id: 'pages.common.validation.required' },
                   {
                     field: intl.formatMessage({
-                      id: 'pages.security.fields.newPassword',
+                      id: 'pages.system.user.fields.newPassword',
                     }),
                   },
                 ),
@@ -397,7 +332,7 @@ const SecurityView: React.FC = () => {
                   { id: 'pages.common.validation.rangeLength' },
                   {
                     field: intl.formatMessage({
-                      id: 'pages.security.fields.newPassword',
+                      id: 'pages.system.user.fields.newPassword',
                     }),
                     min: 8,
                     max: 255,
@@ -413,56 +348,17 @@ const SecurityView: React.FC = () => {
               },
             ]}
           />
-          {passwordVal && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                marginBottom: '16px',
-                marginTop: '-12px',
-              }}
-            >
-              <span
-                style={{ fontSize: '12px', color: token.colorTextSecondary }}
-              >
-                {fmt('pages.common.dict.passwordStrength.label')}
-              </span>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {[1, 2, 3].map((idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      width: '24px',
-                      height: '6px',
-                      borderRadius: '3px',
-                      backgroundColor: getBarColor(idx),
-                      transition: 'background-color 0.3s ease',
-                    }}
-                  />
-                ))}
-              </div>
-              <span
-                style={{
-                  fontSize: '12px',
-                  color: textColors[level],
-                  fontWeight: 500,
-                }}
-              >
-                {strengthTexts[level]}
-              </span>
-            </div>
-          )}
+          <PasswordStrengthBar password={passwordVal} />
           <ProFormText.Password
             name="confirmPassword"
             label={intl.formatMessage({
-              id: 'pages.security.fields.confirmPassword',
+              id: 'pages.system.user.fields.confirmPassword',
             })}
             placeholder={intl.formatMessage(
               { id: 'pages.common.validation.placeholder.input' },
               {
                 field: intl.formatMessage({
-                  id: 'pages.security.fields.confirmPassword',
+                  id: 'pages.system.user.fields.confirmPassword',
                 }),
               },
             )}
@@ -474,7 +370,7 @@ const SecurityView: React.FC = () => {
                   { id: 'pages.common.validation.required' },
                   {
                     field: intl.formatMessage({
-                      id: 'pages.security.fields.confirmPassword',
+                      id: 'pages.system.user.fields.confirmPassword',
                     }),
                   },
                 ),
@@ -498,8 +394,8 @@ const SecurityView: React.FC = () => {
         </ProForm>
       </Modal>
       <Modal
-        title={intl.formatMessage({
-          id: 'pages.security.text.mobileModalTitle',
+        title={fmt('pages.common.action.modifyField', {
+          field: fmt('pages.system.user.fields.mobile'),
         })}
         open={mobileModalOpen}
         onCancel={() => setMobileModalOpen(false)}
@@ -521,12 +417,14 @@ const SecurityView: React.FC = () => {
         >
           <ProFormText
             name="mobile"
-            label={intl.formatMessage({ id: 'pages.security.fields.mobile' })}
+            label={intl.formatMessage({
+              id: 'pages.system.user.fields.mobile',
+            })}
             placeholder={intl.formatMessage(
               { id: 'pages.common.validation.placeholder.input' },
               {
                 field: intl.formatMessage({
-                  id: 'pages.security.fields.mobile',
+                  id: 'pages.system.user.fields.mobile',
                 }),
               },
             )}
@@ -537,7 +435,7 @@ const SecurityView: React.FC = () => {
                   { id: 'pages.common.validation.invalid' },
                   {
                     field: intl.formatMessage({
-                      id: 'pages.security.fields.mobile',
+                      id: 'pages.system.user.fields.mobile',
                     }),
                   },
                 ),
@@ -548,8 +446,8 @@ const SecurityView: React.FC = () => {
       </Modal>
 
       <Modal
-        title={intl.formatMessage({
-          id: 'pages.security.text.emailModalTitle',
+        title={fmt('pages.common.action.modifyField', {
+          field: fmt('pages.system.user.fields.email'),
         })}
         open={emailModalOpen}
         onCancel={() => setEmailModalOpen(false)}
@@ -571,12 +469,12 @@ const SecurityView: React.FC = () => {
         >
           <ProFormText
             name="email"
-            label={intl.formatMessage({ id: 'pages.security.fields.email' })}
+            label={intl.formatMessage({ id: 'pages.system.user.fields.email' })}
             placeholder={intl.formatMessage(
               { id: 'pages.common.validation.placeholder.input' },
               {
                 field: intl.formatMessage({
-                  id: 'pages.security.fields.email',
+                  id: 'pages.system.user.fields.email',
                 }),
               },
             )}
@@ -587,7 +485,7 @@ const SecurityView: React.FC = () => {
                   { id: 'pages.common.validation.invalid' },
                   {
                     field: intl.formatMessage({
-                      id: 'pages.security.fields.email',
+                      id: 'pages.system.user.fields.email',
                     }),
                   },
                 ),
@@ -598,7 +496,9 @@ const SecurityView: React.FC = () => {
       </Modal>
 
       <Modal
-        title={fmt('pages.security.text.mfaModalTitle')}
+        title={fmt('pages.common.action.bindField', {
+          field: fmt('pages.security.text.mfaTitle'),
+        })}
         open={mfaModalOpen}
         onCancel={handleMfaClose}
         footer={null}
@@ -642,15 +542,15 @@ const SecurityView: React.FC = () => {
         >
           <ProFormText
             name="mfaCode"
-            label={fmt('pages.security.fields.mfaCode')}
+            label={fmt('pages.system.user.fields.mfaCode')}
             placeholder={fmt('pages.common.validation.placeholder.input', {
-              field: fmt('pages.security.fields.mfaCode'),
+              field: fmt('pages.system.user.fields.mfaCode'),
             })}
             rules={[
               {
                 required: true,
                 message: fmt('pages.common.validation.required', {
-                  field: fmt('pages.security.fields.mfaCode'),
+                  field: fmt('pages.system.user.fields.mfaCode'),
                 }),
               },
               {
@@ -663,7 +563,9 @@ const SecurityView: React.FC = () => {
       </Modal>
 
       <Modal
-        title={fmt('pages.security.action.mfaDisable')}
+        title={fmt('pages.common.action.unbindField', {
+          field: fmt('pages.security.text.mfaTitle'),
+        })}
         open={mfaDisableModalOpen}
         onCancel={() => {
           if (!mfaDisableSubmitting) setMfaDisableModalOpen(false);
@@ -695,15 +597,15 @@ const SecurityView: React.FC = () => {
         >
           <ProFormText
             name="mfaCode"
-            label={fmt('pages.security.fields.mfaCode')}
+            label={fmt('pages.system.user.fields.mfaCode')}
             placeholder={fmt('pages.common.validation.placeholder.input', {
-              field: fmt('pages.security.fields.mfaCode'),
+              field: fmt('pages.system.user.fields.mfaCode'),
             })}
             rules={[
               {
                 required: true,
                 message: fmt('pages.common.validation.required', {
-                  field: fmt('pages.security.fields.mfaCode'),
+                  field: fmt('pages.system.user.fields.mfaCode'),
                 }),
               },
               {

@@ -12,15 +12,24 @@ const VerifyMfa: React.FC = () => {
 
   const handleSubmit = async (values: { code: string }) => {
     try {
-      const res = await verifyMfa({ code: values.code });
-      message.success(
+      const res = await verifyMfa(
+        { code: values.code },
+        { skipErrorHandler: true },
+      );
+      void message.success(
         intl.formatMessage({ id: 'pages.verifyMfa.feedback.success' }),
       );
-      if (res?.redirectUrl) {
-        window.location.href = res.redirectUrl;
+      if (res?.data?.redirectUrl) {
+        window.location.href = res.data.redirectUrl;
       }
-    } catch {
-      return;
+    } catch (error: any) {
+      if (error?.response?.data?.msg) {
+        void message.error(error.response.data.msg);
+      } else if (error?.info?.errorMessage) {
+        void message.error(error.info.errorMessage);
+      } else if (error?.message) {
+        void message.error(error.message);
+      }
     }
   };
 

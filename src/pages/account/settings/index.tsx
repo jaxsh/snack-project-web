@@ -1,11 +1,10 @@
-import { GridContent } from '@ant-design/pro-components';
+import { GridContent, ProCard } from '@ant-design/pro-components';
 import { useIntl, useModel } from '@umijs/max';
-import { Menu, Spin } from 'antd';
+import { Flex, Menu, Spin, theme } from 'antd';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getSysUserInfo } from '@/services/auth';
 import BaseView from './components/base';
 import SecurityView from './components/security';
-import useStyles from './style.style';
 
 type SettingsStateKeys = 'base' | 'security';
 type SettingsState = {
@@ -27,7 +26,7 @@ const SettingsContent: React.FC<{ selectKey: SettingsStateKeys }> = ({
 };
 
 const Settings: React.FC = () => {
-  const { styles } = useStyles();
+  const { token } = theme.useToken();
   const { setInitialState } = useModel('@@initialState');
   const intl = useIntl();
   const [loading, setLoading] = useState(true);
@@ -125,30 +124,60 @@ const Settings: React.FC = () => {
         </div>
       ) : (
         <div
-          className={styles.main}
           ref={(ref) => {
             if (ref) {
               dom.current = ref;
             }
           }}
+          style={{ width: '100%', height: '100%' }}
         >
-          <div className={styles.leftMenu}>
-            <Menu
-              mode={initConfig.mode}
-              selectedKeys={[initConfig.selectKey]}
-              onClick={({ key }) => {
-                setInitConfig((prev) => ({
-                  ...prev,
-                  selectKey: key as SettingsStateKeys,
-                }));
-              }}
-              items={getMenu()}
-            />
-          </div>
-          <div className={styles.right}>
-            <div className={styles.title}>{menuMap[initConfig.selectKey]}</div>
-            <SettingsContent selectKey={initConfig.selectKey} />
-          </div>
+          <ProCard
+            style={{
+              background: token.colorBgContainer,
+              padding: '16px 0',
+              border: 'none',
+            }}
+          >
+            <Flex vertical={initConfig.mode === 'horizontal'} gap="middle">
+              <div
+                style={{
+                  width: initConfig.mode === 'horizontal' ? '100%' : '224px',
+                }}
+              >
+                <Menu
+                  mode={initConfig.mode}
+                  selectedKeys={[initConfig.selectKey]}
+                  onClick={({ key }) => {
+                    setInitConfig((prev) => ({
+                      ...prev,
+                      selectKey: key as SettingsStateKeys,
+                    }));
+                  }}
+                  items={getMenu()}
+                  style={{ border: 'none' }}
+                />
+              </div>
+              <div
+                style={{
+                  flex: 1,
+                  padding:
+                    initConfig.mode === 'horizontal' ? '20px' : '8px 40px',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 500,
+                    marginBottom: 12,
+                    color: token.colorTextHeading,
+                  }}
+                >
+                  {menuMap[initConfig.selectKey]}
+                </div>
+                <SettingsContent selectKey={initConfig.selectKey} />
+              </div>
+            </Flex>
+          </ProCard>
         </div>
       )}
     </GridContent>

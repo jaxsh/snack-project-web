@@ -6,13 +6,11 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { useIntl, useModel } from '@umijs/max';
-import { App, Button, Upload } from 'antd';
+import { App, Avatar, Button, Col, Flex, Row, Typography, Upload } from 'antd';
 import React from 'react';
 import { updateProfile } from '@/services/auth';
-import useStyles from './index.style';
 
 const BaseView: React.FC = () => {
-  const { styles } = useStyles();
   const { message } = App.useApp();
   const { initialState, setInitialState } = useModel('@@initialState');
   const currentUser = initialState?.currentUser;
@@ -50,71 +48,73 @@ const BaseView: React.FC = () => {
           } as API.SysUserVO,
         };
       });
-      message.success(fmt('pages.common.feedback.save.success'));
+      void message.success(fmt('pages.common.feedback.save.success'));
     } catch {
       return;
     }
   };
 
   return (
-    <div className={styles.baseView}>
-      <div className={styles.left}>
-        <ProForm
-          layout="vertical"
-          onFinish={handleFinish}
-          submitter={{
-            searchConfig: {
-              submitText: fmt('pages.common.action.save'),
-            },
-            render: (_, dom) => dom[1],
-          }}
-          request={async () => ({
-            nickname: currentUser?.nickname || currentUser?.username,
-            realName: currentUser?.realName,
-            gender: currentUser?.gender ?? 0,
-            birthday: currentUser?.birthday,
-          })}
-          requiredMark={false}
-        >
-          <ProFormText
-            width="md"
-            name="nickname"
-            label={fmt('pages.base.fields.nickname')}
-            rules={[
-              {
-                required: true,
-                message: intl.formatMessage(
-                  { id: 'pages.common.validation.required' },
-                  { field: fmt('pages.base.fields.nickname') },
-                ),
+    <div style={{ paddingTop: 12 }}>
+      <Row gutter={[48, 24]}>
+        <Col xs={24} md={16} lg={12}>
+          <ProForm
+            layout="vertical"
+            onFinish={handleFinish}
+            submitter={{
+              searchConfig: {
+                submitText: fmt('pages.common.action.save'),
               },
-            ]}
-          />
-          <ProFormText
-            width="md"
-            name="realName"
-            label={fmt('pages.base.fields.realName')}
-          />
-          <ProFormSelect
-            width="md"
-            name="gender"
-            label={fmt('pages.common.dict.gender.label')}
-            options={[
-              { value: 0, label: fmt('pages.common.dict.gender.unknown') },
-              { value: 1, label: fmt('pages.common.dict.gender.male') },
-              { value: 2, label: fmt('pages.common.dict.gender.female') },
-            ]}
-          />
-          <ProFormDatePicker
-            width="md"
-            name="birthday"
-            label={fmt('pages.base.fields.birthday')}
-          />
-        </ProForm>
-      </div>
-      <div className={styles.right}>
-        <AvatarView avatar={getAvatarURL()} />
-      </div>
+              render: (_, dom) => dom[1],
+            }}
+            request={async () => ({
+              nickname: currentUser?.nickname || currentUser?.username,
+              realName: currentUser?.realName,
+              gender: currentUser?.gender ?? 0,
+              birthday: currentUser?.birthday,
+            })}
+            requiredMark={false}
+          >
+            <ProFormText
+              width="md"
+              name="nickname"
+              label={fmt('pages.system.user.fields.nickname')}
+              rules={[
+                {
+                  required: true,
+                  message: intl.formatMessage(
+                    { id: 'pages.common.validation.required' },
+                    { field: fmt('pages.system.user.fields.nickname') },
+                  ),
+                },
+              ]}
+            />
+            <ProFormText
+              width="md"
+              name="realName"
+              label={fmt('pages.system.user.fields.realName')}
+            />
+            <ProFormSelect
+              width="md"
+              name="gender"
+              label={fmt('pages.common.dict.gender.label')}
+              options={[
+                { value: 0, label: fmt('pages.common.dict.gender.unknown') },
+                { value: 1, label: fmt('pages.common.dict.gender.male') },
+                { value: 2, label: fmt('pages.common.dict.gender.female') },
+              ]}
+            />
+            <ProFormDatePicker
+              width="md"
+              name="birthday"
+              label={fmt('pages.system.user.fields.birthday')}
+            />
+          </ProForm>
+        </Col>
+        <Col xs={24} md={8}>
+          <AvatarView avatar={getAvatarURL()} />
+        </Col>
+      </Row>
     </div>
   );
 };
@@ -122,26 +122,30 @@ const BaseView: React.FC = () => {
 export default BaseView;
 
 const AvatarView = ({ avatar }: { avatar: string }) => {
-  const { styles } = useStyles();
   const intl = useIntl();
   const fmt = (id: string) => intl.formatMessage({ id });
 
   return (
-    <>
-      <div className={styles.avatar_title}>
-        {fmt('pages.base.text.avatarTitle')}
-      </div>
-      <div className={styles.avatar}>
-        <img src={avatar} alt="avatar" />
-      </div>
+    <Flex vertical align="center" style={{ maxWidth: 144 }}>
+      <Typography.Paragraph
+        strong
+        style={{ marginBottom: 8, alignSelf: 'flex-start' }}
+      >
+        {fmt('pages.system.user.fields.avatar')}
+      </Typography.Paragraph>
+      <Avatar
+        shape="square"
+        size={144}
+        src={avatar}
+        alt="avatar"
+        style={{ marginBottom: 12 }}
+      />
       <Upload showUploadList={false}>
-        <div className={styles.button_view}>
-          <Button>
-            <UploadOutlined />
-            {fmt('pages.base.action.changeAvatar')}
-          </Button>
-        </div>
+        <Button>
+          <UploadOutlined />
+          {fmt('pages.common.action.changeAvatar')}
+        </Button>
       </Upload>
-    </>
+    </Flex>
   );
 };
