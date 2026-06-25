@@ -181,6 +181,7 @@ export default {
   'pages.system.user.fields.mfaEnabled': 'MFA',
   'pages.system.user.fields.credentialStatus': '認証ステータス',
   'pages.system.user.fields.mfaCode': '確認コード',
+  'pages.system.user.fields.status': 'ステータス',
 
   // システム管理 - ロール管理
   'pages.system.role.fields.roleName': 'ロール名',

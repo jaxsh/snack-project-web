@@ -82,7 +82,7 @@ const ResourceCreateForm: FC<Props> = ({ trigger, parentId, onSuccess }) => {
         type: isRoot ? 0 : values.type,
       } as API.SysResourceDTO),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.create.success' }),
       );
       onSuccess?.();
@@ -90,7 +90,7 @@ const ResourceCreateForm: FC<Props> = ({ trigger, parentId, onSuccess }) => {
   });
 
   const defaultTrigger = (
-    <Button type="primary" icon={<PlusOutlined />} style={{ borderRadius: 6 }}>
+    <Button type="primary" icon={<PlusOutlined />}>
       {intl.formatMessage({ id: 'pages.common.action.create' })}
     </Button>
   );

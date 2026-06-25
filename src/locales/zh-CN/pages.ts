@@ -18,6 +18,12 @@ export default {
   'pages.common.action.reset': '重置',
   'pages.common.action.save': '保存',
   'pages.common.action.backToHome': '返回首页',
+  'pages.common.action.modifyField': '修改{field}',
+  'pages.common.action.bindField': '绑定{field}',
+  'pages.common.action.unbindField': '解绑{field}',
+  'pages.common.action.bind': '绑定',
+  'pages.common.action.unbind': '解绑',
+  'pages.common.action.changeAvatar': '更换头像',
 
   // 交互结果反馈 (Interaction Feedback)
   'pages.common.feedback.create.success': '创建成功',
@@ -30,6 +36,9 @@ export default {
 
   // 通用字段 (Common Fields)
   'pages.common.fields.createTime': '创建时间',
+  'pages.common.fields.updateTime': '更新时间',
+  'pages.common.fields.status': '状态',
+  'pages.common.fields.remark': '备注',
 
   // 数据字典 (Dictionaries)
   'pages.common.dict.status.label': '状态',
@@ -61,6 +70,8 @@ export default {
     '密码必须包含大小写字母、数字和特殊字符！',
 
   // 文案 (Text)
+  'pages.common.text.bound': '已绑定',
+  'pages.common.text.unbound': '未绑定',
   'pages.common.text.themeSwitch': '主题切换',
   'pages.common.text.langSwitch': '语言切换',
   'pages.common.text.selectedCount': '已选 {count} 项',
@@ -93,7 +104,6 @@ export default {
 
   // 强制/修改密码页面
   'pages.changePassword.text.title': '强制重置密码',
-  'pages.changePassword.text.modalTitle': '修改密码',
   'pages.changePassword.text.description':
     '当前使用的是初始密码或密码已过期，请修改密码后继续使用。',
   'pages.changePassword.feedback.success': '密码修改成功，正在跳转…',
@@ -116,40 +126,11 @@ export default {
   'pages.settings.text.menuSecurity': '安全设置',
 
   // 个人中心/设置 - 基本设置
-  'pages.base.fields.nickname': '昵称',
-  'pages.base.fields.realName': '真实姓名',
-  'pages.base.fields.birthday': '生日',
-  'pages.base.text.avatarTitle': '头像',
-  'pages.base.action.changeAvatar': '更换头像',
-
-  // 个人中心/设置 - 安全设置
-  'pages.security.text.passwordTitle': '账户密码',
-  'pages.security.text.passwordDescription': '当前密码强度：强',
-  'pages.security.text.mobileTitle': '手机号',
-  'pages.security.text.mobileBound': '已绑定：{mobile}',
-  'pages.security.text.mobileUnbound': '未绑定',
-  'pages.security.text.mobileModalTitle': '修改手机号',
-  'pages.security.text.emailTitle': '邮箱',
-  'pages.security.text.emailBound': '已绑定：{email}',
-  'pages.security.text.emailUnbound': '未绑定',
-  'pages.security.text.emailModalTitle': '修改邮箱',
-  'pages.security.fields.password': '账户密码',
-  'pages.security.fields.mobile': '手机号',
-  'pages.security.fields.email': '邮箱',
-  'pages.security.fields.newPassword': '新密码',
-  'pages.security.fields.confirmPassword': '确认新密码',
   'pages.security.text.mfaTitle': 'MFA 设备',
-  'pages.security.text.mfaEnabled': '已绑定',
-  'pages.security.text.mfaDisabled':
-    '未绑定 MFA 设备，绑定后，可以进行二次确认',
-  'pages.security.text.mfaModalTitle': '绑定 MFA 设备',
   'pages.security.text.mfaDescription':
     '使用验证器 App 扫描二维码，输入 6 位验证码完成绑定。若 App 中已有此账号的条目，无需重新扫码，直接输入验证码即可。',
   'pages.security.text.mfaDisableConfirm':
     '解绑后登录将不再需要二次验证，确定解绑吗？',
-  'pages.security.action.mfaEnable': '绑定',
-  'pages.security.action.mfaDisable': '解绑',
-  'pages.security.fields.mfaCode': '验证码',
   'pages.security.validation.mfaCode': '请输入 6 位数字验证码',
 
   // 系统管理 - 用户管理页面
@@ -164,6 +145,35 @@ export default {
   'pages.system.user.text.resetPasswordTitle': '重置密码 - {username}',
   'pages.system.user.text.resetMfaConfirm':
     '确定要重置 {name} 的 MFA 绑定吗？重置后用户需重新绑定验证器才能使用 MFA。',
+  'pages.system.user.text.detailTitle': '用户详情 - {username}',
+  'pages.system.user.text.tabBasic': '基本信息',
+  'pages.system.user.text.tabUpms': '系统与权限',
+  'pages.system.user.text.tabSecurity': '安全与账号',
+  'pages.system.user.text.expireNever': '永不到期',
+  'pages.system.user.text.authInfoTitle': '认证信息',
+
+  // 系统管理 - 用户管理页面字段 label
+  'pages.system.user.fields.username': '用户名',
+  'pages.system.user.fields.password': '账户密码',
+  'pages.system.user.fields.newPassword': '新密码',
+  'pages.system.user.fields.confirmPassword': '确认新密码',
+  'pages.system.user.fields.nickname': '昵称',
+  'pages.system.user.fields.realName': '真实姓名',
+  'pages.system.user.fields.avatar': '头像',
+  'pages.system.user.fields.gender': '性别',
+  'pages.system.user.fields.birthday': '生日',
+  'pages.system.user.fields.mobile': '手机号',
+  'pages.system.user.fields.email': '邮箱',
+  'pages.system.user.fields.lastActiveTime': '最后活跃时间',
+  'pages.system.user.fields.roleCodes': '角色',
+  'pages.system.user.fields.expireDate': '到期日',
+  'pages.system.user.fields.expireDateTip': '留空表示永不到期',
+  'pages.system.user.fields.locked': '锁定状态',
+  'pages.system.user.fields.initialPassword': '初始密码',
+  'pages.system.user.fields.mfaEnabled': 'MFA',
+  'pages.system.user.fields.credentialStatus': '凭证状态',
+  'pages.system.user.fields.mfaCode': '验证码',
+  'pages.system.user.fields.status': '状态',
 
   // 系统管理 - 角色管理页面
   'pages.system.role.fields.roleName': '角色名称',
@@ -200,25 +210,4 @@ export default {
     '将同时删除所有下级资源，确认继续？',
   'pages.system.resource.disableChildren.confirm':
     '禁用后，所有下级资源将一并禁用，确认继续？',
-
-  // 系统管理 - 用户管理页面字段 label
-  'pages.system.user.fields.newPassword': '新密码',
-  'pages.system.user.fields.avatar': '头像',
-  'pages.system.user.fields.username': '用户名',
-  'pages.system.user.fields.realName': '真实姓名',
-  'pages.system.user.fields.nickname': '昵称',
-  'pages.system.user.fields.gender': '性别',
-  'pages.system.user.fields.birthday': '生日',
-  'pages.system.user.fields.mobile': '手机',
-  'pages.system.user.fields.email': '邮箱',
-  'pages.system.user.fields.status': '状态',
-  'pages.system.user.fields.remark': '备注',
-  'pages.system.user.fields.lastActiveTime': '最后活跃时间',
-  'pages.system.user.fields.roleCodes': '角色',
-  'pages.system.user.fields.expireDate': '到期日',
-  'pages.system.user.fields.locked': '锁定状态',
-  'pages.system.user.fields.initialPassword': '初始密码',
-  'pages.system.user.fields.mfaEnabled': 'MFA',
-  'pages.system.user.text.expireDateTip': '留空表示永不到期',
-  'pages.system.user.text.authInfoTitle': '认证信息',
 };

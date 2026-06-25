@@ -2,9 +2,9 @@ import { ApiOutlined, AppstoreOutlined, MenuOutlined } from '@ant-design/icons';
 import { DrawerForm } from '@ant-design/pro-components';
 import { useMutation } from '@tanstack/react-query';
 import { useIntl } from '@umijs/max';
-import { App, Button, Input, Space, Spin, Tree, theme } from 'antd';
+import { App, Button, Flex, Input, Space, Spin, Tree, theme } from 'antd';
 import type { FC, ReactElement } from 'react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { getResourceTree, getRoleResources } from '@/services/system/resource';
 import { updateRole } from '@/services/system/role';
 
@@ -232,7 +232,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
       });
     },
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.update.success' }),
       );
     },
@@ -299,14 +299,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
         style={{ marginBottom: 12 }}
       />
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 8,
-        }}
-      >
+      <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
         <Space size="small">
           <Button
             size="small"
@@ -335,7 +328,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
             )}
           </span>
         </Space>
-      </div>
+      </Flex>
 
       <Spin spinning={resourceLoading}>
         <Tree

@@ -104,7 +104,7 @@ const ResourceEditForm: FC<Props> = ({ trigger, record, onOk }) => {
       } as API.SysResourceDTO);
     },
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.update.success' }),
       );
       onOk?.();

@@ -39,7 +39,7 @@ const RoleCreateForm: FC<Props> = ({ onSuccess }) => {
         status: values.status,
       }),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.create.success' }),
       );
       onSuccess?.();
@@ -50,11 +50,7 @@ const RoleCreateForm: FC<Props> = ({ onSuccess }) => {
     <DrawerForm
       title={intl.formatMessage({ id: 'pages.common.action.create' })}
       trigger={
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          style={{ borderRadius: 6 }}
-        >
+        <Button type="primary" icon={<PlusOutlined />}>
           {intl.formatMessage({ id: 'pages.common.action.create' })}
         </Button>
       }

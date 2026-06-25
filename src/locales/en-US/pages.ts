@@ -18,6 +18,12 @@ export default {
   'pages.common.action.reset': 'Reset',
   'pages.common.action.save': 'Save',
   'pages.common.action.backToHome': 'Back Home',
+  'pages.common.action.modifyField': 'Change {field}',
+  'pages.common.action.bindField': 'Bind {field}',
+  'pages.common.action.unbindField': 'Unbind {field}',
+  'pages.common.action.bind': 'Bind',
+  'pages.common.action.unbind': 'Unbind',
+  'pages.common.action.changeAvatar': 'Change Avatar',
 
   // 交互结果反馈 (Interaction Feedback)
   'pages.common.feedback.create.success': 'Created successfully',
@@ -31,6 +37,9 @@ export default {
 
   // 通用字段 (Common Fields)
   'pages.common.fields.createTime': 'Create Time',
+  'pages.common.fields.updateTime': 'Update Time',
+  'pages.common.fields.status': 'Status',
+  'pages.common.fields.remark': 'Remark',
 
   // 数据字典 (Dictionaries)
   'pages.common.dict.status.label': 'Status',
@@ -62,6 +71,8 @@ export default {
     'Password must contain uppercase and lowercase letters, numbers, and special characters!',
 
   // 文案 (Text)
+  'pages.common.text.bound': 'Bound',
+  'pages.common.text.unbound': 'Unbound',
   'pages.common.text.themeSwitch': 'Switch Theme',
   'pages.common.text.langSwitch': 'Switch Language',
   'pages.common.text.selectedCount': '{count} item(s) selected',
@@ -95,7 +106,6 @@ export default {
 
   // Change Password Page
   'pages.changePassword.text.title': 'Force Reset Password',
-  'pages.changePassword.text.modalTitle': 'Change Password',
   'pages.changePassword.text.description':
     'Your password is temporary or has expired. Please update it to continue.',
   'pages.changePassword.feedback.success':
@@ -120,41 +130,11 @@ export default {
   'pages.settings.text.menuSecurity': 'Security Settings',
 
   // Account Settings - Basic
-  'pages.base.fields.nickname': 'Nickname',
-  'pages.base.fields.realName': 'Real Name',
-  'pages.base.fields.birthday': 'Birthday',
-  'pages.base.text.avatarTitle': 'Avatar',
-  'pages.base.action.changeAvatar': 'Change Avatar',
-
-  // Account Settings - Security
-  'pages.security.text.passwordTitle': 'Account Password',
-  'pages.security.text.passwordDescription':
-    'Current password strength: Strong',
-  'pages.security.text.mobileTitle': 'Mobile Number',
-  'pages.security.text.mobileBound': 'Bound: {mobile}',
-  'pages.security.text.mobileUnbound': 'Not bound',
-  'pages.security.text.mobileModalTitle': 'Change Mobile Number',
-  'pages.security.text.emailTitle': 'Email Address',
-  'pages.security.text.emailBound': 'Bound: {email}',
-  'pages.security.text.emailUnbound': 'Not bound',
-  'pages.security.text.emailModalTitle': 'Change Email Address',
-  'pages.security.fields.password': 'Password',
-  'pages.security.fields.mobile': 'Mobile',
-  'pages.security.fields.email': 'Email',
-  'pages.security.fields.newPassword': 'New Password',
-  'pages.security.fields.confirmPassword': 'Confirm New Password',
   'pages.security.text.mfaTitle': 'MFA Device',
-  'pages.security.text.mfaEnabled': 'Bound',
-  'pages.security.text.mfaDisabled':
-    'No MFA device bound. Bind one to enable two-factor verification.',
-  'pages.security.text.mfaModalTitle': 'Bind MFA Device',
   'pages.security.text.mfaDescription':
     'Scan the QR code with your authenticator app and enter the 6-digit code to complete binding. If your app already has an entry for this account, skip scanning and just enter the code.',
   'pages.security.text.mfaDisableConfirm':
     'Login will no longer require two-factor verification. Are you sure you want to unbind?',
-  'pages.security.action.mfaEnable': 'Bind',
-  'pages.security.action.mfaDisable': 'Unbind',
-  'pages.security.fields.mfaCode': 'Verification Code',
   'pages.security.validation.mfaCode':
     'Please enter a 6-digit verification code',
 
@@ -170,6 +150,35 @@ export default {
   'pages.system.user.text.resetPasswordTitle': 'Reset Password - {username}',
   'pages.system.user.text.resetMfaConfirm':
     'Are you sure you want to reset MFA for {name}? The user will need to re-bind their authenticator.',
+  'pages.system.user.text.detailTitle': 'User Details - {username}',
+  'pages.system.user.text.tabBasic': 'Basic Info',
+  'pages.system.user.text.tabUpms': 'UPMS & Roles',
+  'pages.system.user.text.tabSecurity': 'Security & Account',
+  'pages.system.user.text.expireNever': 'Never Expire',
+  'pages.system.user.text.authInfoTitle': 'Authentication Info',
+
+  // User Management fields label
+  'pages.system.user.fields.username': 'Username',
+  'pages.system.user.fields.password': 'Password',
+  'pages.system.user.fields.newPassword': 'New Password',
+  'pages.system.user.fields.confirmPassword': 'Confirm New Password',
+  'pages.system.user.fields.nickname': 'Nickname',
+  'pages.system.user.fields.realName': 'Real Name',
+  'pages.system.user.fields.avatar': 'Avatar',
+  'pages.system.user.fields.gender': 'Gender',
+  'pages.system.user.fields.birthday': 'Birthday',
+  'pages.system.user.fields.mobile': 'Mobile Number',
+  'pages.system.user.fields.email': 'Email Address',
+  'pages.system.user.fields.lastActiveTime': 'Last Active',
+  'pages.system.user.fields.roleCodes': 'Roles',
+  'pages.system.user.fields.expireDate': 'Expiry Date',
+  'pages.system.user.fields.expireDateTip': 'Leave empty for no expiry',
+  'pages.system.user.fields.locked': 'Locked',
+  'pages.system.user.fields.initialPassword': 'Initial Password',
+  'pages.system.user.fields.mfaEnabled': 'MFA',
+  'pages.system.user.fields.credentialStatus': 'Credential Status',
+  'pages.system.user.fields.mfaCode': 'Verification Code',
+  'pages.system.user.fields.status': 'Status',
 
   // Role Management
   'pages.system.role.fields.roleName': 'Role Name',
@@ -206,25 +215,4 @@ export default {
     'This will also delete all child resources. Continue?',
   'pages.system.resource.disableChildren.confirm':
     'Disabling this will also disable all child resources. Continue?',
-
-  // User Management fields label
-  'pages.system.user.fields.newPassword': 'New Password',
-  'pages.system.user.fields.avatar': 'Avatar',
-  'pages.system.user.fields.username': 'Username',
-  'pages.system.user.fields.realName': 'Real Name',
-  'pages.system.user.fields.nickname': 'Nickname',
-  'pages.system.user.fields.gender': 'Gender',
-  'pages.system.user.fields.birthday': 'Birthday',
-  'pages.system.user.fields.mobile': 'Mobile',
-  'pages.system.user.fields.email': 'Email',
-  'pages.system.user.fields.status': 'Status',
-  'pages.system.user.fields.remark': 'Remark',
-  'pages.system.user.fields.lastActiveTime': 'Last Active',
-  'pages.system.user.fields.roleCodes': 'Roles',
-  'pages.system.user.fields.expireDate': 'Expiry Date',
-  'pages.system.user.fields.locked': 'Locked',
-  'pages.system.user.fields.initialPassword': 'Initial Password',
-  'pages.system.user.fields.mfaEnabled': 'MFA',
-  'pages.system.user.text.expireDateTip': 'Leave empty for no expiry',
-  'pages.system.user.text.authInfoTitle': 'Authentication Info',
 };

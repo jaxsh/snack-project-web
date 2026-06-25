@@ -30,7 +30,7 @@ const RoleList: React.FC = () => {
   const { mutate: deleteRun } = useMutation({
     mutationFn: (id: string | number) => deleteRoles(id),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.delete.success' }),
       );
       actionRef.current?.reloadAndRest?.();
@@ -40,7 +40,7 @@ const RoleList: React.FC = () => {
   const { mutate: batchDeleteRun } = useMutation({
     mutationFn: (ids: string) => deleteRoles(ids),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.delete.success' }),
       );
       actionRef.current?.clearSelected?.();

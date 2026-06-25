@@ -40,7 +40,7 @@ const RoleEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         status: values.status,
       }),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.update.success' }),
       );
       onOk?.();

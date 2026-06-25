@@ -7,7 +7,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { useMutation } from '@tanstack/react-query';
 import { useAccess, useIntl } from '@umijs/max';
-import { App, Button, Popconfirm, Space, Switch, Tag, theme } from 'antd';
+import { App, Popconfirm, Space, Switch, Tag, theme } from 'antd';
 import React, { useRef } from 'react';
 import { ICON_MAP } from '@/components/IconPicker';
 import {
@@ -44,7 +44,7 @@ const ResourceList: React.FC = () => {
   const { mutate: deleteRun } = useMutation({
     mutationFn: (id: number) => deleteResources(id),
     onSuccess: () => {
-      message.success(
+      void message.success(
         intl.formatMessage({ id: 'pages.common.feedback.delete.success' }),
       );
       actionRef.current?.reloadAndRest?.();
