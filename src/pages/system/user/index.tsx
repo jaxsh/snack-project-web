@@ -182,12 +182,16 @@ const UserList: React.FC = () => {
       sorter: true,
       render: (_, record) => (
         <Space size={4}>
-          <UserDetailDrawer
-            record={record}
-            trigger={
-              <a onClick={(e) => e.stopPropagation()}>{record.username}</a>
-            }
-          />
+          {canAccess('sys:user:detail') ? (
+            <UserDetailDrawer
+              record={record}
+              trigger={
+                <a onClick={(e) => e.stopPropagation()}>{record.username}</a>
+              }
+            />
+          ) : (
+            <span>{record.username}</span>
+          )}
           <Typography.Text
             copyable={{ text: record.username }}
             style={{ color: token.colorTextDescription }}
