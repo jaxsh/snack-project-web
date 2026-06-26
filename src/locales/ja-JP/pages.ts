@@ -32,7 +32,7 @@ export default {
   'pages.common.feedback.save.success': '保存に成功しました',
   'pages.common.feedback.delete.confirm': '{name} を削除してもよろしいですか？',
   'pages.common.feedback.batchDelete.confirm':
-    'これら {count} 件のアイテムを削除してもよろしいですか？この操作は取り消せません。',
+    'これら {count} 件のアイテムを削除してもよろしいですか？',
 
   // 通用フィールド (Common Fields)
   'pages.common.fields.createTime': '作成日時',

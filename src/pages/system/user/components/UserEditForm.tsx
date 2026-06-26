@@ -1,7 +1,9 @@
 import {
   DrawerForm,
   ProFormDatePicker,
+  ProFormRadio,
   ProFormSelect,
+  ProFormSwitch,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
@@ -26,6 +28,7 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
     mutationFn: (values: any) =>
       updateUser(record.id, {
         ...values,
+        status: values.status ? 1 : 0,
         birthday: values.birthday || null,
         remark: values.remark || null,
         expireDate: values.expireDate || null,
@@ -53,7 +56,8 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
       }}
       resize={{ minWidth: 400, maxWidth: window.innerWidth * 0.8 }}
       drawerProps={{ destroyOnHidden: true, closable: { placement: 'end' } }}
-      initialValues={{
+      params={{ id: record.id }}
+      request={async () => ({
         username: record.username,
         realName: record.realName,
         nickname: record.nickname,
@@ -62,10 +66,10 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         mobile: record.mobile,
         email: record.email,
         expireDate: record.expireDate,
-        status: record.status ?? 1,
+        status: (record.status ?? 1) === 1,
         remark: record.remark,
         roleCodes: record.roleCodes,
-      }}
+      })}
       onFinish={async (values) => {
         try {
           await mutateAsync(values);
@@ -132,7 +136,7 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
           },
         ]}
       />
-      <ProFormSelect
+      <ProFormRadio.Group
         name="gender"
         label={intl.formatMessage({ id: 'pages.system.user.fields.gender' })}
         options={[
@@ -206,23 +210,15 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
           },
         ]}
       />
-      <ProFormSelect
+      <ProFormSwitch
         name="status"
         label={intl.formatMessage({ id: 'pages.common.fields.status' })}
-        options={[
-          {
-            value: 1,
-            label: intl.formatMessage({
-              id: 'pages.common.dict.status.enabled',
-            }),
-          },
-          {
-            value: 0,
-            label: intl.formatMessage({
-              id: 'pages.common.dict.status.disabled',
-            }),
-          },
-        ]}
+        checkedChildren={intl.formatMessage({
+          id: 'pages.common.dict.status.enabled',
+        })}
+        unCheckedChildren={intl.formatMessage({
+          id: 'pages.common.dict.status.disabled',
+        })}
       />
       <ProFormDatePicker
         name="expireDate"

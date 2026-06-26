@@ -33,7 +33,7 @@ export default {
   'pages.common.feedback.delete.confirm':
     'Are you sure you want to delete {name}?',
   'pages.common.feedback.batchDelete.confirm':
-    'Are you sure you want to delete these {count} items? This action cannot be undone.',
+    'Are you sure you want to delete these {count} items?',
 
   // 通用字段 (Common Fields)
   'pages.common.fields.createTime': 'Create Time',

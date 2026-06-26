@@ -6,11 +6,18 @@ import type { FC, ReactElement } from 'react';
 import { resetUserPassword } from '@/services/system/user';
 
 interface Props {
-  trigger: ReactElement;
+  trigger?: ReactElement;
   record: API.SysUserVO;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-const ResetPasswordForm: FC<Props> = ({ trigger, record }) => {
+const ResetPasswordForm: FC<Props> = ({
+  trigger,
+  record,
+  open,
+  onOpenChange,
+}) => {
   const { message } = App.useApp();
   const intl = useIntl();
 
@@ -33,6 +40,8 @@ const ResetPasswordForm: FC<Props> = ({ trigger, record }) => {
         { username: record.username },
       )}
       trigger={trigger}
+      open={open}
+      onOpenChange={onOpenChange}
       modalProps={{
         destroyOnHidden: true,
         mask: { closable: false },

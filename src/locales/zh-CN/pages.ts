@@ -31,8 +31,7 @@ export default {
   'pages.common.feedback.delete.success': '删除成功',
   'pages.common.feedback.save.success': '保存成功',
   'pages.common.feedback.delete.confirm': '确定要删除 {name} 吗？',
-  'pages.common.feedback.batchDelete.confirm':
-    '确定要删除这 {count} 项吗？此操作无法撤销。',
+  'pages.common.feedback.batchDelete.confirm': '确定要删除这 {count} 项吗？',
 
   // 通用字段 (Common Fields)
   'pages.common.fields.createTime': '创建时间',
