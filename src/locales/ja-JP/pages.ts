@@ -24,6 +24,7 @@ export default {
   'pages.common.action.bind': '登録',
   'pages.common.action.unbind': '解除',
   'pages.common.action.changeAvatar': 'アバター変更',
+  'pages.common.action.detail': '詳細',
 
   // インタラクション結果フィードバック (Interaction Feedback)
   'pages.common.feedback.create.success': '作成に成功しました',

@@ -24,6 +24,7 @@ export default {
   'pages.common.action.bind': 'Bind',
   'pages.common.action.unbind': 'Unbind',
   'pages.common.action.changeAvatar': 'Change Avatar',
+  'pages.common.action.detail': 'Detail',
 
   // 交互结果反馈 (Interaction Feedback)
   'pages.common.feedback.create.success': 'Created successfully',

@@ -24,6 +24,7 @@ export default {
   'pages.common.action.bind': '绑定',
   'pages.common.action.unbind': '解绑',
   'pages.common.action.changeAvatar': '更换头像',
+  'pages.common.action.detail': '详情',
 
   // 交互结果反馈 (Interaction Feedback)
   'pages.common.feedback.create.success': '创建成功',

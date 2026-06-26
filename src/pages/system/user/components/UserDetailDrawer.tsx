@@ -296,13 +296,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
 
   return (
     <DrawerForm
-      title={
-        record.username
-          ? fmt('pages.system.user.text.detailTitle', {
-              username: record.username,
-            })
-          : 'User Details'
-      }
+      title={fmt('pages.common.action.detail')}
       trigger={trigger}
       onOpenChange={handleOpenChange}
       submitter={false}
