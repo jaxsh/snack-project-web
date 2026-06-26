@@ -57,7 +57,6 @@ export async function updateProfile(
     email?: string | null;
     mobile?: string | null;
     mfaEnabled?: number | null;
-    mfaSecret?: string | null;
     mfaCode?: string | null;
   },
   options?: Record<string, any>,
@@ -84,7 +83,6 @@ export async function getMfaSetup(options?: Record<string, any>) {
 export async function updateMfa(
   body: {
     mfaEnabled: number;
-    mfaSecret?: string | null;
     mfaCode: string;
   },
   options?: Record<string, any>,

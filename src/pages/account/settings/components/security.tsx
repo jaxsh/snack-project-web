@@ -160,7 +160,6 @@ const SecurityView: React.FC = () => {
     try {
       await updateMfa({
         mfaEnabled: 1,
-        mfaSecret: mfaSetupData.secret,
         mfaCode: values.mfaCode,
       });
       antdMessage.success(fmt('pages.common.feedback.update.success'));
