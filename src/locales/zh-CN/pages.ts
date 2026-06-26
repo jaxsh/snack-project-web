@@ -170,7 +170,9 @@ export default {
   'pages.system.user.fields.locked': '锁定状态',
   'pages.system.user.fields.initialPassword': '初始密码',
   'pages.system.user.fields.mfaEnabled': 'MFA',
-  'pages.system.user.fields.credentialStatus': '凭证状态',
+  'pages.system.user.fields.credentialStatus': '密码过期',
+  'pages.system.user.fields.passwordExpireTime': '密码到期时间',
+  'pages.system.user.fields.passwordExpireTime.never': '永不到期',
   'pages.system.user.fields.mfaCode': '验证码',
   'pages.system.user.fields.status': '状态',
 

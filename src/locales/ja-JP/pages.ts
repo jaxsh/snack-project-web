@@ -179,7 +179,9 @@ export default {
   'pages.system.user.fields.locked': 'ロック状態',
   'pages.system.user.fields.initialPassword': '初期パスワード',
   'pages.system.user.fields.mfaEnabled': 'MFA',
-  'pages.system.user.fields.credentialStatus': '認証ステータス',
+  'pages.system.user.fields.credentialStatus': 'パスワード期限切れ',
+  'pages.system.user.fields.passwordExpireTime': 'パスワード有効期限',
+  'pages.system.user.fields.passwordExpireTime.never': '無期限',
   'pages.system.user.fields.mfaCode': '確認コード',
   'pages.system.user.fields.status': 'ステータス',
 

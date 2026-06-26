@@ -7,6 +7,7 @@ import { DrawerForm, ProDescriptions } from '@ant-design/pro-components';
 import { useIntl } from '@umijs/max';
 import type { TabsProps } from 'antd';
 import { Avatar, Flex, Space, Spin, Tabs, Tag, Typography } from 'antd';
+import dayjs from 'dayjs';
 import React, { useRef, useState } from 'react';
 import { getUser } from '@/services/system/user';
 
@@ -201,18 +202,43 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
               },
             },
             {
-              title: fmt('pages.system.user.fields.credentialStatus'),
-              dataIndex: ['oauthVO', 'expired'],
-              valueType: 'select',
-              valueEnum: {
-                0: {
-                  text: fmt('pages.common.dict.yesNo.no'),
-                  status: 'Success',
-                },
-                1: {
-                  text: fmt('pages.common.dict.yesNo.yes'),
-                  status: 'Error',
-                },
+              title: fmt('pages.system.user.fields.passwordExpireTime'),
+              dataIndex: ['oauthVO', 'passwordExpireTime'],
+              render: (_, rec) => {
+                const expireTime = rec.oauthVO?.passwordExpireTime;
+                if (!expireTime) {
+                  return (
+                    <Tag color="success">
+                      {fmt('pages.system.user.fields.passwordExpireTime.never')}
+                    </Tag>
+                  );
+                }
+
+                const expireDate = dayjs(expireTime);
+                const now = dayjs();
+
+                if (expireDate.isBefore(now)) {
+                  return (
+                    <Tag color="error">
+                      {expireDate.format('YYYY-MM-DD HH:mm:ss')}
+                    </Tag>
+                  );
+                }
+
+                const diffDays = expireDate.diff(now, 'day');
+                if (diffDays <= 30) {
+                  return (
+                    <Tag color="warning">
+                      {expireDate.format('YYYY-MM-DD HH:mm:ss')}
+                    </Tag>
+                  );
+                }
+
+                return (
+                  <Tag color="success">
+                    {expireDate.format('YYYY-MM-DD HH:mm:ss')}
+                  </Tag>
+                );
               },
             },
             {

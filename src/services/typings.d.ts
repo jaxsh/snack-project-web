@@ -55,6 +55,7 @@ declare namespace API {
     initialPassword?: number;
     initialPasswordLabel?: string;
     mfaEnabled?: number;
+    passwordExpireTime?: string;
   };
 
   type MfaSetupVO = {

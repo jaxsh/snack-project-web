@@ -176,7 +176,9 @@ export default {
   'pages.system.user.fields.locked': 'Locked',
   'pages.system.user.fields.initialPassword': 'Initial Password',
   'pages.system.user.fields.mfaEnabled': 'MFA',
-  'pages.system.user.fields.credentialStatus': 'Credential Status',
+  'pages.system.user.fields.credentialStatus': 'Password Expired',
+  'pages.system.user.fields.passwordExpireTime': 'Password Expiry Time',
+  'pages.system.user.fields.passwordExpireTime.never': 'Never',
   'pages.system.user.fields.mfaCode': 'Verification Code',
   'pages.system.user.fields.status': 'Status',
 
