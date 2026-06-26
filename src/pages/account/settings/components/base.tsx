@@ -67,12 +67,12 @@ const BaseView: React.FC = () => {
               },
               render: (_, dom) => dom[1],
             }}
-            request={async () => ({
+            initialValues={{
               nickname: currentUser?.nickname || currentUser?.username,
               realName: currentUser?.realName,
               gender: currentUser?.gender ?? 0,
               birthday: currentUser?.birthday,
-            })}
+            }}
             requiredMark={false}
           >
             <ProFormText
