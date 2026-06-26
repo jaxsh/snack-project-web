@@ -75,6 +75,7 @@ export default {
   'pages.common.text.themeSwitch': '主题切换',
   'pages.common.text.langSwitch': '语言切换',
   'pages.common.text.selectedCount': '已选 {count} 项',
+  'pages.common.text.changePasswordTitle': '修改账户密码',
 
   // ==========================================
   // 各业务页面专属配置 (Page Specific Configuration)
@@ -103,7 +104,6 @@ export default {
   'pages.login.fields.rememberMe': '自动登录',
 
   // 强制/修改密码页面
-  'pages.changePassword.text.title': '强制重置密码',
   'pages.changePassword.text.description':
     '当前使用的是初始密码或密码已过期，请修改密码后继续使用。',
   'pages.changePassword.feedback.success': '密码修改成功，正在跳转…',

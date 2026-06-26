@@ -77,6 +77,7 @@ export default {
   'pages.common.text.themeSwitch': 'Switch Theme',
   'pages.common.text.langSwitch': 'Switch Language',
   'pages.common.text.selectedCount': '{count} item(s) selected',
+  'pages.common.text.changePasswordTitle': 'Change Account Password',
 
   // ==========================================
   // 各业务页面专属配置 (Page Specific Configuration)
@@ -106,7 +107,6 @@ export default {
   'pages.login.fields.rememberMe': 'Remember me',
 
   // Change Password Page
-  'pages.changePassword.text.title': 'Force Reset Password',
   'pages.changePassword.text.description':
     'Your password is temporary or has expired. Please update it to continue.',
   'pages.changePassword.feedback.success':

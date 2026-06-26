@@ -32,7 +32,7 @@ const ChangePassword: React.FC = () => {
   };
 
   return (
-    <AuthLayout titleId="pages.changePassword.text.title">
+    <AuthLayout titleId="pages.common.text.changePasswordTitle">
       <LoginForm
         contentStyle={{
           minWidth: 280,
@@ -40,7 +40,7 @@ const ChangePassword: React.FC = () => {
         }}
         logo={<img alt="logo" src="/logo.svg" />}
         title={intl.formatMessage({
-          id: 'pages.changePassword.text.title',
+          id: 'pages.common.text.changePasswordTitle',
         })}
         subTitle={intl.formatMessage({
           id: 'pages.changePassword.text.description',

@@ -270,9 +270,7 @@ const SecurityView: React.FC = () => {
       />
 
       <Modal
-        title={fmt('pages.common.action.modifyField', {
-          field: fmt('pages.system.user.fields.password'),
-        })}
+        title={fmt('pages.common.text.changePasswordTitle')}
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={null}

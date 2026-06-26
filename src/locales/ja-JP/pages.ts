@@ -76,6 +76,7 @@ export default {
   'pages.common.text.themeSwitch': 'テーマ切り替え',
   'pages.common.text.langSwitch': '言語切り替え',
   'pages.common.text.selectedCount': '{count}件選択中',
+  'pages.common.text.changePasswordTitle': 'アカウントパスワードの変更',
 
   // ==========================================
   // 各業務ページ専用設定 (Page Specific Configuration)
@@ -107,7 +108,6 @@ export default {
   'pages.login.fields.rememberMe': '次回から自動ログイン',
 
   // パスワード変更ページ
-  'pages.changePassword.text.title': 'パスワードの強制再設定',
   'pages.changePassword.text.description':
     '初期パスワードまたは期限切れのパスワードを変更してください。',
   'pages.changePassword.feedback.success':
