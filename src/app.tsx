@@ -5,7 +5,7 @@ import type {
 } from '@ant-design/pro-components';
 import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link, useModel } from '@umijs/max';
-import { App } from 'antd';
+import { App, ConfigProvider, theme } from 'antd';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
@@ -254,11 +254,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     ErrorBoundary,
     childrenRender: (children) => {
       return (
-        <>
+        <ThemeAwareApp>
           <AntdApiBinder />
           <ThemeWatcher />
           {children}
-        </>
+        </ThemeAwareApp>
       );
     },
     ...initialState?.settings,
@@ -308,6 +308,20 @@ function ThemeWatcher() {
   }, [initialState?.themePreference, setInitialState]);
 
   return null;
+}
+
+function ThemeAwareApp({ children }: { children: React.ReactNode }) {
+  const { initialState } = useModel('@@initialState');
+  const isDark = initialState?.settings?.navTheme === 'realDark';
+  return (
+    <ConfigProvider
+      theme={{
+        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+      }}
+    >
+      <App>{children}</App>
+    </ConfigProvider>
+  );
 }
 
 function AntdApiBinder() {
