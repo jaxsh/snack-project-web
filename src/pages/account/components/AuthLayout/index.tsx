@@ -1,7 +1,8 @@
-import { Helmet, SelectLang, useIntl, useModel } from '@umijs/max';
+import { Helmet, useIntl, useModel } from '@umijs/max';
 import { ConfigProvider, theme } from 'antd';
 import { createStyles } from 'antd-style';
 import React from 'react';
+import { LangDropdown } from '@/components/RightContent';
 import Settings from '../../../../../config/defaultSettings';
 
 const useStyles = createStyles(({ token }, isDark: boolean) => {
@@ -60,7 +61,7 @@ const AuthLayoutContent: React.FC<AuthLayoutProps> = ({
         </title>
       </Helmet>
       <div className={styles.lang} data-lang>
-        {SelectLang && <SelectLang />}
+        <LangDropdown />
       </div>
       <div
         style={{

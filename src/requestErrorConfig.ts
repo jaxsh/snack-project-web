@@ -118,6 +118,9 @@ export const errorConfig: RequestConfig = {
       }
 
       const headers = { ...config.headers };
+      if (locale) {
+        headers['Accept-Language'] = locale;
+      }
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       if (timezone) {
         headers['X-Timezone'] = timezone;
