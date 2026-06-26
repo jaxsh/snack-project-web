@@ -53,14 +53,12 @@ const ResourceList: React.FC = () => {
 
   const { mutate: batchDeleteRun, isPending: batchDeletePending } = useMutation(
     {
-      mutationFn: (rows: (API.SysResourceVO & { children?: any[] })[]) => {
-        const selectedIds = new Set(rows.map((r) => r.id));
-        const topLevel = rows.filter(
-          (r) => !selectedIds.has(r.parentId as number),
-        );
-        return deleteResources(topLevel.map((r) => r.id));
-      },
+      mutationFn: (keys: React.Key[]) =>
+        deleteResources(keys as (string | number)[]),
       onSuccess: () => {
+        void message.success(
+          intl.formatMessage({ id: 'pages.common.feedback.delete.success' }),
+        );
         actionRef.current?.clearSelected?.();
         actionRef.current?.reloadAndRest?.();
       },
@@ -228,15 +226,29 @@ const ResourceList: React.FC = () => {
         search={false}
         pagination={false}
         rowSelection={{ checkStrictly: false }}
-        tableAlertOptionRender={({ selectedRows: rows, onCleanSelected }) => (
+        tableAlertOptionRender={({ selectedRowKeys, onCleanSelected }) => (
           <Space size={16}>
             {canAccess('sys:resource:delete') && (
               <a
-                onClick={() =>
-                  batchDeleteRun(
-                    rows as (API.SysResourceVO & { children?: any[] })[],
-                  )
-                }
+                onClick={() => {
+                  modal.confirm({
+                    title: intl.formatMessage({
+                      id: 'pages.common.action.confirmDelete',
+                    }),
+                    content: intl.formatMessage(
+                      { id: 'pages.common.feedback.batchDelete.confirm' },
+                      { count: selectedRowKeys.length },
+                    ),
+                    okText: intl.formatMessage({
+                      id: 'pages.common.action.ok',
+                    }),
+                    okType: 'danger',
+                    cancelText: intl.formatMessage({
+                      id: 'pages.common.action.cancel',
+                    }),
+                    onOk: () => batchDeleteRun(selectedRowKeys),
+                  });
+                }}
                 style={{ color: token.colorError }}
               >
                 <DeleteOutlined />{' '}
