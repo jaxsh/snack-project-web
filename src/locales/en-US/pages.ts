@@ -171,7 +171,7 @@ export default {
   'pages.system.user.fields.email': 'Email Address',
   'pages.system.user.fields.lastActiveTime': 'Last Active',
   'pages.system.user.fields.roleCodes': 'Roles',
-  'pages.system.user.fields.expireDate': 'Expiry Date',
+  'pages.system.user.fields.expireDate': 'Account Expiry Date',
   'pages.system.user.fields.expireDateTip': 'Leave empty for no expiry',
   'pages.system.user.fields.locked': 'Locked',
   'pages.system.user.fields.initialPassword': 'Initial Password',

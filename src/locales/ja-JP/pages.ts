@@ -174,7 +174,7 @@ export default {
   'pages.system.user.fields.email': 'メールアドレス',
   'pages.system.user.fields.lastActiveTime': '最終アクティブ',
   'pages.system.user.fields.roleCodes': 'ロール',
-  'pages.system.user.fields.expireDate': '有効期限',
+  'pages.system.user.fields.expireDate': 'アカウント有効期限',
   'pages.system.user.fields.expireDateTip': '未入力の場合は無期限',
   'pages.system.user.fields.locked': 'ロック状態',
   'pages.system.user.fields.initialPassword': '初期パスワード',

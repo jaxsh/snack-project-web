@@ -165,7 +165,7 @@ export default {
   'pages.system.user.fields.email': '邮箱',
   'pages.system.user.fields.lastActiveTime': '最后活跃时间',
   'pages.system.user.fields.roleCodes': '角色',
-  'pages.system.user.fields.expireDate': '到期日',
+  'pages.system.user.fields.expireDate': '账户到期日',
   'pages.system.user.fields.expireDateTip': '留空表示永不到期',
   'pages.system.user.fields.locked': '锁定状态',
   'pages.system.user.fields.initialPassword': '初始密码',
