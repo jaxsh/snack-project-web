@@ -56,8 +56,7 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
       }}
       resize={{ minWidth: 400, maxWidth: window.innerWidth * 0.8 }}
       drawerProps={{ destroyOnHidden: true, closable: { placement: 'end' } }}
-      params={{ id: record.id }}
-      request={async () => ({
+      initialValues={{
         username: record.username,
         realName: record.realName,
         nickname: record.nickname,
@@ -69,7 +68,7 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         status: (record.status ?? 1) === 1,
         remark: record.remark,
         roleCodes: record.roleCodes,
-      })}
+      }}
       onFinish={async (values) => {
         try {
           await mutateAsync(values);
