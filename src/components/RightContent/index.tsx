@@ -11,7 +11,7 @@ import {
   useModel,
 } from '@umijs/max';
 import type { MenuProps } from 'antd';
-import { Button } from 'antd';
+import { Button, theme } from 'antd';
 import { createStyles } from 'antd-style';
 import React, { useMemo } from 'react';
 import { getSystemNavTheme } from '@/utils/theme';
@@ -39,6 +39,7 @@ const useStyles = createStyles(({ token, css }) => ({
 
 export const LangDropdown: React.FC = () => {
   const { styles } = useStyles();
+  const { token } = theme.useToken();
   const allLocales = useMemo(() => getAllLocales(), []);
   const currentLocale = getLocale();
   const supportLocales = allLocales.filter((l) => l in localeLabelMap);
@@ -52,7 +53,7 @@ export const LangDropdown: React.FC = () => {
     key: `lang-${locale}`,
     icon:
       locale === currentLocale ? (
-        <CheckOutlined style={{ color: '#52c41a' }} />
+        <CheckOutlined style={{ color: token.colorSuccess }} />
       ) : (
         <span style={{ display: 'inline-block', width: 14 }} />
       ),
@@ -91,6 +92,7 @@ export const LangDropdown: React.FC = () => {
 
 export const ThemeDropdown: React.FC = () => {
   const { styles } = useStyles();
+  const { token } = theme.useToken();
   const { initialState, setInitialState } = useModel('@@initialState');
   const intl = useIntl();
 
@@ -105,7 +107,7 @@ export const ThemeDropdown: React.FC = () => {
       key: 'auto',
       icon:
         currentPref === 'auto' ? (
-          <CheckOutlined style={{ color: '#52c41a' }} />
+          <CheckOutlined style={{ color: token.colorSuccess }} />
         ) : (
           <span style={{ display: 'inline-block', width: 14 }} />
         ),
@@ -115,7 +117,7 @@ export const ThemeDropdown: React.FC = () => {
       key: 'light',
       icon:
         currentPref === 'light' ? (
-          <CheckOutlined style={{ color: '#52c41a' }} />
+          <CheckOutlined style={{ color: token.colorSuccess }} />
         ) : (
           <span style={{ display: 'inline-block', width: 14 }} />
         ),
@@ -125,7 +127,7 @@ export const ThemeDropdown: React.FC = () => {
       key: 'realDark',
       icon:
         currentPref === 'realDark' ? (
-          <CheckOutlined style={{ color: '#52c41a' }} />
+          <CheckOutlined style={{ color: token.colorSuccess }} />
         ) : (
           <span style={{ display: 'inline-block', width: 14 }} />
         ),

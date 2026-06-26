@@ -3,11 +3,6 @@ import { Flex, theme } from 'antd';
 import React from 'react';
 
 /**
- * 密码强度颜色常量
- */
-const STRENGTH_COLORS = ['', '#faad14', '#a0d911', '#52c41a'];
-
-/**
  * 根据密码内容计算密码强度等级
  *
  * @param val 密码文本
@@ -50,6 +45,12 @@ export const PasswordStrengthBar: React.FC<PasswordStrengthBarProps> = ({
   const { token } = theme.useToken();
   const intl = useIntl();
   const level = getStrengthLevel(password);
+  const strengthColors = [
+    '',
+    token.colorError,
+    token.colorWarning,
+    token.colorSuccess,
+  ];
 
   const strengthTexts = [
     '',
@@ -85,7 +86,7 @@ export const PasswordStrengthBar: React.FC<PasswordStrengthBarProps> = ({
               backgroundColor:
                 level === 0 || idx > level
                   ? token.colorFillSecondary
-                  : STRENGTH_COLORS[level],
+                  : strengthColors[level],
               transition: 'background-color 0.3s ease',
             }}
           />
@@ -94,7 +95,7 @@ export const PasswordStrengthBar: React.FC<PasswordStrengthBarProps> = ({
       <span
         style={{
           fontSize: '12px',
-          color: STRENGTH_COLORS[level],
+          color: strengthColors[level],
           fontWeight: 500,
         }}
       >
