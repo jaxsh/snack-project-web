@@ -10,7 +10,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { useIntl } from '@umijs/max';
 import { App, Button, Descriptions } from 'antd';
-import type { FC, ReactElement } from 'react';
+import { type FC, type ReactElement, useMemo } from 'react';
 import { getAllRoles } from '@/services/system/role';
 import { updateUser } from '@/services/system/user';
 
@@ -41,6 +41,23 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
     },
   });
 
+  const initialValues = useMemo(
+    () => ({
+      username: record.username,
+      realName: record.realName,
+      nickname: record.nickname,
+      gender: record.gender ?? 0,
+      birthday: record.birthday,
+      mobile: record.mobile,
+      email: record.email,
+      expireDate: record.expireDate,
+      status: (record.status ?? 1) === 1,
+      remark: record.remark,
+      roleCodes: record.roleCodes,
+    }),
+    [record.id],
+  );
+
   return (
     <DrawerForm
       title={intl.formatMessage({ id: 'pages.common.action.edit' })}
@@ -56,19 +73,7 @@ const UserEditForm: FC<Props> = ({ trigger, record, onOk }) => {
       }}
       resize={{ minWidth: 400, maxWidth: window.innerWidth * 0.8 }}
       drawerProps={{ destroyOnHidden: true, closable: { placement: 'end' } }}
-      initialValues={{
-        username: record.username,
-        realName: record.realName,
-        nickname: record.nickname,
-        gender: record.gender ?? 0,
-        birthday: record.birthday,
-        mobile: record.mobile,
-        email: record.email,
-        expireDate: record.expireDate,
-        status: (record.status ?? 1) === 1,
-        remark: record.remark,
-        roleCodes: record.roleCodes,
-      }}
+      initialValues={initialValues}
       onFinish={async (values) => {
         try {
           await mutateAsync(values);
