@@ -9,6 +9,7 @@ import type { TabsProps } from 'antd';
 import { Avatar, Flex, Space, Spin, Tabs, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import React, { useRef, useState } from 'react';
+import { getAllRoles } from '@/services/system/role';
 import { getUser } from '@/services/system/user';
 
 interface Props {
@@ -23,6 +24,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [userDetail, setUserDetail] = useState<API.SysUserVO | null>(null);
+  const [roleNameMap, setRoleNameMap] = useState<Record<string, string>>({});
 
   const fmt = (key: string, values?: Record<string, string>) =>
     intl.formatMessage({ id: key }, values);
@@ -34,10 +36,19 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
       }
       fetchedRef.current = true;
       setLoading(true);
-      getUser(record.username)
-        .then((res) => {
-          if (res?.data) {
-            setUserDetail(res.data);
+      Promise.all([getUser(record.username), getAllRoles()])
+        .then(([userRes, rolesRes]) => {
+          if (userRes?.data) {
+            setUserDetail(userRes.data);
+          }
+          if (rolesRes?.data?.records) {
+            const map: Record<string, string> = {};
+            rolesRes.data.records.forEach((r) => {
+              if (r.roleCode && r.roleName) {
+                map[r.roleCode] = r.roleName;
+              }
+            });
+            setRoleNameMap(map);
           }
         })
         .catch((err) => {
@@ -48,6 +59,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
         });
     } else {
       setUserDetail(null);
+      setRoleNameMap({});
       setTimeout(() => {
         fetchedRef.current = false;
       }, 500);
@@ -149,10 +161,10 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
               dataIndex: 'roleCodes',
               render: (_, rec) =>
                 rec.roleCodes && rec.roleCodes.length > 0 ? (
-                  <Space size={[0, 4]} wrap>
+                  <Space size={[4, 4]} wrap>
                     {rec.roleCodes.map((role) => (
                       <Tag key={role} color="blue">
-                        {role}
+                        {roleNameMap[role] ?? role}
                       </Tag>
                     ))}
                   </Space>

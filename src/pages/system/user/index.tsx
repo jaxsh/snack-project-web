@@ -1,4 +1,6 @@
 import {
+  CheckOutlined,
+  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
   KeyOutlined,
@@ -44,10 +46,13 @@ const UserList: React.FC = () => {
   const [currentRecord, setCurrentRecord] = useState<API.SysUserVO | null>(
     null,
   );
+  const [statusLoadingId, setStatusLoadingId] = useState<number | null>(null);
 
   const { mutate: updateStatusRun } = useMutation({
     mutationFn: ({ id, status }: { id: number; status: number }) =>
       updateUser(id, { status } as API.SysUserDTO),
+    onMutate: ({ id }) => setStatusLoadingId(id),
+    onSettled: () => setStatusLoadingId(null),
     onSuccess: () => actionRef.current?.reload(),
   });
 
@@ -279,7 +284,10 @@ const UserList: React.FC = () => {
         return (
           <Switch
             size="small"
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
             checked={record.status === 1}
+            loading={statusLoadingId === record.id}
             onChange={(checked) =>
               updateStatusRun({ id: record.id, status: checked ? 1 : 0 })
             }

@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   DrawerForm,
   ProFormDatePicker,
@@ -10,7 +10,7 @@ import {
 } from '@ant-design/pro-components';
 import { useMutation } from '@tanstack/react-query';
 import { useIntl } from '@umijs/max';
-import { App, Button } from 'antd';
+import { App, Button, Tag } from 'antd';
 import type { FC } from 'react';
 import { getAllRoles } from '@/services/system/role';
 import { createUser } from '@/services/system/user';
@@ -239,12 +239,8 @@ const UserCreateForm: FC<Props> = ({ onSuccess }) => {
       <ProFormSwitch
         name="status"
         label={intl.formatMessage({ id: 'pages.common.fields.status' })}
-        checkedChildren={intl.formatMessage({
-          id: 'pages.common.dict.status.enabled',
-        })}
-        unCheckedChildren={intl.formatMessage({
-          id: 'pages.common.dict.status.disabled',
-        })}
+        checkedChildren={<CheckOutlined />}
+        unCheckedChildren={<CloseOutlined />}
       />
       <ProFormDatePicker
         name="expireDate"
@@ -286,13 +282,24 @@ const UserCreateForm: FC<Props> = ({ onSuccess }) => {
         name="roleCodes"
         label={intl.formatMessage({ id: 'pages.system.user.fields.roleCodes' })}
         mode="multiple"
-        fieldProps={{ optionFilterProp: 'label' }}
+        fieldProps={{
+          optionFilterProp: 'label',
+          optionRender: (option) => (
+            <span style={{ fontWeight: 'normal' }}>
+              {option.label}
+              {option.data.status === 0 && (
+                <Tag style={{ marginLeft: 6 }}>禁用</Tag>
+              )}
+            </span>
+          ),
+        }}
         request={async () => {
           const res = await getAllRoles();
           return (
             res.data?.records?.map((r) => ({
               label: r.roleName,
               value: r.roleCode,
+              status: r.status ?? 1,
             })) ?? []
           );
         }}
