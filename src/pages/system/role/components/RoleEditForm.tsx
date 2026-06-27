@@ -1,6 +1,7 @@
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import {
   DrawerForm,
-  ProFormSelect,
+  ProFormSwitch,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
@@ -20,24 +21,13 @@ const RoleEditForm: FC<Props> = ({ trigger, record, onOk }) => {
   const { message } = App.useApp();
   const intl = useIntl();
 
-  const statusOptions = [
-    {
-      value: 1,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.enabled' }),
-    },
-    {
-      value: 0,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.disabled' }),
-    },
-  ];
-
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (values: any) =>
       updateRole(record.id, {
         roleName: values.roleName,
         roleCode: record.roleCode,
         roleDesc: values.roleDesc,
-        status: values.status,
+        status: values.status ? 1 : 0,
       }),
     onSuccess: () => {
       void message.success(
@@ -66,7 +56,7 @@ const RoleEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         roleName: record.roleName,
         roleCode: record.roleCode,
         roleDesc: record.roleDesc,
-        status: record.status ?? 1,
+        status: (record.status ?? 1) === 1,
       }}
       onFinish={async (values) => {
         try {
@@ -103,10 +93,11 @@ const RoleEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         name="roleDesc"
         label={intl.formatMessage({ id: 'pages.system.role.fields.roleDesc' })}
       />
-      <ProFormSelect
+      <ProFormSwitch
         name="status"
         label={intl.formatMessage({ id: 'pages.system.role.fields.status' })}
-        options={statusOptions}
+        checkedChildren={<CheckOutlined />}
+        unCheckedChildren={<CloseOutlined />}
       />
     </DrawerForm>
   );

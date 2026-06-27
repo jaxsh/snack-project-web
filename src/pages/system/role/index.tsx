@@ -1,4 +1,6 @@
 import {
+  CheckOutlined,
+  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
   SafetyCertificateOutlined,
@@ -8,7 +10,7 @@ import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { useMutation } from '@tanstack/react-query';
 import { useAccess, useIntl } from '@umijs/max';
 import { App, Popconfirm, Space, Switch, Tag, theme } from 'antd';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { deleteRoles, queryRoles, updateRole } from '@/services/system/role';
 import ResourceAssignDrawer from './components/ResourceAssignDrawer';
 import RoleCreateForm from './components/RoleCreateForm';
@@ -21,9 +23,20 @@ const RoleList: React.FC = () => {
   const intl = useIntl();
   const { canAccess } = useAccess();
 
+  const [statusLoadingId, setStatusLoadingId] = useState<number | null>(null);
+
   const { mutate: updateStatusRun } = useMutation({
-    mutationFn: ({ id, status }: { id: number; status: number }) =>
-      updateRole(id, { status } as API.SysRoleDTO),
+    mutationFn: ({
+      id,
+      status,
+      roleCode,
+    }: {
+      id: number;
+      status: number;
+      roleCode: string;
+    }) => updateRole(id, { status, roleCode } as API.SysRoleDTO),
+    onMutate: ({ id }) => setStatusLoadingId(id),
+    onSettled: () => setStatusLoadingId(null),
     onSuccess: () => actionRef.current?.reload(),
   });
 
@@ -152,9 +165,16 @@ const RoleList: React.FC = () => {
         return (
           <Switch
             size="small"
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
             checked={record.status === 1}
+            loading={statusLoadingId === record.id}
             onChange={(checked) =>
-              updateStatusRun({ id: record.id, status: checked ? 1 : 0 })
+              updateStatusRun({
+                id: record.id,
+                status: checked ? 1 : 0,
+                roleCode: record.roleCode ?? '',
+              })
             }
           />
         );

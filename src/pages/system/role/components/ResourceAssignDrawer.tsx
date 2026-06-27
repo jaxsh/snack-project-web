@@ -2,7 +2,7 @@ import { ApiOutlined, AppstoreOutlined, MenuOutlined } from '@ant-design/icons';
 import { DrawerForm } from '@ant-design/pro-components';
 import { useMutation } from '@tanstack/react-query';
 import { useIntl } from '@umijs/max';
-import { App, Button, Flex, Input, Space, Spin, Tree, theme } from 'antd';
+import { App, Button, Flex, Input, Space, Spin, Tag, Tree, theme } from 'antd';
 import type { FC, ReactElement } from 'react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { getResourceTree, getRoleResources } from '@/services/system/resource';
@@ -12,6 +12,7 @@ type ResourceTreeNode = {
   value: number;
   title: string;
   type?: number;
+  status?: number;
   permission?: string;
   children?: ResourceTreeNode[];
 };
@@ -20,6 +21,7 @@ type AntdTreeNode = {
   key: number;
   title: string;
   type?: number;
+  status?: number;
   permission?: string;
   children?: AntdTreeNode[];
 };
@@ -31,6 +33,7 @@ const convertResourceTree = (
     value: node.data.id,
     title: node.data.name,
     type: node.data.type,
+    status: node.data.status,
     permission: node.data.permission,
     children:
       node.children.length > 0 ? convertResourceTree(node.children) : undefined,
@@ -41,6 +44,7 @@ const convertToAntdTree = (nodes: ResourceTreeNode[]): AntdTreeNode[] =>
     key: n.value,
     title: n.title,
     type: n.type,
+    status: n.status,
     permission: n.permission,
     children: n.children ? convertToAntdTree(n.children) : undefined,
   }));
@@ -135,7 +139,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
       const nodeKey = node.key as number;
       setCheckedResourceIds((prev) => {
         const set = new Set<number>(prev);
-        if (isChecked) {
+        if (isChecked && !set.has(nodeKey)) {
           set.add(nodeKey);
           for (const k of getAllAncestors(nodeKey)) set.add(k);
         } else {
@@ -203,6 +207,9 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
         <span>
           <span style={{ marginRight: 6 }}>{icon}</span>
           {nameEl}
+          {node.status === 0 && (
+            <Tag style={{ marginLeft: 6, fontSize: 11 }}>禁用</Tag>
+          )}
           {node.permission && (
             <span
               style={{

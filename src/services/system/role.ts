@@ -28,7 +28,7 @@ export async function getAllRoles(options?: Record<string, any>) {
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: { size: 1000 },
+      data: {},
       ...(options || {}),
     },
   );
