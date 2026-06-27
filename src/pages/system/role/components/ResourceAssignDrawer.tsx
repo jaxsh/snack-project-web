@@ -2,7 +2,18 @@ import { ApiOutlined, AppstoreOutlined, MenuOutlined } from '@ant-design/icons';
 import { DrawerForm } from '@ant-design/pro-components';
 import { useMutation } from '@tanstack/react-query';
 import { useIntl } from '@umijs/max';
-import { App, Button, Flex, Input, Space, Spin, Tag, Tree, theme } from 'antd';
+import {
+  App,
+  Button,
+  Flex,
+  Input,
+  Result,
+  Space,
+  Spin,
+  Tag,
+  Tree,
+  theme,
+} from 'antd';
 import type { FC, ReactElement } from 'react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { getResourceTree, getRoleResources } from '@/services/system/resource';
@@ -73,6 +84,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
   const [resourceLoading, setResourceLoading] = useState(false);
   const [treeExpandedKeys, setTreeExpandedKeys] = useState<React.Key[]>([]);
   const [treeSearch, setTreeSearch] = useState('');
+  const [fetchFailed, setFetchFailed] = useState(false);
 
   const antdTreeData = useMemo(
     () => convertToAntdTree(resourceTreeData),
@@ -250,6 +262,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
       fetchedRef.current = true;
       setTreeSearch('');
       setResourceLoading(true);
+      setFetchFailed(false);
       Promise.all([getResourceTree(), getRoleResources(record.roleCode)])
         .then(([treeRes, roleRes]) => {
           const freshTree = convertResourceTree(treeRes.data || []);
@@ -258,6 +271,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
           setCheckedResourceIds((roleRes.data || []).map((r) => r.id));
         })
         .catch(() => {
+          setFetchFailed(true);
           setCheckedResourceIds([]);
         })
         .finally(() => {
@@ -267,6 +281,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
       fetchedRef.current = false;
       setCheckedResourceIds([]);
       setTreeSearch('');
+      setFetchFailed(false);
     }
   };
 
@@ -282,7 +297,7 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
           submitText: intl.formatMessage({ id: 'pages.common.action.save' }),
         },
         render: (_, defaultDoms) => [defaultDoms[1]],
-        submitButtonProps: { loading: isPending },
+        submitButtonProps: { loading: isPending, disabled: fetchFailed },
       }}
       resize={{ minWidth: 480, maxWidth: window.innerWidth * 0.8 }}
       drawerProps={{ destroyOnHidden: true, closable: { placement: 'end' } }}
@@ -296,61 +311,83 @@ const ResourceAssignDrawer: FC<Props> = ({ trigger, record }) => {
         }
       }}
     >
-      <Input
-        allowClear
-        placeholder={intl.formatMessage({
-          id: 'pages.system.role.placeholder.searchResources',
-        })}
-        value={treeSearch}
-        onChange={(e) => setTreeSearch(e.target.value)}
-        style={{ marginBottom: 12 }}
-      />
-
-      <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
-        <Space size="small">
-          <Button
-            size="small"
-            onClick={() => setTreeExpandedKeys(allParentIds)}
-          >
-            {intl.formatMessage({ id: 'pages.system.role.action.expandAll' })}
-          </Button>
-          <Button size="small" onClick={() => setTreeExpandedKeys([])}>
-            {intl.formatMessage({ id: 'pages.system.role.action.collapseAll' })}
-          </Button>
-        </Space>
-        <Space size="small" align="center">
-          <Button
-            size="small"
-            onClick={() => setCheckedResourceIds([...allNodeIds])}
-          >
-            {intl.formatMessage({ id: 'pages.system.role.action.checkAll' })}
-          </Button>
-          <Button size="small" onClick={() => setCheckedResourceIds([])}>
-            {intl.formatMessage({ id: 'pages.system.role.action.uncheckAll' })}
-          </Button>
-          <span style={{ fontSize: 12, color: '#1677ff', minWidth: 60 }}>
-            {intl.formatMessage(
-              { id: 'pages.system.role.text.selectedCount' },
-              { count: checkedResourceIds.length },
-            )}
-          </span>
-        </Space>
-      </Flex>
-
       <Spin spinning={resourceLoading}>
-        <Tree
-          checkable
-          checkStrictly
-          checkedKeys={displayCheckedKeys}
-          expandedKeys={treeSearch ? allParentIds : treeExpandedKeys}
-          onExpand={(keys) => {
-            if (!treeSearch) setTreeExpandedKeys(keys as React.Key[]);
-          }}
-          onCheck={handleTreeCheck}
-          treeData={antdTreeData}
-          titleRender={renderTreeTitle}
-          blockNode
-        />
+        {fetchFailed ? (
+          <Result
+            status="403"
+            title="403"
+            subTitle={intl.formatMessage({ id: 'pages.403.text.subTitle' })}
+          />
+        ) : (
+          <>
+            <Input
+              allowClear
+              placeholder={intl.formatMessage({
+                id: 'pages.system.role.placeholder.searchResources',
+              })}
+              value={treeSearch}
+              onChange={(e) => setTreeSearch(e.target.value)}
+              style={{ marginBottom: 12 }}
+            />
+
+            <Flex
+              justify="space-between"
+              align="center"
+              style={{ marginBottom: 8 }}
+            >
+              <Space size="small">
+                <Button
+                  size="small"
+                  onClick={() => setTreeExpandedKeys(allParentIds)}
+                >
+                  {intl.formatMessage({
+                    id: 'pages.system.role.action.expandAll',
+                  })}
+                </Button>
+                <Button size="small" onClick={() => setTreeExpandedKeys([])}>
+                  {intl.formatMessage({
+                    id: 'pages.system.role.action.collapseAll',
+                  })}
+                </Button>
+              </Space>
+              <Space size="small" align="center">
+                <Button
+                  size="small"
+                  onClick={() => setCheckedResourceIds([...allNodeIds])}
+                >
+                  {intl.formatMessage({
+                    id: 'pages.system.role.action.checkAll',
+                  })}
+                </Button>
+                <Button size="small" onClick={() => setCheckedResourceIds([])}>
+                  {intl.formatMessage({
+                    id: 'pages.system.role.action.uncheckAll',
+                  })}
+                </Button>
+                <span style={{ fontSize: 12, color: '#1677ff', minWidth: 60 }}>
+                  {intl.formatMessage(
+                    { id: 'pages.system.role.text.selectedCount' },
+                    { count: checkedResourceIds.length },
+                  )}
+                </span>
+              </Space>
+            </Flex>
+
+            <Tree
+              checkable
+              checkStrictly
+              checkedKeys={displayCheckedKeys}
+              expandedKeys={treeSearch ? allParentIds : treeExpandedKeys}
+              onExpand={(keys) => {
+                if (!treeSearch) setTreeExpandedKeys(keys as React.Key[]);
+              }}
+              onCheck={handleTreeCheck}
+              treeData={antdTreeData}
+              titleRender={renderTreeTitle}
+              blockNode
+            />
+          </>
+        )}
       </Spin>
     </DrawerForm>
   );
