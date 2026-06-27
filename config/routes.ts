@@ -25,6 +25,11 @@ export default [
     hideInMenu: true,
   },
   {
+    path: '/account/settings',
+    name: 'settings',
+    component: './account/settings',
+  },
+  {
     path: '/',
     component: './DynamicPage',
   },
