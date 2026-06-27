@@ -7,7 +7,7 @@ import {
 } from '@ant-design/pro-components';
 import { useIntl, useModel } from '@umijs/max';
 import { App, Avatar, Button, Col, Flex, Row, Typography, Upload } from 'antd';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { updateProfile } from '@/services/auth';
 
 const BaseView: React.FC = () => {
@@ -23,6 +23,16 @@ const BaseView: React.FC = () => {
     }
     return 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
   };
+
+  const initialValues = useMemo(
+    () => ({
+      nickname: currentUser?.nickname || currentUser?.username,
+      realName: currentUser?.realName,
+      gender: currentUser?.gender ?? 0,
+      birthday: currentUser?.birthday,
+    }),
+    [currentUser?.id],
+  );
 
   const handleFinish = async (values: any) => {
     if (!currentUser?.id) {
@@ -67,12 +77,7 @@ const BaseView: React.FC = () => {
               },
               render: (_, dom) => dom[1],
             }}
-            initialValues={{
-              nickname: currentUser?.nickname || currentUser?.username,
-              realName: currentUser?.realName,
-              gender: currentUser?.gender ?? 0,
-              birthday: currentUser?.birthday,
-            }}
+            initialValues={initialValues}
             requiredMark={false}
           >
             <ProFormText
