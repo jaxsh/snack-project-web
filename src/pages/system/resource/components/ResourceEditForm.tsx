@@ -23,15 +23,20 @@ type ParentTreeNode = {
 
 const convertToParentTree = (
   nodes: API.TreeNode<API.SysResourceVO>[],
+  currentType?: number,
 ): ParentTreeNode[] =>
   nodes
-    .filter((node) => node.data.type === 0)
+    .filter((node) => {
+      if (node.data.type !== 0) return false;
+      if (currentType === 0 && node.data.component) return false;
+      return true;
+    })
     .map((node) => ({
       value: node.data.id,
       title: node.data.name,
       children:
         node.children.length > 0
-          ? convertToParentTree(node.children)
+          ? convertToParentTree(node.children, currentType)
           : undefined,
     }));
 
@@ -140,7 +145,7 @@ const ResourceEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         request={async () => {
           const res = await getResourceTree();
           const filtered = excludeNode(res.data || [], record.id);
-          return convertToParentTree(filtered);
+          return convertToParentTree(filtered, record.type);
         }}
         fieldProps={{ treeDefaultExpandAll: true }}
         placeholder={intl.formatMessage(

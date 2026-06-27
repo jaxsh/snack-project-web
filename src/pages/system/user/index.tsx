@@ -17,6 +17,7 @@ import {
   App,
   Avatar,
   Dropdown,
+  Popconfirm,
   Space,
   Switch,
   Tag,
@@ -386,36 +387,6 @@ const UserList: React.FC = () => {
             disabled: !record.sessions || record.sessions.length === 0,
             onClick: () => revokeRun(record.id),
           },
-          (canAccess('sys:user:reset-password') ||
-            canAccess('sys:user:unlock') ||
-            canAccess('sys:user:reset-mfa') ||
-            canAccess('sys:user:revoke-session')) &&
-            canAccess('sys:user:delete') && { type: 'divider' as const },
-          canAccess('sys:user:delete') && {
-            key: 'delete',
-            label: intl.formatMessage({
-              id: 'pages.common.action.delete',
-            }),
-            icon: <DeleteOutlined />,
-            danger: true,
-            onClick: () => {
-              modal.confirm({
-                title: intl.formatMessage({
-                  id: 'pages.common.action.confirmDelete',
-                }),
-                content: intl.formatMessage(
-                  { id: 'pages.common.feedback.delete.confirm' },
-                  { name: record.username },
-                ),
-                okText: intl.formatMessage({ id: 'pages.common.action.ok' }),
-                okType: 'danger',
-                cancelText: intl.formatMessage({
-                  id: 'pages.common.action.cancel',
-                }),
-                onOk: () => deleteRun(record.id),
-              });
-            },
-          },
         ].filter(Boolean) as any[];
 
         return (
@@ -433,6 +404,27 @@ const UserList: React.FC = () => {
                   actionRef.current?.reload();
                 }}
               />
+            )}
+            {canAccess('sys:user:delete') && (
+              <Popconfirm
+                title={intl.formatMessage({
+                  id: 'pages.common.action.confirmDelete',
+                })}
+                description={intl.formatMessage(
+                  { id: 'pages.common.feedback.delete.confirm' },
+                  { name: record.username },
+                )}
+                onConfirm={() => deleteRun(record.id)}
+                okText={intl.formatMessage({ id: 'pages.common.action.ok' })}
+                cancelText={intl.formatMessage({
+                  id: 'pages.common.action.cancel',
+                })}
+              >
+                <a style={{ color: token.colorError }}>
+                  <DeleteOutlined style={{ marginRight: 4 }} />
+                  {intl.formatMessage({ id: 'pages.common.action.delete' })}
+                </a>
+              </Popconfirm>
             )}
             {dropdownItems.length > 0 && (
               <Dropdown menu={{ items: dropdownItems }}>

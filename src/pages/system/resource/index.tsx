@@ -167,31 +167,17 @@ const ResourceList: React.FC = () => {
       onCell: () => ({ style: { whiteSpace: 'nowrap' as const } }),
       render: (_, record) => (
         <Space size="middle">
-          <ResourceEditForm
-            trigger={
-              <a>
-                <EditOutlined style={{ marginRight: 4 }} />
-                {intl.formatMessage({ id: 'pages.common.action.edit' })}
-              </a>
-            }
-            record={record}
-            onOk={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          {record.type === 0 && !record.component && (
-            <ResourceCreateForm
+          {canAccess('sys:resource:update') && (
+            <ResourceEditForm
               trigger={
                 <a>
-                  <PlusCircleOutlined style={{ marginRight: 4 }} />
-                  {intl.formatMessage({
-                    id: 'pages.system.resource.action.addChild',
-                  })}
+                  <EditOutlined style={{ marginRight: 4 }} />
+                  {intl.formatMessage({ id: 'pages.common.action.edit' })}
                 </a>
               }
-              parentId={record.id}
-              onSuccess={() => {
-                actionRef.current?.reloadAndRest?.();
+              record={record}
+              onOk={() => {
+                actionRef.current?.reload();
               }}
             />
           )}
@@ -222,6 +208,24 @@ const ResourceList: React.FC = () => {
               </a>
             </Popconfirm>
           )}
+          {canAccess('sys:resource:create') &&
+            record.type === 0 &&
+            !record.component && (
+              <ResourceCreateForm
+                trigger={
+                  <a>
+                    <PlusCircleOutlined style={{ marginRight: 4 }} />
+                    {intl.formatMessage({
+                      id: 'pages.system.resource.action.addChild',
+                    })}
+                  </a>
+                }
+                parentId={record.id}
+                onSuccess={() => {
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              />
+            )}
         </Space>
       ),
     },
@@ -237,7 +241,7 @@ const ResourceList: React.FC = () => {
         rowSelection={{ checkStrictly: false }}
         tableAlertOptionRender={({ selectedRowKeys, onCleanSelected }) => (
           <Space size={16}>
-            {canAccess('sys:resource:delete') && (
+            {canAccess('sys:resource:batch-delete') && (
               <a
                 onClick={() => {
                   modal.confirm({
@@ -270,14 +274,18 @@ const ResourceList: React.FC = () => {
             </a>
           </Space>
         )}
-        toolBarRender={() => [
-          <ResourceCreateForm
-            key="create"
-            onSuccess={() => {
-              actionRef.current?.reloadAndRest?.();
-            }}
-          />,
-        ]}
+        toolBarRender={() =>
+          [
+            canAccess('sys:resource:create') && (
+              <ResourceCreateForm
+                key="create"
+                onSuccess={() => {
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              />
+            ),
+          ].filter(Boolean) as React.ReactNode[]
+        }
         request={async () => {
           try {
             const res = await getResourceTree();

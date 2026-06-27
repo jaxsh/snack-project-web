@@ -195,18 +195,41 @@ const RoleList: React.FC = () => {
       onCell: () => ({ style: { whiteSpace: 'nowrap' as const } }),
       render: (_, record) => (
         <Space size="middle">
-          <RoleEditForm
-            trigger={
-              <a>
-                <EditOutlined style={{ marginRight: 4 }} />
-                {intl.formatMessage({ id: 'pages.common.action.edit' })}
+          {canAccess('sys:role:update') && (
+            <RoleEditForm
+              trigger={
+                <a>
+                  <EditOutlined style={{ marginRight: 4 }} />
+                  {intl.formatMessage({ id: 'pages.common.action.edit' })}
+                </a>
+              }
+              record={record}
+              onOk={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          )}
+          {canAccess('sys:role:delete') && (
+            <Popconfirm
+              title={intl.formatMessage({
+                id: 'pages.common.action.confirmDelete',
+              })}
+              description={intl.formatMessage(
+                { id: 'pages.common.feedback.delete.confirm' },
+                { name: record.roleName },
+              )}
+              onConfirm={() => deleteRun(record.id)}
+              okText={intl.formatMessage({ id: 'pages.common.action.ok' })}
+              cancelText={intl.formatMessage({
+                id: 'pages.common.action.cancel',
+              })}
+            >
+              <a style={{ color: token.colorError }}>
+                <DeleteOutlined style={{ marginRight: 4 }} />
+                {intl.formatMessage({ id: 'pages.common.action.delete' })}
               </a>
-            }
-            record={record}
-            onOk={() => {
-              actionRef.current?.reload();
-            }}
-          />
+            </Popconfirm>
+          )}
           <ResourceAssignDrawer
             trigger={
               <a>
@@ -218,25 +241,6 @@ const RoleList: React.FC = () => {
             }
             record={record}
           />
-          <Popconfirm
-            title={intl.formatMessage({
-              id: 'pages.common.action.confirmDelete',
-            })}
-            description={intl.formatMessage(
-              { id: 'pages.common.feedback.delete.confirm' },
-              { name: record.roleName },
-            )}
-            onConfirm={() => deleteRun(record.id)}
-            okText={intl.formatMessage({ id: 'pages.common.action.ok' })}
-            cancelText={intl.formatMessage({
-              id: 'pages.common.action.cancel',
-            })}
-          >
-            <a style={{ color: token.colorError }}>
-              <DeleteOutlined style={{ marginRight: 4 }} />
-              {intl.formatMessage({ id: 'pages.common.action.delete' })}
-            </a>
-          </Popconfirm>
         </Space>
       ),
     },
@@ -249,17 +253,21 @@ const RoleList: React.FC = () => {
         rowKey="id"
         search={{ labelWidth: 'auto', defaultCollapsed: false }}
         pagination={{ defaultPageSize: 10, showSizeChanger: true }}
-        toolBarRender={() => [
-          <RoleCreateForm
-            key="create"
-            onSuccess={() => {
-              actionRef.current?.reload();
-            }}
-          />,
-        ]}
+        toolBarRender={() =>
+          [
+            canAccess('sys:role:create') && (
+              <RoleCreateForm
+                key="create"
+                onSuccess={() => {
+                  actionRef.current?.reload();
+                }}
+              />
+            ),
+          ].filter(Boolean) as React.ReactNode[]
+        }
         tableAlertOptionRender={({ selectedRowKeys, onCleanSelected }) => (
           <Space size={16}>
-            {canAccess('sys:role:delete') && (
+            {canAccess('sys:role:batch-delete') && (
               <a
                 onClick={() => handleBatchDelete(selectedRowKeys)}
                 style={{ color: token.colorError }}
