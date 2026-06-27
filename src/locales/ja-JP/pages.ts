@@ -183,6 +183,7 @@ export default {
   'pages.system.user.fields.credentialStatus': 'パスワード期限切れ',
   'pages.system.user.fields.passwordExpireTime': 'パスワード有効期限',
   'pages.system.user.fields.passwordExpireTime.never': '無期限',
+  'pages.system.user.fields.activeSession': 'アクティブなセッション ({id})',
   'pages.system.user.fields.mfaCode': '確認コード',
   'pages.system.user.fields.status': 'ステータス',
 

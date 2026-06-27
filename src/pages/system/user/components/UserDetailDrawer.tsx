@@ -76,6 +76,16 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
   const user = userDetail || record;
   const nameToShow = user.realName || user.nickname || user.username;
 
+  const sessionColumns = (user.sessions || []).map((session, index) => ({
+    key: session.sessionId,
+    title: fmt('pages.system.user.fields.activeSession', {
+      id: session.sessionId.substring(0, 8),
+    }),
+    dataIndex: ['sessions', index, 'lastRequest'],
+    valueType: 'dateTime' as const,
+    span: 1,
+  }));
+
   const tabItems: TabsProps['items'] = [
     {
       key: 'basic',
@@ -317,14 +327,9 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
                   </Tag>
                 );
               },
-              span: 1,
+              span: 2,
             },
-            {
-              title: fmt('pages.system.user.fields.lastActiveTime'),
-              dataIndex: 'lastActiveTime',
-              valueType: 'dateTime',
-              span: 1,
-            },
+            ...sessionColumns,
           ]}
         />
       ),

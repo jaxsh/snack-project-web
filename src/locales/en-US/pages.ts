@@ -180,6 +180,7 @@ export default {
   'pages.system.user.fields.credentialStatus': 'Password Expired',
   'pages.system.user.fields.passwordExpireTime': 'Password Expiry Time',
   'pages.system.user.fields.passwordExpireTime.never': 'Never',
+  'pages.system.user.fields.activeSession': 'Active Session ({id})',
   'pages.system.user.fields.mfaCode': 'Verification Code',
   'pages.system.user.fields.status': 'Status',
 

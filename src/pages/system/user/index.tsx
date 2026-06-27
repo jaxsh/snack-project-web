@@ -23,11 +23,12 @@ import {
   Typography,
   theme,
 } from 'antd';
+import dayjs from 'dayjs';
 import React, { useRef, useState } from 'react';
 import {
   deleteUsers,
   queryUsers,
-  revokeUserTokens,
+  revokeUserSession,
   unlockUser,
   updateUser,
 } from '@/services/system/user';
@@ -90,7 +91,7 @@ const UserList: React.FC = () => {
   });
 
   const { mutate: revokeRun } = useMutation({
-    mutationFn: (id: number) => revokeUserTokens(id),
+    mutationFn: (id: number) => revokeUserSession(id),
     onSuccess: () => {
       void message.success(
         intl.formatMessage({ id: 'pages.system.user.feedback.revoke.success' }),
@@ -310,8 +311,20 @@ const UserList: React.FC = () => {
       }),
       dataIndex: 'lastActiveTime',
       key: 'lastActiveTime',
-      valueType: 'dateTime',
       search: false,
+      render: (_, record) => {
+        if (!record.sessions || record.sessions.length === 0) {
+          return '-';
+        }
+        let latest = dayjs(record.sessions[0].lastRequest);
+        for (let i = 1; i < record.sessions.length; i++) {
+          const time = dayjs(record.sessions[i].lastRequest);
+          if (time.isAfter(latest)) {
+            latest = time;
+          }
+        }
+        return latest.format('YYYY-MM-DD HH:mm:ss');
+      },
     },
     {
       title: intl.formatMessage({ id: 'pages.common.action.columnLabel' }),
@@ -363,20 +376,20 @@ const UserList: React.FC = () => {
               });
             },
           },
-          canAccess('sys:user:revoke-token') && {
+          canAccess('sys:user:revoke-session') && {
             key: 'revokeTokens',
             label: intl.formatMessage({
               id: 'pages.system.user.action.revoke',
             }),
             icon: <LogoutOutlined />,
             danger: true,
-            disabled: !record.lastActiveTime,
+            disabled: !record.sessions || record.sessions.length === 0,
             onClick: () => revokeRun(record.id),
           },
           (canAccess('sys:user:reset-password') ||
             canAccess('sys:user:unlock') ||
             canAccess('sys:user:reset-mfa') ||
-            canAccess('sys:user:revoke-token')) &&
+            canAccess('sys:user:revoke-session')) &&
             canAccess('sys:user:delete') && { type: 'divider' as const },
           canAccess('sys:user:delete') && {
             key: 'delete',
@@ -455,7 +468,7 @@ const UserList: React.FC = () => {
         }
         tableAlertOptionRender={({ selectedRowKeys, onCleanSelected }) => (
           <Space size={16}>
-            {canAccess('sys:user:delete') && (
+            {canAccess('sys:user:batch-delete') && (
               <a
                 onClick={() => handleBatchDelete(selectedRowKeys)}
                 style={{ color: token.colorError }}

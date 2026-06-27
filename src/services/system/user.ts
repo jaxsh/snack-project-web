@@ -108,13 +108,15 @@ export async function unlockUser(
   });
 }
 
-/** 强制下线用户 DELETE /api/upms/users/${id}/tokens */
-export async function revokeUserTokens(
+/** 强退用户会话 (不传 sessionId 时强制下线所有会话并撤销 Token) DELETE /api/upms/users/${id}/sessions */
+export async function revokeUserSession(
   id: number | string,
+  sessionId?: string,
   options?: Record<string, any>,
 ) {
-  return request<API.ApiResponse<void>>(`/api/upms/users/${id}/tokens`, {
+  return request<API.ApiResponse<void>>(`/api/upms/users/${id}/sessions`, {
     method: 'DELETE',
+    params: sessionId ? { sessionId } : {},
     ...(options || {}),
   });
 }

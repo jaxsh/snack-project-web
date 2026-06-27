@@ -34,9 +34,15 @@ declare namespace API {
     mobile?: string;
     email?: string;
     expireDate?: string;
-    lastActiveTime?: string;
     roleCodes?: string[];
+    sessions?: SysSessionVO[];
     oauthVO?: OAuthUserVO;
+  };
+
+  type SysSessionVO = {
+    sessionId: string;
+    username: string;
+    lastRequest: string;
   };
 
   type OAuthUserVO = {
