@@ -6,7 +6,7 @@ import {
 import { DrawerForm, ProDescriptions } from '@ant-design/pro-components';
 import { useIntl } from '@umijs/max';
 import type { TabsProps } from 'antd';
-import { Avatar, Flex, Space, Spin, Tabs, Tag, Typography } from 'antd';
+import { Avatar, Flex, Result, Space, Spin, Tabs, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import React, { useRef, useState } from 'react';
 import { getAllRoles } from '@/services/system/role';
@@ -25,6 +25,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [userDetail, setUserDetail] = useState<API.SysUserVO | null>(null);
   const [roleNameMap, setRoleNameMap] = useState<Record<string, string>>({});
+  const [fetchFailed, setFetchFailed] = useState<boolean>(false);
 
   const fmt = (key: string, values?: Record<string, string>) =>
     intl.formatMessage({ id: key }, values);
@@ -38,6 +39,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
       setLoading(true);
       Promise.all([getUser(record.username), getAllRoles()])
         .then(([userRes, rolesRes]) => {
+          setFetchFailed(false);
           if (userRes?.data) {
             setUserDetail(userRes.data);
           }
@@ -53,6 +55,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
         })
         .catch((err) => {
           console.error('Failed to fetch user details:', err);
+          setFetchFailed(true);
         })
         .finally(() => {
           setLoading(false);
@@ -60,6 +63,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
     } else {
       setUserDetail(null);
       setRoleNameMap({});
+      setFetchFailed(false);
       setTimeout(() => {
         fetchedRef.current = false;
       }, 500);
@@ -319,30 +323,38 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
       }}
     >
       <Spin spinning={loading}>
-        <Flex vertical gap="middle">
-          <Flex align="center" gap="middle">
-            <Avatar
-              src={user.avatar || defaultAvatar}
-              size={64}
-              style={{ flexShrink: 0 }}
-            />
-            <Flex vertical>
-              <Space align="center">
-                <Title level={4} style={{ margin: 0 }}>
-                  {nameToShow}
-                </Title>
-                <Tag color={user.status === 1 ? 'success' : 'error'}>
-                  {user.statusLabel ||
-                    (user.status === 1
-                      ? fmt('pages.common.dict.status.enabled')
-                      : fmt('pages.common.dict.status.disabled'))}
-                </Tag>
-              </Space>
-              <Text type="secondary">@{user.username}</Text>
+        {fetchFailed ? (
+          <Result
+            status="403"
+            title="403"
+            subTitle={fmt('pages.403.text.subTitle')}
+          />
+        ) : (
+          <Flex vertical gap="middle">
+            <Flex align="center" gap="middle">
+              <Avatar
+                src={user.avatar || defaultAvatar}
+                size={64}
+                style={{ flexShrink: 0 }}
+              />
+              <Flex vertical>
+                <Space align="center">
+                  <Title level={4} style={{ margin: 0 }}>
+                    {nameToShow}
+                  </Title>
+                  <Tag color={user.status === 1 ? 'success' : 'error'}>
+                    {user.statusLabel ||
+                      (user.status === 1
+                        ? fmt('pages.common.dict.status.enabled')
+                        : fmt('pages.common.dict.status.disabled'))}
+                  </Tag>
+                </Space>
+                <Text type="secondary">@{user.username}</Text>
+              </Flex>
             </Flex>
+            <Tabs defaultActiveKey="basic" items={tabItems} />
           </Flex>
-          <Tabs defaultActiveKey="basic" items={tabItems} />
-        </Flex>
+        )}
       </Spin>
     </DrawerForm>
   );
