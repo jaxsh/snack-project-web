@@ -87,21 +87,25 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
       ),
       children: (
         <ProDescriptions<API.SysUserVO>
-          column={1}
+          column={2}
+          layout="vertical"
           dataSource={user}
           emptyText="-"
           columns={[
             {
               title: fmt('pages.system.user.fields.username'),
               dataIndex: 'username',
+              span: 1,
             },
             {
               title: fmt('pages.system.user.fields.realName'),
               dataIndex: 'realName',
+              span: 1,
             },
             {
               title: fmt('pages.system.user.fields.nickname'),
               dataIndex: 'nickname',
+              span: 1,
             },
             {
               title: fmt('pages.system.user.fields.gender'),
@@ -112,23 +116,28 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
                 1: { text: fmt('pages.common.dict.gender.male') },
                 2: { text: fmt('pages.common.dict.gender.female') },
               },
+              span: 1,
             },
             {
               title: fmt('pages.system.user.fields.birthday'),
               dataIndex: 'birthday',
               valueType: 'date',
+              span: 1,
             },
             {
               title: fmt('pages.system.user.fields.mobile'),
               dataIndex: 'mobile',
+              span: 1,
             },
             {
               title: fmt('pages.system.user.fields.email'),
               dataIndex: 'email',
+              span: 2,
             },
             {
               title: fmt('pages.common.fields.remark'),
               dataIndex: 'remark',
+              span: 2,
             },
           ]}
         />
@@ -144,7 +153,8 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
       ),
       children: (
         <ProDescriptions<API.SysUserVO>
-          column={1}
+          column={2}
+          layout="vertical"
           dataSource={user}
           emptyText="-"
           columns={[
@@ -159,6 +169,7 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
                       : fmt('pages.common.dict.status.disabled'))}
                 </Tag>
               ),
+              span: 2,
             },
             {
               title: fmt('pages.system.user.fields.roleCodes'),
@@ -173,16 +184,19 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
                     ))}
                   </Space>
                 ) : null,
+              span: 2,
             },
             {
               title: fmt('pages.common.fields.createTime'),
               dataIndex: 'createTime',
               valueType: 'dateTime',
+              span: 1,
             },
             {
               title: fmt('pages.common.fields.updateTime'),
               dataIndex: 'updateTime',
               valueType: 'dateTime',
+              span: 1,
             },
           ]}
         />
@@ -198,7 +212,8 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
       ),
       children: (
         <ProDescriptions<API.SysUserVO>
-          column={1}
+          column={2}
+          layout="vertical"
           dataSource={user}
           emptyText="-"
           columns={[
@@ -216,6 +231,52 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
                   status: 'Error',
                 },
               },
+              span: 1,
+            },
+            {
+              title: fmt('pages.system.user.fields.initialPassword'),
+              dataIndex: ['oauthVO', 'initialPassword'],
+              valueType: 'select',
+              valueEnum: {
+                0: {
+                  text: fmt('pages.common.dict.yesNo.no'),
+                  status: 'Default',
+                },
+                1: {
+                  text: fmt('pages.common.dict.yesNo.yes'),
+                  status: 'Warning',
+                },
+              },
+              span: 1,
+            },
+            {
+              title: fmt('pages.system.user.fields.mfaEnabled'),
+              dataIndex: ['oauthVO', 'mfaEnabled'],
+              valueType: 'select',
+              valueEnum: {
+                0: {
+                  text: fmt('pages.common.dict.yesNo.no'),
+                  status: 'Default',
+                },
+                1: {
+                  text: fmt('pages.common.dict.yesNo.yes'),
+                  status: 'Success',
+                },
+              },
+              span: 1,
+            },
+            {
+              title: fmt('pages.system.user.fields.expireDate'),
+              dataIndex: 'expireDate',
+              render: (_, rec) =>
+                rec.expireDate ? (
+                  <Tag color="warning">{rec.expireDate}</Tag>
+                ) : (
+                  <Tag color="success">
+                    {fmt('pages.system.user.text.expireNever')}
+                  </Tag>
+                ),
+              span: 1,
             },
             {
               title: fmt('pages.system.user.fields.passwordExpireTime'),
@@ -256,53 +317,13 @@ const UserDetailDrawer: React.FC<Props> = ({ record, trigger }) => {
                   </Tag>
                 );
               },
-            },
-            {
-              title: fmt('pages.system.user.fields.initialPassword'),
-              dataIndex: ['oauthVO', 'initialPassword'],
-              valueType: 'select',
-              valueEnum: {
-                0: {
-                  text: fmt('pages.common.dict.yesNo.no'),
-                  status: 'Default',
-                },
-                1: {
-                  text: fmt('pages.common.dict.yesNo.yes'),
-                  status: 'Warning',
-                },
-              },
-            },
-            {
-              title: fmt('pages.system.user.fields.mfaEnabled'),
-              dataIndex: ['oauthVO', 'mfaEnabled'],
-              valueType: 'select',
-              valueEnum: {
-                0: {
-                  text: fmt('pages.common.dict.yesNo.no'),
-                  status: 'Default',
-                },
-                1: {
-                  text: fmt('pages.common.dict.yesNo.yes'),
-                  status: 'Success',
-                },
-              },
-            },
-            {
-              title: fmt('pages.system.user.fields.expireDate'),
-              dataIndex: 'expireDate',
-              render: (_, rec) =>
-                rec.expireDate ? (
-                  <Tag color="warning">{rec.expireDate}</Tag>
-                ) : (
-                  <Tag color="success">
-                    {fmt('pages.system.user.text.expireNever')}
-                  </Tag>
-                ),
+              span: 1,
             },
             {
               title: fmt('pages.system.user.fields.lastActiveTime'),
               dataIndex: 'lastActiveTime',
               valueType: 'dateTime',
+              span: 1,
             },
           ]}
         />
