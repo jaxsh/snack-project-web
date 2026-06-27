@@ -1,9 +1,10 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   DrawerForm,
   ProFormDigit,
   ProFormRadio,
   ProFormSelect,
+  ProFormSwitch,
   ProFormText,
 } from '@ant-design/pro-components';
 import { useMutation } from '@tanstack/react-query';
@@ -44,17 +45,6 @@ const ResourceCreateForm: FC<Props> = ({ trigger, parentId, onSuccess }) => {
     },
   ];
 
-  const statusOptions = [
-    {
-      value: 1,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.enabled' }),
-    },
-    {
-      value: 0,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.disabled' }),
-    },
-  ];
-
   const methodOptions = [
     { value: 'GET', label: 'GET' },
     { value: 'POST', label: 'POST' },
@@ -63,23 +53,14 @@ const ResourceCreateForm: FC<Props> = ({ trigger, parentId, onSuccess }) => {
     { value: 'PATCH', label: 'PATCH' },
   ];
 
-  const visibleOptions = [
-    {
-      value: 1,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.enabled' }),
-    },
-    {
-      value: 0,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.disabled' }),
-    },
-  ];
-
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (values: any) =>
       createResource({
         ...values,
         parentId: parentId ?? 0,
         type: isRoot ? 0 : values.type,
+        status: values.status ? 1 : 0,
+        visible: values.visible ? 1 : 0,
       } as API.SysResourceDTO),
     onSuccess: () => {
       void message.success(
@@ -113,7 +94,7 @@ const ResourceCreateForm: FC<Props> = ({ trigger, parentId, onSuccess }) => {
         destroyOnHidden: true,
         closable: { placement: 'end' },
       }}
-      initialValues={{ status: 1, visible: 1 }}
+      initialValues={{ status: true, visible: true }}
       onOpenChange={(open) => {
         if (!open) setFormType(isRoot ? 0 : undefined);
       }}
@@ -210,12 +191,13 @@ const ResourceCreateForm: FC<Props> = ({ trigger, parentId, onSuccess }) => {
             })}
             min={0}
           />
-          <ProFormSelect
+          <ProFormSwitch
             name="visible"
             label={intl.formatMessage({
               id: 'pages.system.resource.fields.visible',
             })}
-            options={visibleOptions}
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
           />
         </>
       )}
@@ -244,12 +226,13 @@ const ResourceCreateForm: FC<Props> = ({ trigger, parentId, onSuccess }) => {
           />
         </>
       )}
-      <ProFormSelect
+      <ProFormSwitch
         name="status"
         label={intl.formatMessage({
           id: 'pages.system.resource.fields.status',
         })}
-        options={statusOptions}
+        checkedChildren={<CheckOutlined />}
+        unCheckedChildren={<CloseOutlined />}
       />
     </DrawerForm>
   );

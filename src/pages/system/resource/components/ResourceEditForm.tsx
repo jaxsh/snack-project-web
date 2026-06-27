@@ -1,8 +1,10 @@
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import {
   DrawerForm,
   ProFormDigit,
   ProFormRadio,
   ProFormSelect,
+  ProFormSwitch,
   ProFormText,
   ProFormTreeSelect,
 } from '@ant-design/pro-components';
@@ -50,16 +52,6 @@ interface Props {
 const ResourceEditForm: FC<Props> = ({ trigger, record, onOk }) => {
   const { message } = App.useApp();
   const intl = useIntl();
-  const statusOptions = [
-    {
-      value: 1,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.enabled' }),
-    },
-    {
-      value: 0,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.disabled' }),
-    },
-  ];
 
   const typeOptions = [
     {
@@ -84,23 +76,14 @@ const ResourceEditForm: FC<Props> = ({ trigger, record, onOk }) => {
     { value: 'PATCH', label: 'PATCH' },
   ];
 
-  const visibleOptions = [
-    {
-      value: 1,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.enabled' }),
-    },
-    {
-      value: 0,
-      label: intl.formatMessage({ id: 'pages.common.dict.status.disabled' }),
-    },
-  ];
-
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (values: any) => {
       const { type: _type, ...rest } = values;
       return updateResource(record.id, {
         ...rest,
         parentId: rest.parentId ?? 0,
+        status: rest.status ? 1 : 0,
+        visible: rest.visible ? 1 : 0,
       } as API.SysResourceDTO);
     },
     onSuccess: () => {
@@ -136,8 +119,8 @@ const ResourceEditForm: FC<Props> = ({ trigger, record, onOk }) => {
         method: record.method,
         icon: record.icon,
         sortOrder: record.sortOrder,
-        visible: record.visible,
-        status: record.status ?? 1,
+        visible: record.visible === 1,
+        status: (record.status ?? 1) === 1,
       }}
       onFinish={async (values) => {
         try {
@@ -234,12 +217,13 @@ const ResourceEditForm: FC<Props> = ({ trigger, record, onOk }) => {
             })}
             min={0}
           />
-          <ProFormSelect
+          <ProFormSwitch
             name="visible"
             label={intl.formatMessage({
               id: 'pages.system.resource.fields.visible',
             })}
-            options={visibleOptions}
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
           />
         </>
       )}
@@ -268,12 +252,13 @@ const ResourceEditForm: FC<Props> = ({ trigger, record, onOk }) => {
           />
         </>
       )}
-      <ProFormSelect
+      <ProFormSwitch
         name="status"
         label={intl.formatMessage({
           id: 'pages.system.resource.fields.status',
         })}
-        options={statusOptions}
+        checkedChildren={<CheckOutlined />}
+        unCheckedChildren={<CloseOutlined />}
       />
     </DrawerForm>
   );
