@@ -87,7 +87,7 @@ const BaseView: React.FC = () => {
         currentUser: { ...s.currentUser, avatar: undefined } as API.SysUserVO,
       };
     });
-    void message.success(fmt('pages.common.feedback.save.success'));
+    void message.success(fmt('pages.common.feedback.delete.success'));
   };
 
   return (

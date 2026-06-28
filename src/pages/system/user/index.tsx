@@ -13,18 +13,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { useMutation } from '@tanstack/react-query';
 import { useAccess, useIntl } from '@umijs/max';
-import {
-  App,
-  Avatar,
-  Dropdown,
-  Popconfirm,
-  Space,
-  Switch,
-  Tag,
-  Typography,
-  theme,
-} from 'antd';
-import dayjs from 'dayjs';
+import { App, Dropdown, Popconfirm, Space, Switch, Tag, theme } from 'antd';
 import React, { useRef, useState } from 'react';
 import {
   deleteUsers,
@@ -172,39 +161,39 @@ const UserList: React.FC = () => {
 
   const columns: ProColumns<API.SysUserVO>[] = [
     {
-      title: intl.formatMessage({ id: 'pages.system.user.fields.avatar' }),
-      dataIndex: 'avatar',
-      key: 'avatar',
-      search: false,
-      render: (_, record) => {
-        const defaultAvatar =
-          'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
-        return <Avatar src={record.avatar || defaultAvatar} size="large" />;
-      },
-    },
-    {
       title: intl.formatMessage({ id: 'pages.system.user.fields.username' }),
       dataIndex: 'username',
       key: 'username',
-      sorter: true,
-      render: (_, record) => (
-        <Space size={4}>
-          {canAccess('sys:user:detail') ? (
-            <UserDetailDrawer
-              record={record}
-              trigger={
-                <a onClick={(e) => e.stopPropagation()}>{record.username}</a>
-              }
-            />
-          ) : (
+      hideInTable: true,
+    },
+    {
+      title: intl.formatMessage({ id: 'pages.system.user.fields.username' }),
+      dataIndex: 'avatar',
+      key: 'avatar',
+      valueType: 'avatar',
+      search: false,
+      fieldProps: {
+        size: 'large',
+      },
+      renderText: (text) =>
+        text ||
+        'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      render: (dom, record) => {
+        const content = (
+          <Space size={8}>
+            {dom}
             <span>{record.username}</span>
-          )}
-          <Typography.Text
-            copyable={{ text: record.username }}
-            style={{ color: token.colorTextDescription }}
+          </Space>
+        );
+        return canAccess('sys:user:detail') ? (
+          <UserDetailDrawer
+            record={record}
+            trigger={<a onClick={(e) => e.stopPropagation()}>{content}</a>}
           />
-        </Space>
-      ),
+        ) : (
+          content
+        );
+      },
     },
     {
       title: intl.formatMessage({ id: 'pages.system.user.fields.realName' }),
@@ -310,22 +299,10 @@ const UserList: React.FC = () => {
       title: intl.formatMessage({
         id: 'pages.system.user.fields.lastActiveTime',
       }),
-      dataIndex: 'lastActiveTime',
+      dataIndex: ['sessions', 0, 'lastRequest'],
       key: 'lastActiveTime',
+      valueType: 'dateTime',
       search: false,
-      render: (_, record) => {
-        if (!record.sessions || record.sessions.length === 0) {
-          return '-';
-        }
-        let latest = dayjs(record.sessions[0].lastRequest);
-        for (let i = 1; i < record.sessions.length; i++) {
-          const time = dayjs(record.sessions[i].lastRequest);
-          if (time.isAfter(latest)) {
-            latest = time;
-          }
-        }
-        return latest.format('YYYY-MM-DD HH:mm:ss');
-      },
     },
     {
       title: intl.formatMessage({ id: 'pages.common.action.columnLabel' }),
@@ -429,7 +406,7 @@ const UserList: React.FC = () => {
             {dropdownItems.length > 0 && (
               <Dropdown menu={{ items: dropdownItems }}>
                 <a onClick={(e) => e.preventDefault()}>
-                  <MoreOutlined style={{ fontSize: 16, cursor: 'pointer' }} />
+                  <MoreOutlined style={{ cursor: 'pointer' }} />
                 </a>
               </Dropdown>
             )}
