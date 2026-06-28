@@ -48,6 +48,8 @@ export default {
   'pages.common.dict.status.label': 'Status',
   'pages.common.dict.status.enabled': 'Enabled',
   'pages.common.dict.status.disabled': 'Disabled',
+  'pages.common.dict.status.success': 'Success',
+  'pages.common.dict.status.fail': 'Fail',
   'pages.common.dict.yesNo.yes': 'Yes',
   'pages.common.dict.yesNo.no': 'No',
   'pages.common.dict.gender.label': 'Gender',
@@ -74,6 +76,7 @@ export default {
     'Password must contain uppercase and lowercase letters, numbers, and special characters!',
   'pages.common.validation.imageFormat': 'Only JPG/PNG images are allowed!',
   'pages.common.validation.imageSize': 'Image size cannot exceed 2MB!',
+  'pages.common.validation.json': 'Please enter valid JSON format data',
 
   // 文案 (Text)
   'pages.common.text.bound': 'Bound',
@@ -223,4 +226,27 @@ export default {
     'This will also delete all child resources. Continue?',
   'pages.system.resource.disableChildren.confirm':
     'Disabling this will also disable all child resources. Continue?',
+
+  // Scheduler Job Management
+  'pages.system.schedulerJob.fields.jobName': 'Job Name',
+  'pages.system.schedulerJob.fields.jobClassName': 'Job Class Name',
+  'pages.system.schedulerJob.fields.cronExpression': 'Cron Expression',
+  'pages.system.schedulerJob.fields.jobData': 'Job Data',
+  'pages.system.schedulerJob.fields.description': 'Description',
+  'pages.system.schedulerJob.fields.status': 'Status',
+  'pages.system.schedulerJob.action.trigger': 'Trigger Now',
+  'pages.system.schedulerJob.action.log': 'Execution Logs',
+  'pages.system.schedulerJob.feedback.trigger.success':
+    'Trigger request sent successfully',
+  'pages.system.schedulerJob.log.drawerTitle': 'Execution Logs - {jobName}',
+  'pages.system.schedulerJob.log.fields.id': 'Log ID',
+  'pages.system.schedulerJob.log.fields.jobName': 'Job Name',
+  'pages.system.schedulerJob.log.fields.duration': 'Duration (ms)',
+  'pages.system.schedulerJob.log.fields.status': 'Status',
+  'pages.system.schedulerJob.log.fields.errorMessage': 'Error Message',
+  'pages.system.schedulerJob.log.fields.createTime': 'Execution Time',
+  'pages.system.schedulerJob.log.error.details': 'Error Details',
+  'pages.system.schedulerJob.trigger.confirm.title': 'Manual Execution',
+  'pages.system.schedulerJob.trigger.confirm.description':
+    'Are you sure you want to manually trigger job {name}?',
 };

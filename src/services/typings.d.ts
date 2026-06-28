@@ -165,4 +165,38 @@ declare namespace API {
     contentType?: string;
     extension?: string;
   };
+
+  type SysSchedulerJobVO = {
+    id: number;
+    jobName: string;
+    jobClassName: string;
+    cronExpression: string;
+    jobData?: string;
+    status: number;
+    statusLabel?: string;
+    description?: string;
+    createTime?: string;
+    updateTime?: string;
+  };
+
+  type SysSchedulerJobDTO = {
+    jobName?: string;
+    jobClassName?: string;
+    cronExpression?: string;
+    jobData?: string;
+    status?: number;
+    description?: string;
+  };
+
+  type SysSchedulerJobLogVO = {
+    id: number;
+    jobId: number;
+    jobName: string;
+    createTime?: string;
+    updateTime?: string;
+    duration: number;
+    status: number;
+    errorMessage?: string;
+  };
 }
+

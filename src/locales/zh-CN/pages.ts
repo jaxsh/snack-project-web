@@ -46,6 +46,8 @@ export default {
   'pages.common.dict.status.label': '状态',
   'pages.common.dict.status.enabled': '启用',
   'pages.common.dict.status.disabled': '禁用',
+  'pages.common.dict.status.success': '成功',
+  'pages.common.dict.status.fail': '失败',
   'pages.common.dict.yesNo.yes': '是',
   'pages.common.dict.yesNo.no': '否',
   'pages.common.dict.gender.label': '性别',
@@ -72,6 +74,7 @@ export default {
     '密码必须包含大小写字母、数字和特殊字符！',
   'pages.common.validation.imageFormat': '只能上传 JPG/PNG 格式的图片！',
   'pages.common.validation.imageSize': '图片大小不能超过 2MB！',
+  'pages.common.validation.json': '请输入合法的 JSON 格式数据',
 
   // 文案 (Text)
   'pages.common.text.bound': '已绑定',
@@ -217,4 +220,26 @@ export default {
     '将同时删除所有下级资源，确认继续？',
   'pages.system.resource.disableChildren.confirm':
     '禁用后，所有下级资源将一并禁用，确认继续？',
+
+  // 系统管理 - 定时任务管理页面
+  'pages.system.schedulerJob.fields.jobName': '任务名称',
+  'pages.system.schedulerJob.fields.jobClassName': '任务类名',
+  'pages.system.schedulerJob.fields.cronExpression': 'Cron表达式',
+  'pages.system.schedulerJob.fields.jobData': '任务参数',
+  'pages.system.schedulerJob.fields.description': '描述',
+  'pages.system.schedulerJob.fields.status': '状态',
+  'pages.system.schedulerJob.action.trigger': '手动执行',
+  'pages.system.schedulerJob.action.log': '执行日志',
+  'pages.system.schedulerJob.feedback.trigger.success': '手动执行指令已下发',
+  'pages.system.schedulerJob.log.drawerTitle': '执行日志 - {jobName}',
+  'pages.system.schedulerJob.log.fields.id': '日志ID',
+  'pages.system.schedulerJob.log.fields.jobName': '任务名称',
+  'pages.system.schedulerJob.log.fields.duration': '执行耗时(ms)',
+  'pages.system.schedulerJob.log.fields.status': '执行状态',
+  'pages.system.schedulerJob.log.fields.errorMessage': '错误信息',
+  'pages.system.schedulerJob.log.fields.createTime': '执行时间',
+  'pages.system.schedulerJob.log.error.details': '错误详情',
+  'pages.system.schedulerJob.trigger.confirm.title': '手动执行确认',
+  'pages.system.schedulerJob.trigger.confirm.description':
+    '确认要手动执行任务 {name} 吗？',
 };

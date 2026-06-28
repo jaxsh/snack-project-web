@@ -47,6 +47,8 @@ export default {
   'pages.common.dict.status.label': 'ステータス',
   'pages.common.dict.status.enabled': '有効',
   'pages.common.dict.status.disabled': '無効',
+  'pages.common.dict.status.success': '成功',
+  'pages.common.dict.status.fail': '失敗',
   'pages.common.dict.yesNo.yes': 'はい',
   'pages.common.dict.yesNo.no': 'いいえ',
   'pages.common.dict.gender.label': '性別',
@@ -74,6 +76,7 @@ export default {
   'pages.common.validation.imageFormat':
     'JPG/PNG形式の画像のみアップロード可能です！',
   'pages.common.validation.imageSize': '画像サイズは2MBを超えてはなりません！',
+  'pages.common.validation.json': '有効なJSON形式のデータを入力してください',
 
   // テキスト (Text)
   'pages.common.text.bound': '登録済み',
@@ -227,4 +230,27 @@ export default {
     'すべての下位リソースも削除されます。続行しますか？',
   'pages.system.resource.disableChildren.confirm':
     '無効にすると、すべての下位リソースも無効になります。続行しますか？',
+
+  // 定期タスク管理
+  'pages.system.schedulerJob.fields.jobName': 'タスク名',
+  'pages.system.schedulerJob.fields.jobClassName': '実行クラス名',
+  'pages.system.schedulerJob.fields.cronExpression': 'Cron式',
+  'pages.system.schedulerJob.fields.jobData': 'タスクパラメータ',
+  'pages.system.schedulerJob.fields.description': '説明',
+  'pages.system.schedulerJob.fields.status': 'ステータス',
+  'pages.system.schedulerJob.action.trigger': '即時実行',
+  'pages.system.schedulerJob.action.log': '実行ログ',
+  'pages.system.schedulerJob.feedback.trigger.success':
+    '即時実行指示が送信されました',
+  'pages.system.schedulerJob.log.drawerTitle': '実行ログ - {jobName}',
+  'pages.system.schedulerJob.log.fields.id': 'ログID',
+  'pages.system.schedulerJob.log.fields.jobName': 'タスク名',
+  'pages.system.schedulerJob.log.fields.duration': '実行時間(ms)',
+  'pages.system.schedulerJob.log.fields.status': '実行ステータス',
+  'pages.system.schedulerJob.log.fields.errorMessage': 'エラーメッセージ',
+  'pages.system.schedulerJob.log.fields.createTime': '実行日時',
+  'pages.system.schedulerJob.log.error.details': 'エラーの詳細',
+  'pages.system.schedulerJob.trigger.confirm.title': '手動実行の確認',
+  'pages.system.schedulerJob.trigger.confirm.description':
+    'タスク {name} を手動で実行してもよろしいですか？',
 };
