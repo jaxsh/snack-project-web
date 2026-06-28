@@ -23,7 +23,8 @@ export default {
   'pages.common.action.unbindField': '{field}の登録解除',
   'pages.common.action.bind': '登録',
   'pages.common.action.unbind': '解除',
-  'pages.common.action.changeAvatar': 'アバター変更',
+  'pages.common.action.changeAvatar': 'アバターを変更',
+  'pages.common.action.preview': 'プレビュー',
   'pages.common.action.detail': '詳細',
 
   // インタラクション結果フィードバック (Interaction Feedback)
@@ -31,6 +32,7 @@ export default {
   'pages.common.feedback.update.success': '更新に成功しました',
   'pages.common.feedback.delete.success': '削除に成功しました',
   'pages.common.feedback.save.success': '保存に成功しました',
+  'pages.common.feedback.failed': '操作が失敗しました',
   'pages.common.feedback.delete.confirm': '{name} を削除してもよろしいですか？',
   'pages.common.feedback.batchDelete.confirm':
     'これら {count} 件のアイテムを削除してもよろしいですか？',
@@ -69,6 +71,9 @@ export default {
     '{field}は {min} 文字から {max} 文字の間でなければなりません',
   'pages.common.validation.passwordPattern':
     'パスワードには大文字、小文字、数字、および特殊文字を含める必要があります！',
+  'pages.common.validation.imageFormat':
+    'JPG/PNG形式の画像のみアップロード可能です！',
+  'pages.common.validation.imageSize': '画像サイズは2MBを超えてはなりません！',
 
   // テキスト (Text)
   'pages.common.text.bound': '登録済み',

@@ -35,6 +35,10 @@ export default {
       target: OAUTH_TARGET,
       changeOrigin: true,
     },
+    '/upload/': {
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+    },
   },
   /**
    * @name 详细的代理配置

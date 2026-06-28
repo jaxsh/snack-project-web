@@ -24,6 +24,7 @@ export default {
   'pages.common.action.bind': '绑定',
   'pages.common.action.unbind': '解绑',
   'pages.common.action.changeAvatar': '更换头像',
+  'pages.common.action.preview': '预览',
   'pages.common.action.detail': '详情',
 
   // 交互结果反馈 (Interaction Feedback)
@@ -31,6 +32,7 @@ export default {
   'pages.common.feedback.update.success': '修改成功',
   'pages.common.feedback.delete.success': '删除成功',
   'pages.common.feedback.save.success': '保存成功',
+  'pages.common.feedback.failed': '操作失败',
   'pages.common.feedback.delete.confirm': '确定要删除 {name} 吗？',
   'pages.common.feedback.batchDelete.confirm': '确定要删除这 {count} 项吗？',
 
@@ -68,6 +70,8 @@ export default {
     '{field}长度在 {min} 到 {max} 个字符之间',
   'pages.common.validation.passwordPattern':
     '密码必须包含大小写字母、数字和特殊字符！',
+  'pages.common.validation.imageFormat': '只能上传 JPG/PNG 格式的图片！',
+  'pages.common.validation.imageSize': '图片大小不能超过 2MB！',
 
   // 文案 (Text)
   'pages.common.text.bound': '已绑定',

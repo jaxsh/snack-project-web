@@ -156,4 +156,13 @@ declare namespace API {
     data: T;
     children: TreeNode<T>[];
   };
+
+  type SysFileVO = {
+    id: number;
+    url: string;
+    originalName?: string;
+    fileSize?: number;
+    contentType?: string;
+    extension?: string;
+  };
 }

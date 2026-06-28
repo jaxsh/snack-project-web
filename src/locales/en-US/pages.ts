@@ -24,6 +24,7 @@ export default {
   'pages.common.action.bind': 'Bind',
   'pages.common.action.unbind': 'Unbind',
   'pages.common.action.changeAvatar': 'Change Avatar',
+  'pages.common.action.preview': 'Preview',
   'pages.common.action.detail': 'Detail',
 
   // 交互结果反馈 (Interaction Feedback)
@@ -31,6 +32,7 @@ export default {
   'pages.common.feedback.update.success': 'Updated successfully',
   'pages.common.feedback.delete.success': 'Deleted successfully',
   'pages.common.feedback.save.success': 'Saved successfully',
+  'pages.common.feedback.failed': 'Operation failed',
   'pages.common.feedback.delete.confirm':
     'Are you sure you want to delete {name}?',
   'pages.common.feedback.batchDelete.confirm':
@@ -70,6 +72,8 @@ export default {
     '{field} length must be between {min} and {max} characters',
   'pages.common.validation.passwordPattern':
     'Password must contain uppercase and lowercase letters, numbers, and special characters!',
+  'pages.common.validation.imageFormat': 'Only JPG/PNG images are allowed!',
+  'pages.common.validation.imageSize': 'Image size cannot exceed 2MB!',
 
   // 文案 (Text)
   'pages.common.text.bound': 'Bound',
